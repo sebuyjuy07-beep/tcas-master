@@ -6,3 +6,4 @@ database/*.db-wal
 database/*.db-shm
 database/*.db.bak
 database.sqlite
+

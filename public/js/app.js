@@ -27,12 +27,120 @@ window.fetch = function (url, options = {}) {
     return _originalFetch(url, options);
 };
 
+// ==========================================
+// 0.2 VECTOR SVG ICON & AVATAR CREST SYSTEM
+// ==========================================
+const TCAS_ICONS = {
+    'check': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><polyline points="20 6 9 17 4 12"></polyline></svg>',
+    'check-circle': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+    'alert-triangle': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+    'alert-circle': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+    'info': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
+    'flame': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>',
+    'target': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
+    'zap': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+    'shield': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+    'brain': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-4.54z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-4.54z"/></svg>',
+    'award': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H7"/><path d="M14 14.66V17c0 .55.45 1 1 1h2"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>',
+    'medal': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>',
+    'lock': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
+    'unlock': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>',
+    'lightbulb': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>',
+    'book': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+    'clock': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+    'file-text': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>',
+    'package': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>',
+    'clipboard': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>',
+    'play': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><polygon points="5 3 19 12 5 21 5 3"/></svg>',
+    'shuffle': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>',
+    'tool': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>',
+    'edit': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
+    'trash': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
+    'key': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M21 2l-2 2m-1.5 1.5L14 9l-1.5-1.5-2 2 1.5 1.5L4 19a3 3 0 1 1-2-2l8-8 1.5 1.5 2-2-1.5-1.5 3.5-3.5z"/></svg>',
+    'bookmark': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>',
+    'cpu': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>',
+    'user': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+    'rotate-cw': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>',
+    'star': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+    'x': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+};
+
+const TCAS_AVATARS = {
+    'scholar-m': {
+        name: 'Scholar Prime',
+        svg: '<svg viewBox="0 0 64 64" width="100%" height="100%" fill="none"><circle cx="32" cy="32" r="30" fill="url(#tc-av-sm)"/><path d="M32 17l19 9.5-19 9.5-19-9.5 19-9.5z" fill="#60a5fa" stroke="#93c5fd" stroke-width="2.2" stroke-linejoin="round"/><path d="M20 31.5v11c0 4.5 5.5 8 12 8s12-3.5 12-8v-11" stroke="#93c5fd" stroke-width="2.5" fill="none"/><path d="M48 29v13" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round"/><circle cx="48" cy="44" r="2.5" fill="#fbbf24"/><defs><linearGradient id="tc-av-sm" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1e3a8a"/><stop offset="100%" stop-color="#312e81"/></linearGradient></defs></svg>'
+    },
+    'scholar-f': {
+        name: 'Scholar Elite',
+        svg: '<svg viewBox="0 0 64 64" width="100%" height="100%" fill="none"><circle cx="32" cy="32" r="30" fill="url(#tc-av-sf)"/><path d="M32 18l17 8.5-17 8.5-17-8.5 17-8.5z" fill="#34d399" stroke="#6ee7b7" stroke-width="2" stroke-linejoin="round"/><path d="M21 31v10c0 4 5 7 11 7s11-3 11-7V31" stroke="#6ee7b7" stroke-width="2.2" fill="none"/><path d="M14 43c2-4 2-10 6-13M50 43c-2-4-2-10-6-13" stroke="#a7f3d0" stroke-width="2" stroke-linecap="round"/><circle cx="32" cy="41" r="2" fill="#fbbf24"/><defs><linearGradient id="tc-av-sf" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#064e3b"/><stop offset="100%" stop-color="#0f766e"/></linearGradient></defs></svg>'
+    },
+    'mage': {
+        name: 'Grand Sage',
+        svg: '<svg viewBox="0 0 64 64" width="100%" height="100%" fill="none"><circle cx="32" cy="32" r="30" fill="url(#tc-av-mg)"/><path d="M32 12l10 32H22L32 12z" fill="#8b5cf6" stroke="#c4b5fd" stroke-width="2" stroke-linejoin="round"/><ellipse cx="32" cy="44" rx="19" ry="5.5" fill="#6d28d9" stroke="#c4b5fd" stroke-width="2"/><circle cx="32" cy="27" r="3" fill="#fef08a"/><path d="M32 23v8M28 27h8" stroke="#fef08a" stroke-width="1.8"/><defs><linearGradient id="tc-av-mg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#3b0764"/><stop offset="100%" stop-color="#581c87"/></linearGradient></defs></svg>'
+    },
+    'fox': {
+        name: 'Cyber Fox',
+        svg: '<svg viewBox="0 0 64 64" width="100%" height="100%" fill="none"><circle cx="32" cy="32" r="30" fill="url(#tc-av-fx)"/><path d="M32 46L19 32l3-16 10 9 10-9 3 16-13 14z" fill="#f97316" stroke="#fdba74" stroke-width="2" stroke-linejoin="round"/><polygon points="32 46 25 36 39 36" fill="#ffffff"/><circle cx="26" cy="31" r="2.2" fill="#18181b"/><circle cx="38" cy="31" r="2.2" fill="#18181b"/><circle cx="32" cy="43" r="2" fill="#0f172a"/><defs><linearGradient id="tc-av-fx" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7c2d12"/><stop offset="100%" stop-color="#c2410c"/></linearGradient></defs></svg>'
+    },
+    'lightning': {
+        name: 'Thunder Bolt',
+        svg: '<svg viewBox="0 0 64 64" width="100%" height="100%" fill="none"><circle cx="32" cy="32" r="30" fill="url(#tc-av-lt)"/><polygon points="36 12 18 32 32 32 28 52 46 32 32 32 36 12" fill="#fbbf24" stroke="#fef08a" stroke-width="2.5" stroke-linejoin="round"/><defs><linearGradient id="tc-av-lt" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#78350f"/><stop offset="100%" stop-color="#b45309"/></linearGradient></defs></svg>'
+    },
+    'diamond': {
+        name: 'Prism Diamond',
+        svg: '<svg viewBox="0 0 64 64" width="100%" height="100%" fill="none"><circle cx="32" cy="32" r="30" fill="url(#tc-av-dm)"/><path d="M22 22l10-10 10 10-10 30-10-30z" fill="#38bdf8" stroke="#bae6fd" stroke-width="2" stroke-linejoin="round"/><line x1="22" y1="22" x2="42" y2="22" stroke="#bae6fd" stroke-width="2"/><polyline points="22 22 32 32 42 22" stroke="#bae6fd" stroke-width="1.8"/><defs><linearGradient id="tc-av-dm" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#082f49"/><stop offset="100%" stop-color="#0369a1"/></linearGradient></defs></svg>'
+    },
+    'rocket': {
+        name: 'Aero Rocket',
+        svg: '<svg viewBox="0 0 64 64" width="100%" height="100%" fill="none"><circle cx="32" cy="32" r="30" fill="url(#tc-av-rk)"/><path d="M32 14c-5 6-8 15-8 23h16c0-8-3-17-8-23z" fill="#f43f5e" stroke="#fda4af" stroke-width="2" stroke-linejoin="round"/><path d="M24 37l-6 7 6-2M40 37l6 7-6-2" stroke="#fda4af" stroke-width="2" stroke-linejoin="round"/><circle cx="32" cy="28" r="3.5" fill="#38bdf8" stroke="#bae6fd" stroke-width="1.5"/><path d="M29 42l3 9 3-9" fill="#fbbf24"/><defs><linearGradient id="tc-av-rk" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#881337"/><stop offset="100%" stop-color="#be123c"/></linearGradient></defs></svg>'
+    },
+    'crown': {
+        name: 'Imperial Crown',
+        svg: '<svg viewBox="0 0 64 64" width="100%" height="100%" fill="none"><circle cx="32" cy="32" r="30" fill="url(#tc-av-cr)"/><path d="M16 43h32l4-21-9.5 7.5L32 15l-10.5 14.5L12 22l4 21z" fill="#fbbf24" stroke="#fef08a" stroke-width="2" stroke-linejoin="round"/><rect x="16" y="44" width="32" height="4.5" rx="1.5" fill="#f59e0b"/><circle cx="16" cy="21" r="2.2" fill="#fef08a"/><circle cx="32" cy="14" r="2.5" fill="#fef08a"/><circle cx="48" cy="21" r="2.2" fill="#fef08a"/><circle cx="32" cy="34" r="2.5" fill="#ef4444"/><defs><linearGradient id="tc-av-cr" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#713f12"/><stop offset="100%" stop-color="#a16207"/></linearGradient></defs></svg>'
+    }
+};
+
+const TCAS_AVATAR_MAP = {
+    '👨‍🎓': 'scholar-m',
+    '👩‍🎓': 'scholar-f',
+    '🧙‍♂️': 'mage',
+    '🦊': 'fox',
+    '⚡': 'lightning',
+    '💎': 'diamond',
+    '🚀': 'rocket',
+    '👑': 'crown'
+};
+
 const app = {
+    // SVG & Avatar Vector Generator
+    svg(name, opts = {}) {
+        const template = TCAS_ICONS[name] || TCAS_ICONS['info'];
+        const s = opts.size || 18;
+        const c = opts.color || 'currentColor';
+        const w = opts.strokeWidth || 2;
+        const cls = opts.className || '';
+        return template.replace(/{s}/g, s).replace(/{c}/g, c).replace(/{w}/g, w).replace(/{cls}/g, cls);
+    },
+
+    renderAvatar(key, size = 48) {
+        if (!key) key = 'scholar-m';
+        // Map legacy emojis or return matched SVG
+        const resolvedKey = TCAS_AVATAR_MAP[key] || key;
+        const av = TCAS_AVATARS[resolvedKey];
+        if (av) {
+            return `<div class="avatar-vector-box" style="width:${size}px;height:${size}px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;overflow:hidden;flex-shrink:0;" title="${av.name}">${av.svg}</div>`;
+        }
+        if (typeof key === 'string' && (key.startsWith('http') || key.startsWith('data:'))) {
+            return `<img src="${key}" style="width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;display:block;" alt="Avatar" />`;
+        }
+        return `<div class="avatar-vector-box" style="width:${size}px;height:${size}px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;overflow:hidden;flex-shrink:0;">${TCAS_AVATARS['scholar-m'].svg}</div>`;
+    },
+
     // Current Application State
     state: {
         currentUser: null,
         authToken: localStorage.getItem('tcas_auth_token') || null,
-        selectedAvatar: '👨‍🎓',
+        selectedAvatar: 'scholar-m',
         currentView: 'dashboard',
         subjects: [],
         currentSubjectId: 'tgat1',
@@ -111,6 +219,7 @@ const app = {
 
     // Initialization
     async init() {
+        this.updateSoundUI();
         this.bindEvents();
         this.setupTextSelectionListener();
         this.initScratchpad();
@@ -210,6 +319,21 @@ const app = {
         const activeNav = document.getElementById(`nav-${viewName}`);
         if (activeNav) activeNav.classList.add('active');
 
+        // Update Bottom Nav
+        document.querySelectorAll('.bottom-nav-item').forEach(item => item.classList.remove('active'));
+        const activeBottomNav = document.getElementById(`bottom-nav-${viewName}`);
+        if (activeBottomNav) activeBottomNav.classList.add('active');
+
+        // Close mobile sidebar and backdrop if open
+        const sidebar = document.getElementById('main-sidebar');
+        const backdrop = document.getElementById('sidebar-backdrop');
+        if (sidebar && sidebar.classList.contains('mobile-open')) {
+            sidebar.classList.remove('mobile-open');
+        }
+        if (backdrop && backdrop.classList.contains('open')) {
+            backdrop.classList.remove('open');
+        }
+
         // Update View Sections
         document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
         const targetView = document.getElementById(`view-${viewName}`);
@@ -254,11 +378,17 @@ const app = {
         }
 
         // Close mobile sidebar if open
-        document.getElementById('main-sidebar').classList.remove('mobile-open');
+        const sb = document.getElementById('main-sidebar');
+        const sbd = document.getElementById('sidebar-backdrop');
+        if (sb) sb.classList.remove('mobile-open');
+        if (sbd) sbd.classList.remove('open');
     },
 
     toggleSidebar() {
-        document.getElementById('main-sidebar').classList.toggle('mobile-open');
+        const sb = document.getElementById('main-sidebar');
+        const sbd = document.getElementById('sidebar-backdrop');
+        if (sb) sb.classList.toggle('mobile-open');
+        if (sbd) sbd.classList.toggle('open');
     },
 
     // Math Render helper using KaTeX
@@ -280,7 +410,7 @@ const app = {
         const toast = document.createElement('div');
         toast.className = `toast ${type}`;
         toast.innerHTML = `
-            <span>${type === 'success' ? '✅' : type === 'error' ? '⚠️' : 'ℹ️'}</span>
+            <span style="display:inline-flex;align-items:center;margin-right:6px;">${type === 'success' ? app.svg('check-circle', { size: 18, color: '#34d399' }) : type === 'error' ? app.svg('alert-triangle', { size: 18, color: '#f43f5e' }) : type === 'warning' ? app.svg('alert-triangle', { size: 18, color: '#f59e0b' }) : app.svg('info', { size: 18, color: '#38bdf8' })}</span>
             <span>${message}</span>
         `;
         container.appendChild(toast);
@@ -288,6 +418,185 @@ const app = {
             toast.style.opacity = '0';
             setTimeout(() => toast.remove(), 250);
         }, 3000);
+    },
+
+    // ==========================================
+    // 0.5 TACTILE AUDIO & GAMIFIED FX ENGINE
+    // ==========================================
+    sfxMuted: localStorage.getItem('tcas_sfx_muted') === 'true',
+    audioCtx: null,
+
+    getAudioContext() {
+        if (!this.audioCtx) {
+            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+            if (AudioContextClass) this.audioCtx = new AudioContextClass();
+        }
+        if (this.audioCtx && this.audioCtx.state === 'suspended') {
+            this.audioCtx.resume();
+        }
+        return this.audioCtx;
+    },
+
+    toggleSound() {
+        this.sfxMuted = !this.sfxMuted;
+        localStorage.setItem('tcas_sfx_muted', this.sfxMuted ? 'true' : 'false');
+        this.updateSoundUI();
+        if (!this.sfxMuted) this.playSfx('select');
+    },
+
+    updateSoundUI() {
+        const btn = document.getElementById('btn-sound-toggle');
+        const text = document.getElementById('sound-text-label');
+        if (!btn) return;
+        if (this.sfxMuted) {
+            btn.classList.add('muted');
+            if (text) text.textContent = 'เสียง: ปิด';
+        } else {
+            btn.classList.remove('muted');
+            if (text) text.textContent = 'เสียง: เปิด';
+        }
+    },
+
+    playSfx(type = 'click') {
+        if (this.sfxMuted) return;
+        try {
+            const ctx = this.getAudioContext();
+            if (!ctx) return;
+            const now = ctx.currentTime;
+
+            if (type === 'click') {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(320, now);
+                osc.frequency.exponentialRampToValueAtTime(140, now + 0.04);
+                gain.gain.setValueAtTime(0.08, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.05);
+            } else if (type === 'select') {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(440, now);
+                osc.frequency.exponentialRampToValueAtTime(660, now + 0.07);
+                gain.gain.setValueAtTime(0.09, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.09);
+            } else if (type === 'correct') {
+                [523.25, 659.25, 783.99].forEach((freq, idx) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.07);
+                    gain.gain.setValueAtTime(0.12, now + idx * 0.07);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.07 + 0.16);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now + idx * 0.07);
+                    osc.stop(now + idx * 0.07 + 0.18);
+                });
+            } else if (type === 'wrong') {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(190, now);
+                osc.frequency.linearRampToValueAtTime(110, now + 0.14);
+                gain.gain.setValueAtTime(0.08, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.15);
+            } else if (type === 'level_up') {
+                [440, 554.37, 659.25, 880].forEach((freq, idx) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.09);
+                    gain.gain.setValueAtTime(0.14, now + idx * 0.09);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.09 + 0.25);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now + idx * 0.09);
+                    osc.stop(now + idx * 0.09 + 0.28);
+                });
+            }
+        } catch (e) {
+            // Audio context gesture check
+        }
+    },
+
+    showFloatingExp(text = '+50 EXP', x, y) {
+        const el = document.createElement('div');
+        el.className = 'floating-exp-text';
+        el.textContent = text;
+        if (x !== undefined && y !== undefined) {
+            el.style.left = `${x}px`;
+            el.style.top = `${y}px`;
+        } else {
+            el.style.left = '50%';
+            el.style.top = '40%';
+            el.style.transform = 'translate(-50%, -50%)';
+        }
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 1200);
+    },
+
+    launchConfetti() {
+        const canvas = document.getElementById('confetti-canvas');
+        if (!canvas) return;
+        canvas.style.display = 'block';
+        const ctx = canvas.getContext('2d');
+        const W = (canvas.width = window.innerWidth);
+        const H = (canvas.height = window.innerHeight);
+
+        const colors = ['#6366f1', '#06b6d4', '#10b981', '#f59e0b', '#ec4899', '#ffffff'];
+        const pieces = [];
+        for (let i = 0; i < 90; i++) {
+            pieces.push({
+                x: W / 2 + (Math.random() - 0.5) * 260,
+                y: H * 0.45,
+                vx: (Math.random() - 0.5) * 14,
+                vy: -(Math.random() * 13 + 6),
+                size: Math.random() * 8 + 4,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                rotation: Math.random() * 360,
+                rSpeed: (Math.random() - 0.5) * 10
+            });
+        }
+
+        let frames = 0;
+        function render() {
+            ctx.clearRect(0, 0, W, H);
+            pieces.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.45;
+                p.rotation += p.rSpeed;
+
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate((p.rotation * Math.PI) / 180);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.7);
+                ctx.restore();
+            });
+
+            frames++;
+            if (frames < 75) {
+                requestAnimationFrame(render);
+            } else {
+                ctx.clearRect(0, 0, W, H);
+                canvas.style.display = 'none';
+            }
+        }
+        render();
     },
 
     // ==========================================
@@ -353,7 +662,7 @@ const app = {
             const avatar = (this.state.currentUser && this.state.currentUser.avatar_url) ? this.state.currentUser.avatar_url : ((d.user && d.user.avatar_url) ? d.user.avatar_url : '👨‍🎓');
             const username = (this.state.currentUser && this.state.currentUser.username) ? this.state.currentUser.username : ((d.user && d.user.username) ? d.user.username : 'student');
 
-            if (sideAvatar) sideAvatar.textContent = avatar;
+            if (sideAvatar) sideAvatar.innerHTML = this.renderAvatar(avatar, 38);
             if (sideName) sideName.textContent = (this.state.currentUser && this.state.currentUser.display_name) ? this.state.currentUser.display_name : (d.user && d.user.display_name ? d.user.display_name : d.rank_title);
             if (sideSub) sideSub.textContent = `@${username} • Lv.${d.level}`;
             if (sideBadge) sideBadge.textContent = `Lv.${d.level}`;
@@ -375,12 +684,48 @@ const app = {
                 heroBadge.style.borderColor = d.rank_color;
                 heroBadge.style.color = d.rank_color;
             }
-            if (heroStreak) heroStreak.textContent = `🔥 ${d.streak_days} วันติด`;
+            const streakVal = document.getElementById('rpg-streak-days-val');
+            if (streakVal) streakVal.textContent = `${d.streak_days} วันติด`;
+            const topStreak = document.getElementById('hero-streak-badge');
+            if (topStreak) topStreak.innerHTML = `${this.svg('flame', { size: 14, color: '#f59e0b' })} ${d.streak_days} วันติด`;
             if (heroTitle) heroTitle.textContent = d.rank_title;
             if (heroSubtitle) heroSubtitle.textContent = `TCAS Challenger • ค่าประสบการณ์รวม ${d.total_xp.toLocaleString()} XP`;
             if (expText) expText.textContent = `${d.xp_in_level.toLocaleString()} / ${d.xp_needed.toLocaleString()} XP (${d.xp_percent}%)`;
             if (expFill) expFill.style.width = `${d.xp_percent}%`;
             if (combatPower) combatPower.textContent = d.combat_power.toLocaleString();
+
+            // 2.5 Update Collectible Trading Card Elements
+            const cardAvatar = document.getElementById('card-avatar-display');
+            const cardName = document.getElementById('card-player-name');
+            const cardSerial = document.getElementById('card-serial-no');
+            const cardRarity = document.getElementById('card-rarity-badge');
+            const cardFront = document.getElementById('tcas-card-front');
+
+            if (cardAvatar) cardAvatar.innerHTML = this.renderAvatar(avatar, 108);
+            if (cardName) cardName.textContent = (this.state.currentUser && this.state.currentUser.display_name) ? this.state.currentUser.display_name : (d.user && d.user.display_name ? d.user.display_name : username);
+            if (cardSerial) cardSerial.textContent = `#TCAS-68-${username.toUpperCase().slice(0, 8)}`;
+            if (cardRarity) {
+                cardRarity.textContent = d.level >= 20 ? '★ MYTHIC TCAS ★' : d.level >= 10 ? '★ UR EDITION ★' : d.level >= 5 ? '★ SSR EDITION ★' : '★ SR EDITION ★';
+            }
+            if (cardFront) {
+                cardFront.classList.remove('tier-bronze', 'tier-silver', 'tier-gold', 'tier-mythic');
+                if (d.level >= 20) cardFront.classList.add('tier-mythic');
+                else if (d.level >= 10) cardFront.classList.add('tier-gold');
+                else if (d.level >= 5) cardFront.classList.add('tier-silver');
+                else cardFront.classList.add('tier-bronze');
+            }
+
+            // Card Back Stats
+            const bAns = document.getElementById('card-back-answered');
+            const bAcc = document.getElementById('card-back-accuracy');
+            const bMas = document.getElementById('card-back-mastered');
+            const bTime = document.getElementById('card-back-time');
+            if (bAns) bAns.textContent = `${d.raw ? d.raw.total_answered || 0 : 0} ข้อ`;
+            if (bAcc) bAcc.textContent = `${d.stats ? d.stats.accuracy || 0 : 0}%`;
+            if (bMas) bMas.textContent = `${d.raw ? d.raw.total_mastered || 0 : 0} คำ`;
+            if (bTime) bTime.textContent = `${d.raw ? Math.round((d.raw.total_time_spent_seconds || 0) / 60) : 0} นาที`;
+
+            this.setupTradingCardTilt();
 
             // If background update and user is not looking at status view, don't re-render chart
             if (isInitial && this.state.currentView !== 'status') return;
@@ -432,13 +777,14 @@ const app = {
             return `<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="rgba(148, 163, 184, 0.25)" stroke-width="1.2" />`;
         }).join('\n');
 
-        // Data Polygon points (scaled between 15 and 100)
+        // Data Polygon points (scaled between 10 and 100, or 0 if completely uninitialized)
+        const hasAnyStats = ((stats.accuracy || 0) + (stats.speed || 0) + (stats.defense || 0) + (stats.mastery || 0) + (stats.consistency || 0)) > 0;
         const values = [
-            Math.max(15, Math.min(100, stats.accuracy || 0)),
-            Math.max(15, Math.min(100, stats.speed || 0)),
-            Math.max(15, Math.min(100, stats.defense || 0)),
-            Math.max(15, Math.min(100, stats.mastery || 0)),
-            Math.max(15, Math.min(100, stats.consistency || 0))
+            hasAnyStats ? Math.max(10, Math.min(100, stats.accuracy || 0)) : 0,
+            hasAnyStats ? Math.max(10, Math.min(100, stats.speed || 0)) : 0,
+            hasAnyStats ? Math.max(10, Math.min(100, stats.defense || 0)) : 0,
+            hasAnyStats ? Math.max(10, Math.min(100, stats.mastery || 0)) : 0,
+            hasAnyStats ? Math.max(10, Math.min(100, stats.consistency || 0)) : 0
         ];
 
         const dataPts = values.map((val, i) => {
@@ -459,11 +805,11 @@ const app = {
 
         // Labels definitions
         const labelsData = [
-            { text: '🎯 ACC แม่นยำ', score: stats.accuracy, color: '#38bdf8', anchor: 'middle', baseline: 'auto', dx: 0, dy: -14 },
-            { text: '⚡ SPD สปีด', score: stats.speed, color: '#f59e0b', anchor: 'start', baseline: 'middle', dx: 14, dy: 0 },
-            { text: '🛡️ DEF ป้องกันจุดหลอก', score: stats.defense, color: '#10b981', anchor: 'start', baseline: 'hanging', dx: 8, dy: 14 },
-            { text: '🧠 MST ทบทวนแม่น', score: stats.mastery, color: '#a78bfa', anchor: 'end', baseline: 'hanging', dx: -8, dy: 14 },
-            { text: '🔥 CON วินัยต่อเนื่อง', score: stats.consistency, color: '#f43f5e', anchor: 'end', baseline: 'middle', dx: -14, dy: 0 }
+            { text: 'ACC แม่นยำ', score: stats.accuracy, color: '#38bdf8', anchor: 'middle', baseline: 'auto', dx: 0, dy: -14 },
+            { text: 'SPD สปีด', score: stats.speed, color: '#f59e0b', anchor: 'start', baseline: 'middle', dx: 14, dy: 0 },
+            { text: 'DEF ต้านจุดหลอก', score: stats.defense, color: '#10b981', anchor: 'start', baseline: 'hanging', dx: 8, dy: 14 },
+            { text: 'MST ทบทวนแม่น', score: stats.mastery, color: '#a78bfa', anchor: 'end', baseline: 'hanging', dx: -8, dy: 14 },
+            { text: 'CON วินัยต่อเนื่อง', score: stats.consistency, color: '#f43f5e', anchor: 'end', baseline: 'middle', dx: -14, dy: 0 }
         ];
 
         const labelsSvg = labelsData.map((lbl, i) => {
@@ -519,50 +865,62 @@ const app = {
         `;
     },
 
-    renderRpgAttributes(stats, raw) {
+    renderRpgAttributes(stats, raw = {}) {
         const container = document.getElementById('rpg-attr-list');
         if (!container) return;
+
+        const isGuestOrEmpty = !raw.total_answered || raw.total_answered === 0;
 
         const attrs = [
             {
                 code: 'ACC',
                 name: 'Accuracy (ความแม่นยำในการตอบ)',
-                icon: '🎯',
-                value: stats.accuracy,
+                icon: this.svg('target', { size: 18, color: '#06b6d4' }),
+                value: stats.accuracy || 0,
                 color: '#06b6d4',
-                desc: `ตอบถูกทั้งหมด ${raw.total_correct} จาก ${raw.total_answered} ข้อ ในการทดสอบทั้งหมด`
+                desc: isGuestOrEmpty
+                    ? 'ยังไม่มีประวัติการทำข้อสอบ (เริ่มทำข้อสอบเพื่อวัดระดับ)'
+                    : `ตอบถูกทั้งหมด ${raw.total_correct} จาก ${raw.total_answered} ข้อ ในการทดสอบทั้งหมด`
             },
             {
                 code: 'SPD',
                 name: 'Speed (ความเร็วเฉลี่ยต่อข้อ)',
-                icon: '⚡',
-                value: stats.speed,
+                icon: this.svg('zap', { size: 18, color: '#f59e0b' }),
+                value: stats.speed || 0,
                 color: '#f59e0b',
-                desc: `ใช้เวลาเฉลี่ย ${raw.avg_time_seconds} วินาที/ข้อ (เกณฑ์แนะนำ ทปอ. 45-60 วินาที)`
+                desc: isGuestOrEmpty || !raw.avg_time_seconds
+                    ? 'ยังไม่มีประวัติการจับเวลา (เกณฑ์แนะนำ ทปอ. 45-60 วินาที/ข้อ)'
+                    : `ใช้เวลาเฉลี่ย ${raw.avg_time_seconds} วินาที/ข้อ (เกณฑ์แนะนำ ทปอ. 45-60 วินาที)`
             },
             {
                 code: 'DEF',
                 name: 'Trap Defense (ภูมิคุ้มกันจุดหลอก)',
-                icon: '🛡️',
-                value: stats.defense,
+                icon: this.svg('shield', { size: 18, color: '#10b981' }),
+                value: stats.defense || 0,
                 color: '#10b981',
-                desc: 'ความสามารถในการตรวจจับช้อยส์ลวงและจุดหลอกที่ ทปอ. มักตั้งไว้'
+                desc: raw.total_trap_q > 0
+                    ? `ตรวจจับและรอดพ้นจุดหลอก ${raw.trap_defended || 0} จาก ${raw.total_trap_q} ข้อ`
+                    : 'ความสามารถในการตรวจจับช้อยส์ลวงและจุดหลอกที่ ทปอ. มักตั้งไว้'
             },
             {
                 code: 'MST',
                 name: 'Mastery (การแก้ไขจุดอ่อน & คลังศัพท์)',
-                icon: '🧠',
-                value: stats.mastery,
+                icon: this.svg('brain', { size: 18, color: '#8b5cf6' }),
+                value: stats.mastery || 0,
                 color: '#8b5cf6',
-                desc: `พิชิตจุดอ่อน ${raw.mastered_mistakes} ข้อ • แม่นยำคำศัพท์ ${raw.mastered_vocab} คำ`
+                desc: (raw.mastered_mistakes > 0 || raw.mastered_vocab > 0)
+                    ? `พิชิตจุดอ่อน ${raw.mastered_mistakes || 0} ข้อ • แม่นยำคำศัพท์ ${raw.mastered_vocab || 0} คำ`
+                    : 'ยังไม่มีประวัติพิชิตจุดอ่อนหรือคำศัพท์'
             },
             {
                 code: 'CON',
                 name: 'Consistency (ไฟความต่อเนื่อง & วินัย)',
-                icon: '🔥',
-                value: stats.consistency,
+                icon: this.svg('flame', { size: 18, color: '#f43f5e' }),
+                value: stats.consistency || 0,
                 color: '#f43f5e',
-                desc: `ฝึกฝนต่อเนื่องและทำข้อสอบจำลองจบไปแล้ว ${raw.total_sessions} ชุดเต็ม`
+                desc: raw.total_sessions > 0
+                    ? `ฝึกฝนต่อเนื่องและทำข้อสอบจำลองจบไปแล้ว ${raw.total_sessions} ชุดเต็ม`
+                    : 'ยังไม่มีประวัติการทำข้อสอบจำลองจบชุด'
             }
         ];
 
@@ -605,13 +963,243 @@ const app = {
                     <div class="achieve-header">
                         <h4 class="achieve-title">${a.name}</h4>
                         <span class="achieve-status-badge ${a.unlocked ? 'status-unlocked' : 'status-locked'}">
-                            ${a.unlocked ? '✨ ปลดล็อกแล้ว' : '🔒 ล็อกอยู่'}
+                            ${a.unlocked ? '<span style="display:inline-flex;align-items:center;gap:4px;">' + this.svg('check-circle', { size: 13, color: '#34d399' }) + ' ปลดล็อกแล้ว</span>' : '<span style="display:inline-flex;align-items:center;gap:4px;">' + this.svg('lock', { size: 13, color: '#94a3b8' }) + ' ล็อกอยู่</span>'}
                         </span>
                     </div>
                     <p class="achieve-desc">${a.desc}</p>
                 </div>
             </div>
         `).join('');
+    },
+
+    // ==========================================
+    // 3D COLLECTIBLE TRADING CARD ENGINE
+    // ==========================================
+        // ==========================================
+    // 3D COLLECTIBLE TRADING CARD ENGINE
+    // ==========================================
+    setupTradingCardTilt() {
+        const card = document.getElementById('tcas-card-3d-wrapper');
+        const tilt = document.getElementById('tcas-card-tilt');
+        const flip = document.getElementById('tcas-card-flip');
+        const glare = document.getElementById('card-holo-glare');
+        if (!card || !tilt || card._tiltBound) return;
+        card._tiltBound = true;
+
+        const handleMove = (clientX, clientY) => {
+            if (flip && flip.classList.contains('is-flipped')) {
+                tilt.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+                if (glare) glare.style.opacity = '0';
+                return;
+            }
+            const rect = card.getBoundingClientRect();
+            const x = clientX - rect.left;
+            const y = clientY - rect.top;
+            const halfW = rect.width / 2;
+            const halfH = rect.height / 2;
+
+            const rotateX = ((halfH - y) / halfH) * 12;
+            const rotateY = ((x - halfW) / halfW) * 12;
+
+            tilt.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`;
+            if (glare) {
+                glare.style.opacity = '1';
+                glare.style.background = `radial-gradient(circle at ${(x / rect.width * 100).toFixed(1)}% ${(y / rect.height * 100).toFixed(1)}%, rgba(255,255,255,0.45) 0%, rgba(236,72,153,0.2) 35%, transparent 70%)`;
+            }
+        };
+
+        const handleReset = () => {
+            tilt.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+            if (glare) glare.style.opacity = '0';
+        };
+
+        card.addEventListener('mousemove', (e) => handleMove(e.clientX, e.clientY));
+        card.addEventListener('mouseleave', handleReset);
+
+        // Touch support for iPad / Mobile
+        card.addEventListener('touchmove', (e) => {
+            if (e.touches && e.touches[0]) {
+                handleMove(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        }, { passive: true });
+        card.addEventListener('touchend', handleReset);
+    },
+
+    flipTradingCard() {
+        const flip = document.getElementById('tcas-card-flip');
+        if (!flip) return;
+        this.playSfx('select');
+        const isFlipped = flip.classList.toggle('is-flipped');
+        const tilt = document.getElementById('tcas-card-tilt');
+        if (tilt) {
+            tilt.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        }
+        const glare = document.getElementById('card-holo-glare');
+        if (glare) glare.style.opacity = '0';
+
+        const btn = document.getElementById('btn-flip-card');
+        if (btn) {
+            btn.innerHTML = isFlipped
+                ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: text-bottom; margin-right: 4px;"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>พลิกดูหน้าการ์ด`
+                : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: text-bottom; margin-right: 4px;"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>พลิกดูหลังการ์ด`;
+        }
+    },
+
+    downloadTradingCard() {
+        this.playSfx('click');
+        this.showToast('กำลังสร้างรูปการ์ดพลังความละเอียดสูง...', 'info');
+
+        const canvas = document.createElement('canvas');
+        canvas.width = 750;
+        canvas.height = 1100;
+        const ctx = canvas.getContext('2d');
+
+        const u = this.state.currentUser || {};
+        const stats = u.stats || {};
+        const lvl = stats.level || 1;
+        const name = (u.display_name || u.username || 'นักรบ TCAS');
+        const avatar = u.avatar_url || '👨‍🎓';
+        const cp = document.getElementById('rpg-combat-power')?.textContent || '0';
+        const rank = document.getElementById('rpg-hero-badge')?.textContent || 'Tier V';
+        const title = document.getElementById('rpg-hero-title')?.textContent || 'ผู้เริ่มต้นการเดินทาง';
+
+        // 1. Background Frame
+        let borderCol = '#f59e0b';
+        let bgGrad = ctx.createLinearGradient(0, 0, 750, 1100);
+        if (lvl >= 20) {
+            borderCol = '#ec4899';
+            bgGrad.addColorStop(0, '#1c0b30');
+            bgGrad.addColorStop(0.5, '#2b1046');
+            bgGrad.addColorStop(1, '#0e031a');
+        } else if (lvl >= 10) {
+            borderCol = '#f59e0b';
+            bgGrad.addColorStop(0, '#221908');
+            bgGrad.addColorStop(0.5, '#352509');
+            bgGrad.addColorStop(1, '#140f03');
+        } else if (lvl >= 5) {
+            borderCol = '#38bdf8';
+            bgGrad.addColorStop(0, '#0f172a');
+            bgGrad.addColorStop(0.5, '#1e293b');
+            bgGrad.addColorStop(1, '#090d16');
+        } else {
+            borderCol = '#b45309';
+            bgGrad.addColorStop(0, '#1a130e');
+            bgGrad.addColorStop(0.5, '#2a1d15');
+            bgGrad.addColorStop(1, '#110b07');
+        }
+
+        // Draw Card Body
+        ctx.fillStyle = bgGrad;
+        ctx.beginPath();
+        if (ctx.roundRect) ctx.roundRect(20, 20, 710, 1060, 36);
+        else ctx.rect(20, 20, 710, 1060);
+        ctx.fill();
+        ctx.lineWidth = 8;
+        ctx.strokeStyle = borderCol;
+        ctx.stroke();
+
+        // Inner Border Ring
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+        ctx.beginPath();
+        if (ctx.roundRect) ctx.roundRect(32, 32, 686, 1036, 28);
+        else ctx.rect(32, 32, 686, 1036);
+        ctx.stroke();
+
+        // 2. Header
+        ctx.fillStyle = borderCol;
+        ctx.font = 'bold 22px Outfit, sans-serif';
+        ctx.fillText(lvl >= 20 ? '★ MYTHIC TCAS ★' : lvl >= 10 ? '★ UR EDITION ★' : lvl >= 5 ? '★ SSR EDITION ★' : '★ SR EDITION ★', 50, 75);
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = 'bold 18px Outfit, sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText(`TCAS68 • #00${lvl}`, 700, 75);
+        ctx.textAlign = 'left';
+
+        // 3. Avatar Box
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(375, 260, 115, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(99, 102, 241, 0.25)';
+        ctx.fill();
+        ctx.lineWidth = 6;
+        ctx.strokeStyle = borderCol;
+        ctx.stroke();
+
+        ctx.font = '96px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(avatar, 375, 260);
+        ctx.restore();
+
+        // Level Badge
+        ctx.fillStyle = '#ef4444';
+        ctx.beginPath();
+        if (ctx.roundRect) ctx.roundRect(315, 365, 120, 42, 21);
+        else ctx.rect(315, 365, 120, 42);
+        ctx.fill();
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 22px Outfit, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(`Lv.${lvl}`, 375, 393);
+
+        // 4. Character Title & Name
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 38px Kanit, sans-serif';
+        ctx.fillText(name, 375, 470);
+
+        ctx.fillStyle = borderCol;
+        ctx.font = '24px Prompt, sans-serif';
+        ctx.fillText(`${title} • ${rank}`, 375, 515);
+
+        // 5. Combat Power Box
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.75)';
+        ctx.beginPath();
+        if (ctx.roundRect) ctx.roundRect(65, 560, 620, 180, 24);
+        else ctx.rect(65, 560, 620, 180);
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = 'bold 20px Outfit, sans-serif';
+        ctx.fillText('COMBAT POWER (CP)', 375, 605);
+
+        ctx.fillStyle = '#38bdf8';
+        ctx.font = 'bold 64px Outfit, sans-serif';
+        ctx.fillText(cp, 375, 680);
+
+        // 6. Blueprint Certified Stamp
+        ctx.fillStyle = 'rgba(16, 185, 129, 0.15)';
+        ctx.beginPath();
+        if (ctx.roundRect) ctx.roundRect(200, 775, 350, 65, 12);
+        else ctx.rect(200, 775, 350, 65);
+        ctx.fill();
+        ctx.strokeStyle = '#10b981';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        ctx.fillStyle = '#34d399';
+        ctx.font = 'bold 24px Outfit, sans-serif';
+        ctx.fillText('✓ ทปอ. BLUEPRINT SPEC', 375, 816);
+
+        // 7. Footer Trademark
+        ctx.fillStyle = '#64748b';
+        ctx.font = '16px Outfit, sans-serif';
+        ctx.fillText('TCAS BLUEPRINT MASTER • OFFICIAL COLLECTIBLE TCG', 375, 960);
+        ctx.fillText('tcas-master.onrender.com', 375, 990);
+
+        // Trigger Download
+        setTimeout(() => {
+            const link = document.createElement('a');
+            link.download = `TCAS-Card-${u.username || 'Student'}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            this.playSfx('correct');
+            this.showToast('บันทึกรูปการ์ดพลังเรียบร้อยแล้ว!', 'success');
+        }, 300);
     },
 
     getSubjectGroupCategory(sub) {
@@ -855,7 +1443,7 @@ const app = {
             if (container) {
                 container.innerHTML = `
                     <div class="empty-state" style="grid-column: 1 / -1; padding: 3rem 1.5rem; text-align: center;">
-                        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🔍</div>
+                        <div style="display:flex;justify-content:center;margin-bottom: 0.5rem;">${this.svg('target', {size: 36, color: 'var(--accent-indigo)'})}</div>
                         <h4 style="margin-bottom: 0.5rem; color: #f8fafc;">ไม่พบวิชาที่ตรงกับเงื่อนไขการค้นหา</h4>
                         <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">ลองเปลี่ยนหมวดหมู่ ปิดตัวกรองพร้อมสอบ หรือใช้คำค้นหาอื่น</p>
                         <button class="btn btn-outline btn-sm" onclick="app.resetSubjectFilters()">รีเซ็ตตัวกรองทั้งหมด</button>
@@ -874,12 +1462,12 @@ const app = {
 
             return `
                 <div class="subject-card ${themeClass} ${isComingSoon ? 'is-coming-soon' : ''}">
-                    ${isComingSoon ? '<div class="subject-ribbon-red">🚧 ยังไม่เสร็จ</div>' : ''}
+                    ${isComingSoon ? '<div class="subject-ribbon-red">กำลังจัดทำ</div>' : ''}
                     <div>
                         <div class="subject-top">
                             <span class="subject-cat-badge ${catClass}">${sub.category}</span>
                             <span class="subject-code">รหัส ${sub.code}</span>
-                            ${isComingSoon ? '<span class="badge-status-danger">🔴 เตรียมข้อสอบ</span>' : '<span class="badge-counter" style="background: rgba(16, 185, 129, 0.2); color: #34d399; font-size: 0.75rem;">พร้อมสอบจริง</span>'}
+                            ${isComingSoon ? '<span class="badge-status-danger">เตรียมข้อสอบ</span>' : '<span class="badge-counter" style="background: rgba(16, 185, 129, 0.2); color: #34d399; font-size: 0.75rem;">พร้อมสอบจริง</span>'}
                         </div>
                         <h4 class="subject-name-th">${sub.name_th}</h4>
                         <div class="subject-name-en">${sub.name_en}</div>
@@ -888,28 +1476,28 @@ const app = {
 
                     <div>
                         <div class="subject-meta-chips">
-                            <span class="meta-chip">⏱️ ${sub.duration_minutes} นาที</span>
-                            <span class="meta-chip">📝 ${sub.total_questions} ข้อ</span>
-                            <span class="meta-chip">🏆 ${sub.total_score} คะแนน</span>
-                            <span class="meta-chip">📦 ${sub.total_db_questions} ข้อในคลัง</span>
-                            ${!isComingSoon ? `<span class="meta-chip" style="color: #34d399; background: rgba(16, 185, 129, 0.12); border-color: rgba(16, 185, 129, 0.35);">🏆 พิชิตแล้ว ${sub.mastered_count || 0}/${sub.total_db_questions}</span>` : ''}
+                            <span class="meta-chip">${this.svg('clock', {size: 13})} ${sub.duration_minutes} นาที</span>
+                            <span class="meta-chip">${this.svg('file-text', {size: 13})} ${sub.total_questions} ข้อ</span>
+                            <span class="meta-chip">${this.svg('award', {size: 13})} ${sub.total_score} คะแนน</span>
+                            <span class="meta-chip">${this.svg('package', {size: 13})} ${sub.total_db_questions} ข้อในคลัง</span>
+                            ${!isComingSoon ? `<span class="meta-chip" style="color: #34d399; background: rgba(16, 185, 129, 0.12); border-color: rgba(16, 185, 129, 0.35);">${this.svg('check-circle', {size: 13})} พิชิตแล้ว ${sub.mastered_count || 0}/${sub.total_db_questions}</span>` : ''}
                         </div>
 
                         <div class="subject-actions">
                             ${isComingSoon ? `
                                 <button class="btn btn-secondary btn-sm" onclick="app.showComingSoonToast('${this.escapeHtml(sub.name_th)}')" style="opacity: 0.8; border-color: rgba(239, 68, 68, 0.4); color: #fca5a5;" title="อยู่ระหว่างจัดทำข้อสอบ">
-                                    ⏳ เร็วๆ นี้
+                                    ${this.svg('clock', {size: 13})} เร็วๆ นี้
                                 </button>
                             ` : `
                                 <button class="btn btn-primary btn-sm" onclick="app.onFullMockClick('${sub.id}', ${sub.total_db_questions || 0}, ${sub.total_questions || 60})">
-                                    🎯 Full Mock ${sub.total_db_questions > sub.total_questions ? `<span style="font-size: 0.75rem; opacity: 0.9; margin-left: 2px;">(${Math.floor(sub.total_db_questions / sub.total_questions)} ชุด)</span>` : ''}
+                                    ${this.svg('target', {size: 14})} Full Mock ${sub.total_db_questions > sub.total_questions ? `<span style="font-size: 0.75rem; opacity: 0.9; margin-left: 2px;">(${Math.floor(sub.total_db_questions / sub.total_questions)} ชุด)</span>` : ''}
                                 </button>
                             `}
                             <button class="btn btn-secondary btn-sm" onclick="app.openBlueprintView('${sub.id}')">
-                                📋 Blueprint
+                                ${this.svg('clipboard', {size: 14})} Blueprint
                             </button>
                             <button class="btn btn-warning btn-sm" onclick="app.openCheatSheetModal('${sub.id}')" title="ดูสรุปสูตร & แนวข้อสอบ">
-                                📖 สรุปสูตร
+                                ${this.svg('book', {size: 14})} สรุปสูตร
                             </button>
                         </div>
                     </div>
@@ -1119,7 +1707,7 @@ const app = {
                         <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.75rem;">
                             <span style="font-size: 0.8rem; color: #64748b;">⏱️ ${subject.duration_minutes || 60} นาที • ${subject.total_score || 100} คะแนน</span>
                             <button class="btn btn-primary btn-sm" onclick="app.startExamFromSetModal('${subjectId}', ${s.set_number})">
-                                🚀 เริ่มทำชุดนี้
+                                ${this.svg('play', {size: 14})} เริ่มทำชุดนี้
                             </button>
                         </div>
                     </div>
@@ -1144,7 +1732,7 @@ const app = {
                     <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.75rem;">
                         <span style="font-size: 0.8rem; color: #a855f7;">⏱️ ${subject.duration_minutes || 60} นาที • ${subject.total_score || 100} คะแนน</span>
                         <button class="btn btn-secondary btn-sm" style="border-color: #a855f7; color: #e9d5ff;" onclick="app.startExamFromSetModal('${subjectId}', null)">
-                            🎲 เริ่มสอบแบบสุ่ม
+                            ${this.svg('shuffle', {size: 14})} เริ่มสอบแบบสุ่ม
                         </button>
                     </div>
                 </div>
@@ -1357,6 +1945,7 @@ const app = {
     },
 
     selectOption(optionId) {
+        this.playSfx('select');
         const session = this.state.activeSession;
         if (!session) return;
 
@@ -1818,14 +2407,19 @@ const app = {
         document.getElementById('res-wrong-count').textContent = `${result.wrong_count} ข้อ`;
         document.getElementById('res-time-spent').textContent = `${mins}:${String(secs).padStart(2, '0')}`;
 
-        // Feedback Headline
+        // Feedback Headline with Blueprint Rubber Stamps & Audio
         const headlineEl = document.getElementById('res-headline');
         if (result.accuracy_pct >= 80) {
-            headlineEl.textContent = '🌟 ยอดเยี่ยมมาก! ระดับคะแนนพร้อมสอบจริง';
+            this.playSfx('level_up');
+            this.launchConfetti();
+            headlineEl.innerHTML = '🌟 ยอดเยี่ยมมาก! ระดับคะแนนพร้อมสอบจริง <span class="rubber-stamp stamp-gold">★ TOP TIER ★</span>';
         } else if (result.accuracy_pct >= 50) {
-            headlineEl.textContent = '👍 ดีมาก! ใกล้ถึงเป้าหมายแล้ว เก็บรายละเอียดเพิ่มอีกนิด';
+            this.playSfx('correct');
+            this.launchConfetti();
+            headlineEl.innerHTML = '👍 ดีมาก! ใกล้ถึงเป้าหมายแล้ว <span class="rubber-stamp">✓ ทปอ. PASS</span>';
         } else {
-            headlineEl.textContent = '💪 อย่ายอมแพ้! ฝึกซ้ำในสมุดจุดอ่อนเพื่ออุดรอยรั่ว';
+            this.playSfx('click');
+            headlineEl.innerHTML = '💪 อย่ายอมแพ้! ฝึกซ้ำในสมุดจุดอ่อนเพื่ออุดรอยรั่ว <span class="rubber-stamp stamp-cyan">⚡ DRILL MORE</span>';
         }
 
         // Domain Breakdown (Robust Array / Object Parsing)
@@ -3114,7 +3708,7 @@ const app = {
         if (list.length === 0) {
             container.innerHTML = `
                 <div class="empty-state" style="grid-column: 1 / -1; padding: 3rem 1.5rem; text-align: center;">
-                    <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">📖</div>
+                    <div style="display:flex;justify-content:center;margin-bottom: 0.75rem;">${this.svg('book', {size: 36, color: 'var(--accent-indigo)'})}</div>
                     <div style="font-weight: 700; font-size: 1.1rem; color: #f1f5f9; margin-bottom: 0.5rem;">ยังไม่มีคำศัพท์ในหมวดนี้</div>
                     <p style="color: var(--text-secondary); max-width: 460px; margin: 0 auto; font-size: 0.9rem;">
                         ขณะฝึกทำข้อสอบภาษาอังกฤษ สามารถลากคลุมเฉพาะคำศัพท์ที่ไม่คุ้นเคยเพื่อแปลและบันทึกเข้าคลังคำศัพท์นี้ได้ทันที
@@ -3845,7 +4439,7 @@ const app = {
         if (items.length === 0) {
             listEl.innerHTML = `
                 <div style="text-align: center; padding: 2rem 1rem; color: var(--text-muted); font-size: 0.8rem;">
-                    <div style="font-size: 1.8rem; margin-bottom: 0.4rem; opacity: 0.7;">🔖</div>
+                    <div style="display:flex;justify-content:center;margin-bottom: 0.4rem; opacity: 0.7;">${this.svg('bookmark', {size: 28, color: 'var(--accent-indigo)'})}</div>
                     <p style="margin: 0;">ยังไม่มีข้อสอบที่บันทึกไว้</p>
                     <p style="margin-top: 0.25rem; font-size: 0.72rem; color: var(--text-secondary);">
                         กดปุ่ม <strong>"เก็บไว้ถาม AI"</strong> เหนือข้อสอบขณะทำ หรือกดคุยได้ทันที
@@ -4664,7 +5258,7 @@ const app = {
         const mode = this.state.cefrTimerMode || 'per_15';
 
         if (mode === 'zen') {
-            if (timerText) timerText.textContent = '🧘‍♂️ Zen';
+            if (timerText) timerText.textContent = 'Zen';
             this.state.cefrTimerInterval = setInterval(() => {
                 this.state.cefrTotalTimeElapsed++;
                 const m = Math.floor(this.state.cefrTotalTimeElapsed / 60);
@@ -4763,12 +5357,15 @@ const app = {
         if (fbBanner) {
             fbBanner.style.display = 'flex';
             if (isCorrect) {
-                fbIcon.textContent = '🎉';
+                this.playSfx('correct');
+                this.showFloatingExp('+20 EXP', window.innerWidth / 2, window.innerHeight * 0.45);
+                fbIcon.innerHTML = this.svg('check-circle', { size: 40, color: '#34d399' });
                 fbTitle.textContent = 'ถูกต้อง แม่นยำมาก!';
                 fbTitle.style.color = '#34d399';
                 fbDesc.textContent = `ความหมาย: ${q.correct_meaning_th}`;
             } else {
-                fbIcon.textContent = '💡';
+                this.playSfx('wrong');
+                fbIcon.innerHTML = this.svg('lightbulb', { size: 40, color: '#fb7185' });
                 fbTitle.textContent = 'ยังไม่ถูกต้อง!';
                 fbTitle.style.color = '#fb7185';
                 fbDesc.textContent = `คำตอบที่ถูกต้องคือ: ${q.correct_meaning_th}`;
@@ -4865,15 +5462,20 @@ const app = {
             if (expEl) expEl.textContent = `+${r.exp_earned} EXP`;
 
             if (r.score_percentage >= 80) {
-                if (trophyEl) trophyEl.textContent = '🏆';
+                this.playSfx('level_up');
+                this.launchConfetti();
+                if (trophyEl) trophyEl.innerHTML = this.svg('award', { size: 48, color: '#fbbf24' });
                 if (headingEl) headingEl.textContent = 'ยอดเยี่ยม ไร้ที่ติ!';
                 if (subtitleEl) subtitleEl.textContent = `คุณเชี่ยวชาญคำศัพท์ระดับ ${r.level} พร้อมพิชิตข้อสอบจริงแล้ว`;
             } else if (r.score_percentage >= 50) {
-                if (trophyEl) trophyEl.textContent = '⭐';
+                this.playSfx('correct');
+                this.launchConfetti();
+                if (trophyEl) trophyEl.innerHTML = this.svg('star', { size: 48, color: '#fbbf24' });
                 if (headingEl) headingEl.textContent = 'ทำได้ดี มีพัฒนาการ!';
                 if (subtitleEl) subtitleEl.textContent = `คะแนนผ่านเกณฑ์ ทบทวนคำที่ตอบผิดอีกนิดจะจำได้แม่นยำขึ้นครับ`;
             } else {
-                if (trophyEl) trophyEl.textContent = '📖';
+                this.playSfx('wrong');
+                if (trophyEl) trophyEl.innerHTML = this.svg('book', { size: 48, color: '#94a3b8' });
                 if (headingEl) headingEl.textContent = 'พยายามต่อไป!';
                 if (subtitleEl) subtitleEl.textContent = `แนะนำให้กด ⭐ ปักหมุดคำที่ตอบผิดเพื่อกลับมาทบทวนซ้ำครับ`;
             }
@@ -4884,7 +5486,7 @@ const app = {
                 listContainer.innerHTML = this.state.cefrQuizAnswers.map(a => `
                     <div class="cefr-breakdown-item">
                         <div class="cefr-breakdown-left">
-                            <span class="cefr-item-status">${a.is_correct ? '✅' : '❌'}</span>
+                            <span class="cefr-item-status">${a.is_correct ? this.svg('check-circle', { size: 16, color: '#34d399' }) : this.svg('x', { size: 16, color: '#f43f5e' })}</span>
                             <div>
                                 <span class="cefr-item-word">${this.escapeHtml(a.word)}</span>
                                 <span class="cefr-item-pos">(${a.part_of_speech})</span>
@@ -5033,7 +5635,9 @@ const app = {
             if (heroLvl) heroLvl.textContent = `Lv.${lvl}`;
 
             if (sidebarAuthBtn) {
-                sidebarAuthBtn.textContent = '🚪';
+                sidebarAuthBtn.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                `;
                 sidebarAuthBtn.title = 'ออกจากระบบ';
             }
 
@@ -5041,29 +5645,37 @@ const app = {
                 topbarSection.innerHTML = `
                     <div class="topbar-user-chip" onclick="app.navigate('status')" title="คลิกดูสเตตัสตัวละคร RPG ของคุณ">
                         <span class="topbar-avatar">${avatar}</span>
-                        <span class="topbar-user-name">${u.display_name || u.username}</span>
+                        <span class="topbar-user-name btn-text-responsive">${u.display_name || u.username}</span>
                         <span class="topbar-user-badge">Lv.${lvl}</span>
-                        <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); app.handleLogout()" style="padding: 0.15rem 0.5rem; margin-left: 0.25rem; font-size: 0.75rem;" title="ออกจากระบบ">
-                            🚪 ออก
+                        <button class="btn btn-outline btn-sm btn-logout-chip" onclick="event.stopPropagation(); app.handleLogout()" title="ออกจากระบบ">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                            <span class="btn-text-responsive">ออก</span>
                         </button>
                     </div>
                 `;
             }
         } else {
             // Guest mode
-            if (sidebarAvatar) sidebarAvatar.textContent = '👤';
+            if (sidebarAvatar) sidebarAvatar.innerHTML = this.renderAvatar('scholar-m', 38);
             if (sidebarName) sidebarName.textContent = 'ผู้ใช้งานทั่วไป';
             if (sidebarSub) sidebarSub.textContent = 'คลิกเพื่อเข้าสู่ระบบ';
             if (sidebarBadge) sidebarBadge.textContent = 'Guest';
+            const mistBadge = document.getElementById('sidebar-mistakes-count');
+            if (mistBadge) mistBadge.textContent = '0';
+            const mastBadge = document.getElementById('sidebar-mastered-count');
+            if (mastBadge) mastBadge.textContent = '0';
             if (sidebarAuthBtn) {
-                sidebarAuthBtn.textContent = '🔑';
+                sidebarAuthBtn.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                `;
                 sidebarAuthBtn.title = 'เข้าสู่ระบบ / สมัครสมาชิก';
             }
 
             if (topbarSection) {
                 topbarSection.innerHTML = `
                     <button class="btn btn-primary btn-sm" onclick="app.openAuthModal('login')">
-                        <span>👤 เข้าสู่ระบบ / สมัครสมาชิก</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        <span class="btn-text-responsive">เข้าสู่ระบบ</span>
                     </button>
                 `;
             }
@@ -5102,8 +5714,8 @@ const app = {
         }
     },
 
-    selectAvatar(emoji, btn) {
-        this.state.selectedAvatar = emoji;
+    selectAvatar(key, btn) {
+        this.state.selectedAvatar = key;
         document.querySelectorAll('.avatar-option-btn').forEach(b => b.classList.remove('selected'));
         if (btn) btn.classList.add('selected');
     },
@@ -5161,7 +5773,7 @@ const app = {
         const display_name = document.getElementById('register-displayname').value.trim();
         const password = document.getElementById('register-password').value;
         const confirm_password = document.getElementById('register-confirm-password').value;
-        const avatar_url = this.state.selectedAvatar || '👨‍🎓';
+        const avatar_url = this.state.selectedAvatar || 'scholar-m';
         const btn = document.getElementById('btn-submit-register');
 
         if (!username || !password) {
@@ -5263,9 +5875,9 @@ const app = {
                     if (u.id === currentUserId) userRank = rank;
 
                     let rankBadgeHtml = `<span class="rank-badge rank-badge-other">${rank}</span>`;
-                    if (rank === 1) rankBadgeHtml = `<span class="rank-badge rank-badge-1">🥇</span>`;
-                    else if (rank === 2) rankBadgeHtml = `<span class="rank-badge rank-badge-2">🥈</span>`;
-                    else if (rank === 3) rankBadgeHtml = `<span class="rank-badge rank-badge-3">🥉</span>`;
+                    if (rank === 1) rankBadgeHtml = `<span class="rank-badge rank-badge-1" style="display:inline-flex;align-items:center;justify-content:center;">${this.svg('medal', { size: 18, color: '#f59e0b' })}</span>`;
+                    else if (rank === 2) rankBadgeHtml = `<span class="rank-badge rank-badge-2" style="display:inline-flex;align-items:center;justify-content:center;">${this.svg('medal', { size: 18, color: '#cbd5e1' })}</span>`;
+                    else if (rank === 3) rankBadgeHtml = `<span class="rank-badge rank-badge-3" style="display:inline-flex;align-items:center;justify-content:center;">${this.svg('medal', { size: 18, color: '#d97706' })}</span>`;
 
                     const isCurrent = (u.id === currentUserId) ? 'current-user-row' : '';
 
@@ -5274,7 +5886,7 @@ const app = {
                             <td>${rankBadgeHtml}</td>
                             <td>
                                 <div class="user-cell">
-                                    <span class="user-cell-avatar">${u.avatar_url || '👨‍🎓'}</span>
+                                    <span class="user-cell-avatar">${this.renderAvatar(u.avatar_url, 28)}</span>
                                     <div class="user-cell-names">
                                         <span class="user-cell-display">${this.escapeHtml(u.display_name)} ${u.id === currentUserId ? '<span style="color: #38bdf8; font-size: 0.75rem;">(คุณ)</span>' : ''}</span>
                                         <span class="user-cell-handle">@${this.escapeHtml(u.username)}</span>

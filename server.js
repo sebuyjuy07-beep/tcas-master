@@ -545,14 +545,16 @@ app.post('/api/sessions/:id/submit', (req, res) => {
                     }
                 }
 
-                if (!isCorrect) {
-                    // If wrong, log to user's isolated mistake notebook
-                    const mistakeId = 'mst_' + userId + '_' + ans.question_id;
-                    recordMistake.run(mistakeId, userId, ans.question_id);
-                } else {
-                    // If correct, record to user_mastered_questions (ถอดออกจากข้อสอบหลัก ย้ายไปใส่ข้อสอบที่ผ่านแล้ว)
-                    recordMastered.run(userId, ans.question_id);
-                    updateMistakeMastered.run(userId, ans.question_id);
+                if (userId && userId !== 'usr_guest' && (!req.user || req.user.role !== 'guest')) {
+                    if (!isCorrect) {
+                        // If wrong, log to user's isolated mistake notebook
+                        const mistakeId = 'mst_' + userId + '_' + ans.question_id;
+                        recordMistake.run(mistakeId, userId, ans.question_id);
+                    } else {
+                        // If correct, record to user_mastered_questions (ถอดออกจากข้อสอบหลัก ย้ายไปใส่ข้อสอบที่ผ่านแล้ว)
+                        recordMastered.run(userId, ans.question_id);
+                        updateMistakeMastered.run(userId, ans.question_id);
+                    }
                 }
 
                 insertUserAnswer.run(
@@ -692,6 +694,9 @@ app.get('/api/sessions/:id/review', (req, res) => {
 app.get('/api/mistakes', (req, res) => {
     try {
         const userId = req.user.id;
+        if (!userId || userId === 'usr_guest' || req.user.role === 'guest') {
+            return res.json({ success: true, data: [] });
+        }
         const mistakes = db.prepare(`
             SELECT m.*, q.stimulus, q.question_text, q.explanation, q.trap_analysis, q.difficulty,
                    s.name_th as subject_name, s.id as subject_id,
@@ -772,6 +777,16 @@ app.delete('/api/mistakes/:questionId', (req, res) => {
 app.get('/api/questions/mastered', (req, res) => {
     try {
         const userId = req.user.id;
+        if (!userId || userId === 'usr_guest' || req.user.role === 'guest') {
+            return res.json({
+                success: true,
+                data: {
+                    total_mastered: 0,
+                    subject_stats: [],
+                    questions: []
+                }
+            });
+        }
         const { subject_id, blueprint_id, search, limit = 50, offset = 0 } = req.query;
 
         // Subject summary stats for Mastered Bank
@@ -894,6 +909,21 @@ app.delete('/api/questions/mastered/:questionId', (req, res) => {
 app.get('/api/stats/overview', (req, res) => {
     try {
         const userId = req.user.id;
+        if (!userId || userId === 'usr_guest' || req.user.role === 'guest') {
+            return res.json({
+                success: true,
+                data: {
+                    total_sessions: 0,
+                    total_answered: 0,
+                    total_correct: 0,
+                    accuracy_pct: 0,
+                    total_mistakes: 0,
+                    total_time_spent_minutes: 0,
+                    domain_stats: [],
+                    recent_sessions: []
+                }
+            });
+        }
         const totalSessions = db.prepare("SELECT COUNT(*) as count FROM exam_sessions WHERE user_id = ? AND status = 'completed'").get(userId).count;
         const totalAnswered = db.prepare(`
             SELECT COUNT(ua.id) as count 
@@ -957,6 +987,50 @@ app.get('/api/stats/overview', (req, res) => {
 app.get('/api/stats/rpg-status', (req, res) => {
     try {
         const userId = req.user.id;
+        if (!userId || userId === 'usr_guest' || req.user.role === 'guest') {
+            return res.json({
+                success: true,
+                data: {
+                    user: { username: 'guest', display_name: 'ผู้ใช้งานทั่วไป', avatar_url: 'scholar-m', role: 'guest' },
+                    level: 1,
+                    total_xp: 0,
+                    xp_in_level: 0,
+                    xp_needed: 80,
+                    xp_percent: 0,
+                    combat_power: 0,
+                    streak_days: 0,
+                    rank_title: 'ผู้เริ่มต้นการเดินทาง (Novice Explorer)',
+                    rank_badge: 'Tier V',
+                    rank_color: '#94a3b8',
+                    stats: {
+                        accuracy: 0,
+                        speed: 0,
+                        defense: 0,
+                        mastery: 0,
+                        consistency: 0
+                    },
+                    raw: {
+                        total_answered: 0,
+                        total_correct: 0,
+                        avg_time_seconds: 0,
+                        total_trap_q: 0,
+                        trap_defended: 0,
+                        total_mistakes: 0,
+                        mastered_mistakes: 0,
+                        total_vocab: 0,
+                        mastered_vocab: 0,
+                        total_sessions: 0
+                    },
+                    achievements: [
+                        { id: 'first_step', name: 'ก้าวแรกสู่อนาคต', desc: 'ทำข้อสอบชุดแรกจบ', unlocked: false },
+                        { id: 'streak_3', name: 'ไฟแห่งความมุ่งมั่น', desc: 'ฝึกฝนต่อเนื่อง 3 วันติด', unlocked: false },
+                        { id: 'master_10', name: 'ผู้พิชิตโจทย์ 10 ข้อ', desc: 'ตอบข้อสอบถูกต้องครบ 10 ข้อ', unlocked: false },
+                        { id: 'trap_breaker', name: 'ผู้ทำลายกับดัก', desc: 'ตรวจจับและตอบถูกในข้อที่มีจุดหลอก', unlocked: false },
+                        { id: 'vocab_champ', name: 'คลังศัพท์พิชิต TCAS', desc: 'จำคำศัพท์ระดับ B2 ขึ้นไปครบ 10 คำ', unlocked: false }
+                    ]
+                }
+            });
+        }
         const totalSessions = db.prepare("SELECT COUNT(*) as count FROM exam_sessions WHERE user_id = ? AND status = 'completed'").get(userId).count;
         const ansStats = db.prepare(`
             SELECT COUNT(ua.id) as total_answered,
@@ -1012,11 +1086,11 @@ app.get('/api/stats/rpg-status', (req, res) => {
         // 1. Accuracy (ACC) [0-100]
         const acc = ansStats.total_answered > 0
             ? Math.round((ansStats.total_correct / ansStats.total_answered) * 100)
-            : 60;
+            : 0;
 
         // 2. Speed (SPD) [0-100] (Target 45-60s)
-        const avgSeconds = Math.max(10, Math.round(ansStats.avg_time));
-        let spd = 65;
+        const avgSeconds = ansStats.total_answered > 0 ? Math.max(10, Math.round(ansStats.avg_time)) : 0;
+        let spd = 0;
         if (ansStats.total_answered > 0) {
             if (avgSeconds <= 35) spd = 95;
             else if (avgSeconds <= 55) spd = 85;
@@ -1028,20 +1102,22 @@ app.get('/api/stats/rpg-status', (req, res) => {
         // 3. Trap Defense (DEF) [0-100]
         const def = trapStats.total_trap_q > 0
             ? Math.round((trapStats.trap_defended / trapStats.total_trap_q) * 100)
-            : Math.min(100, Math.max(50, acc - 5));
+            : 0;
 
         // 4. Mastery (MST) [0-100]
-        let mst = 50;
+        let mst = 0;
         if (mistakeStats.total_mistakes > 0) {
             mst = Math.round((mistakeStats.mastered_mistakes / mistakeStats.total_mistakes) * 100);
         } else if (vocabStats.total_vocab > 0) {
-            mst = Math.min(100, vocabStats.mastered_vocab * 15 + 40);
+            mst = Math.min(100, vocabStats.mastered_vocab * 15);
         } else {
-            mst = 55;
+            mst = 0;
         }
 
         // 5. Consistency (CON) [0-100]
-        const con = Math.min(100, Math.max(30, (streak * 12) + (totalSessions * 8)));
+        const con = totalSessions > 0 || streak > 0
+            ? Math.min(100, Math.max(0, (streak * 12) + (totalSessions * 8)))
+            : 0;
 
         // Combat Power (CP)
         const combatPower = Math.round((acc * 2.5 + spd * 1.5 + def * 2.0 + mst * 2.0 + con * 2.0) * 10);
@@ -1995,46 +2071,53 @@ app.post('/api/cefr/quiz/generate', (req, res) => {
 app.post('/api/cefr/quiz/submit', (req, res) => {
     try {
         const userId = req.user.id;
+        const isRegistered = userId && userId !== 'usr_guest' && (!req.user || req.user.role !== 'guest');
         const { quiz_id, level = 'B2', mode = 'meaning', answers = [], time_spent_seconds = 0 } = req.body;
         if (!answers || answers.length === 0) {
             return res.status(400).json({ success: false, error: 'ไม่พบรายการคำตอบ' });
         }
 
         let correctCount = 0;
-        const upsertMastery = db.prepare(`
-            INSERT INTO cefr_word_mastery (user_id, word_id, times_seen, times_correct, consecutive_correct, mastery_level, last_practiced_at)
-            VALUES (@user_id, @word_id, 1, @is_correct, @is_correct, CASE WHEN @is_correct = 1 THEN 'learning' ELSE 'need_review' END, CURRENT_TIMESTAMP)
-            ON CONFLICT(user_id, word_id) DO UPDATE SET
-                times_seen = times_seen + 1,
-                times_correct = times_correct + @is_correct,
-                consecutive_correct = CASE WHEN @is_correct = 1 THEN consecutive_correct + 1 ELSE 0 END,
-                mastery_level = CASE 
-                    WHEN (consecutive_correct + @is_correct) >= 3 THEN 'mastered'
-                    WHEN @is_correct = 1 THEN 'reviewing'
-                    ELSE 'need_review'
-                END,
-                last_practiced_at = CURRENT_TIMESTAMP
-        `);
+        if (isRegistered) {
+            const upsertMastery = db.prepare(`
+                INSERT INTO cefr_word_mastery (user_id, word_id, times_seen, times_correct, consecutive_correct, mastery_level, last_practiced_at)
+                VALUES (@user_id, @word_id, 1, @is_correct, @is_correct, CASE WHEN @is_correct = 1 THEN 'learning' ELSE 'need_review' END, CURRENT_TIMESTAMP)
+                ON CONFLICT(user_id, word_id) DO UPDATE SET
+                    times_seen = times_seen + 1,
+                    times_correct = times_correct + @is_correct,
+                    consecutive_correct = CASE WHEN @is_correct = 1 THEN consecutive_correct + 1 ELSE 0 END,
+                    mastery_level = CASE 
+                        WHEN (consecutive_correct + @is_correct) >= 3 THEN 'mastered'
+                        WHEN @is_correct = 1 THEN 'reviewing'
+                        ELSE 'need_review'
+                    END,
+                    last_practiced_at = CURRENT_TIMESTAMP
+            `);
 
-        db.transaction(() => {
+            db.transaction(() => {
+                for (const a of answers) {
+                    if (a.is_correct) correctCount++;
+                    upsertMastery.run({
+                        user_id: userId,
+                        word_id: a.word_id,
+                        is_correct: a.is_correct ? 1 : 0
+                    });
+                }
+            })();
+
+            const scorePercentage = Math.round((correctCount / answers.length) * 100);
+            const expEarned = (correctCount * 15) + (scorePercentage >= 80 ? 50 : 0);
+
+            // Save history with user_id
+            db.prepare(`
+                INSERT INTO cefr_quiz_history (id, user_id, cefr_level, quiz_mode, total_questions, correct_count, score_percentage, exp_earned, time_spent_seconds)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            `).run(quiz_id || ('quiz_' + Date.now()), userId, level, mode, answers.length, correctCount, scorePercentage, expEarned, time_spent_seconds);
+        } else {
             for (const a of answers) {
                 if (a.is_correct) correctCount++;
-                upsertMastery.run({
-                    user_id: userId,
-                    word_id: a.word_id,
-                    is_correct: a.is_correct ? 1 : 0
-                });
             }
-        })();
-
-        const scorePercentage = Math.round((correctCount / answers.length) * 100);
-        const expEarned = (correctCount * 15) + (scorePercentage >= 80 ? 50 : 0);
-
-        // Save history with user_id
-        db.prepare(`
-            INSERT INTO cefr_quiz_history (id, user_id, cefr_level, quiz_mode, total_questions, correct_count, score_percentage, exp_earned, time_spent_seconds)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `).run(quiz_id || ('quiz_' + Date.now()), userId, level, mode, answers.length, correctCount, scorePercentage, expEarned, time_spent_seconds);
+        }
 
         res.json({
             success: true,
