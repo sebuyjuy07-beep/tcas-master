@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCAS Blueprint Master | รวมแนวข้อสอบและระบบติวอิงพิมพ์เขียว ทปอ.</title>
+    <meta name="description" content="ระบบฝึกทำข้อสอบจำลอง TGAT, TPAT, A-Level อ้างอิงโครงสร้าง Test Blueprint ของ ทปอ. พร้อมระบบจับเวลา วิเคราะห์จุดอ่อน และสมุดบันทึกข้อผิดพลาด">
+    
+    <!-- Google Fonts (Prompt & Kanit for Thai, Outfit for Numbers/Headers) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- KaTeX for crisp Math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/style.css?v=2.7">
+</head>
+<body class="theme-dark">
+    <!-- Ambient Background Glows -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <div class="ambient-glow glow-3"></div>
+
+    <div class="app-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="main-sidebar">
+            <div class="brand">
+                <div class="brand-logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                </div>
+                <div class="brand-info">
+                    <span class="brand-title">TCAS Master</span>
+                    <span class="brand-badge">ทปอ. Blueprint</span>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <button class="nav-item active" id="nav-dashboard" onclick="app.navigate('dashboard')">
+                    <span class="nav-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    </span>
+                    <span class="nav-label">แดชบอร์ดภาพรวม</span>
+                </button>
+
+                <button class="nav-item" id="nav-status" onclick="app.navigate('status')">
+                    <span class="nav-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    </span>
+                    <span class="nav-label">สเตตัสตัวละคร (RPG)</span>
+                    <span class="badge-counter" id="sidebar-level-badge" style="background: linear-gradient(135deg, #f59e0b, #ef4444); color: #fff; font-weight: 700;">Lv.1</span>
+                </button>
+
+                <button class="nav-item" id="nav-blueprint" onclick="app.navigate('blueprint')">
+                    <span class="nav-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    </span>
+                    <span class="nav-label">โครงสร้าง Blueprint</span>
+                </button>
+
+                <button class="nav-item" id="nav-mistakes" onclick="app.navigate('mistakes')">
+                    <span class="nav-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/><path d="m9 14 2 2 4-4"/></svg>
+                    </span>
+                    <span class="nav-label">สมุดจุดอ่อน (Mistakes)</span>
+                    <span class="badge-counter" id="sidebar-mistakes-count">0</span>
+                </button>
+
+                <button class="nav-item" id="nav-mastered" onclick="app.navigate('mastered')">
+                    <span class="nav-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    </span>
+                    <span class="nav-label">ข้อสอบที่พิชิตแล้ว</span>
+                    <span class="badge-counter" id="sidebar-mastered-count" style="background: rgba(16, 185, 129, 0.25); color: #34d399; font-weight: 700;">0</span>
+                </button>
+
+                <button class="nav-item" id="nav-vocab" onclick="app.navigate('vocab')">
+                    <span class="nav-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
+                    </span>
+                    <span class="nav-label">คลังคำศัพท์ (Vocab)</span>
+                    <span class="badge-counter" id="sidebar-vocab-count" style="background: var(--accent-cyan); color: #000;">0</span>
+                </button>
+
+                <button class="nav-item" id="nav-cefr" onclick="app.navigate('cefr')">
+                    <span class="nav-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><circle cx="12" cy="10" r="3"/><path d="m14 13 2 3"/></svg>
+                    </span>
+                    <span class="nav-label">ควิซคำศัพท์ (CEFR)</span>
+                    <span class="badge-counter" style="background: linear-gradient(135deg, #10b981, #06b6d4); color: #fff; font-weight: 700; font-size: 0.7rem;">A1-C2</span>
+                </button>
+
+                <button class="nav-item" id="nav-add" onclick="app.navigate('add')">
+                    <span class="nav-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                    </span>
+                    <span class="nav-label">เพิ่มข้อสอบ / นำเข้า</span>
+                </button>
+
+                <button class="nav-item" id="nav-ai-hub" onclick="app.openAiChatHub()" title="เปิดศูนย์สนทนา TCAS Master AI (คู่คิดวิเคราะห์ข้อสอบ)">
+                    <span class="nav-icon" style="font-size: 1.15rem;">🤖</span>
+                    <span class="nav-label">TCAS Master AI</span>
+                    <span class="badge-counter" id="sidebar-ai-count" style="background: linear-gradient(135deg, #8b5cf6, #ec4899); color: #fff; font-weight: 700; font-size: 0.75rem;">0</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-chip" id="sidebar-user-chip" onclick="app.handleUserChipClick()" style="cursor: pointer;" title="คลิกเพื่อจัดการบัญชีหรือดูสเตตัส">
+                    <div class="user-avatar" id="sidebar-user-avatar" style="background: linear-gradient(135deg, #6366f1, #06b6d4); font-weight: 800;">👨‍🎓</div>
+                    <div class="user-meta">
+                        <span class="user-name" id="sidebar-user-name">นักรบ TCAS</span>
+                        <span class="user-sub" id="sidebar-user-sub">@student • Lv.1</span>
+                    </div>
+                    <button class="btn-sidebar-logout" id="btn-sidebar-auth" onclick="event.stopPropagation(); app.handleAuthButtonAction()" title="เข้าสู่ระบบ / สลับบัญชี" style="background: none; border: none; font-size: 1.05rem; cursor: pointer; color: var(--text-muted); padding: 4px;">
+                        🔑
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-viewport">
+            <!-- Top Header Bar -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="mobile-toggle-btn" id="btn-toggle-menu" onclick="app.toggleSidebar()">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                    </button>
+                    <h1 class="view-heading" id="view-title">แดชบอร์ดภาพรวม</h1>
+                </div>
+
+                <div class="topbar-right">
+                    <button class="btn btn-outline btn-sm btn-ai-hub-topbar" onclick="app.openAiChatHub()" title="เปิดศูนย์สนทนา TCAS Master AI (คู่คิดวิเคราะห์ข้อสอบ ถามได้ตลอดเวลา)">
+                        <span style="font-size: 1.05rem;">🤖</span>
+                        <span>TCAS Master AI</span>
+                        <span class="badge-counter" id="topbar-ai-count" style="background: linear-gradient(135deg, #8b5cf6, #ec4899); color: #fff; font-size: 0.72rem; padding: 2px 7px; border-radius: 999px; margin-left: 4px; font-weight: 700;">0</span>
+                    </button>
+                    <button class="btn btn-outline btn-sm" onclick="app.openLeaderboardModal()" title="ดูตารางอันดับคะแนน (Leaderboard)">
+                        <span>🏆 ตารางอันดับ</span>
+                    </button>
+                    <button class="btn btn-outline btn-sm" onclick="app.toggleScratchpad()" title="เปิดกระดานทดเลขและวาดรูปคณิตศาสตร์">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+                        <span>✏️ กระดานทดเลข</span>
+                    </button>
+                    <div id="topbar-user-section">
+                        <!-- Populated dynamically by app.js -->
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-scrollable">
+                <!-- VIEW 1: DASHBOARD -->
+                <section class="view-section active" id="view-dashboard">
+                    <!-- Dual-Hub Hero Banner (Command Center & TCAS Countdown) -->
+                    <div class="hero-banner-hub glass-panel">
+                        <div class="hero-hub-left">
+                            <div class="hero-badge-row">
+                                <span class="hero-tag">🎯 TCAS68 EXAMINATION COMMAND HUB</span>
+                                <span class="hero-streak-pill" id="hero-streak-badge" title="ฝึกฝนติดต่อกันเพื่อสร้างวินัย">🔥 สตรีค 3 วันติด</span>
+                            </div>
+                            <h2 class="hero-title">ฝึกตรงจุดตาม Blueprint ทปอ. พร้อมจับเวลาเสมือนจริง</h2>
+                            <p class="hero-desc">
+                                คลังข้อสอบวิเคราะห์โครงสร้าง น้ำหนักคะแนน และรูปแบบโจทย์จากพิมพ์เขียวทางการ MyTCAS 68 สุ่มทำแบบ Full Mock หรือเจาะพาร์ตจุดอ่อนได้ไม่จำกัด
+                            </p>
+                            <div class="hero-actions">
+                                <button class="btn btn-primary" onclick="app.openQuickStartModal()">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                                    เริ่มสอบจำลองทันที (Quick Mock)
+                                </button>
+                                <button class="btn btn-secondary" onclick="app.navigate('blueprint')">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                                    สำรวจพิมพ์เขียว ทปอ.
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Right Hub: TCAS Countdown & Dream Target Widget -->
+                        <div class="hero-hub-right">
+                            <div class="countdown-card">
+                                <div class="countdown-header">
+                                    <span class="countdown-label">⏳ นับถอยหลังวันสอบ TCAS68</span>
+                                    <div class="countdown-tabs">
+                                        <button class="countdown-tab active" id="tab-cd-tgat" onclick="app.switchCountdownTarget('tgat')">TGAT/TPAT</button>
+                                        <button class="countdown-tab" id="tab-cd-alevel" onclick="app.switchCountdownTarget('alevel')">A-Level</button>
+                                    </div>
+                                </div>
+                                <div class="countdown-digits-grid" id="tcas-countdown-grid">
+                                    <div class="cd-box"><span class="cd-num" id="cd-days">00</span><span class="cd-txt">วัน</span></div>
+                                    <div class="cd-box"><span class="cd-num" id="cd-hours">00</span><span class="cd-txt">ชม.</span></div>
+                                    <div class="cd-box"><span class="cd-num" id="cd-mins">00</span><span class="cd-txt">นาที</span></div>
+                                    <div class="cd-box"><span class="cd-num" id="cd-secs">00</span><span class="cd-txt">วินาที</span></div>
+                                </div>
+                                <div class="target-faculty-box">
+                                    <div class="faculty-label-row">
+                                        <span>🎯 คณะเป้าหมายในฝัน:</span>
+                                        <select class="faculty-select" id="dream-faculty-select" onchange="app.saveDreamFaculty(this.value)">
+                                            <option value="med">คณะแพทยศาสตร์ / ทันตแพทย์</option>
+                                            <option value="eng">คณะวิศวกรรมศาสตร์</option>
+                                            <option value="bba" selected>คณะพาณิชยศาสตร์ / บัญชี-บริหาร</option>
+                                            <option value="comm">คณะนิเทศศาสตร์ / วารสารฯ</option>
+                                            <option value="law">คณะนิติศาสตร์ / รัฐศาสตร์</option>
+                                            <option value="arch">คณะสถาปัตยกรรมศาสตร์</option>
+                                            <option value="sci">คณะวิทยาศาสตร์ / ไอที</option>
+                                            <option value="arts">คณะอักษรฯ / มนุษยศาสตร์ / ศิลปศาสตร์</option>
+                                        </select>
+                                    </div>
+                                    <div class="target-readiness-row">
+                                        <span class="readiness-text">ความพร้อมเป้าหมาย: <strong id="target-readiness-pct">75%</strong></span>
+                                        <div class="readiness-bar-track">
+                                            <div class="readiness-bar-fill" id="target-readiness-bar" style="width: 75%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Metric Stats Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon icon-indigo">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                            </div>
+                            <div class="stat-data">
+                                <span class="stat-number" id="stat-total-answered">0</span>
+                                <span class="stat-label">ข้อที่ทำไปแล้ว</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon icon-emerald">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                            </div>
+                            <div class="stat-data">
+                                <span class="stat-number" id="stat-accuracy">0%</span>
+                                <span class="stat-label">ความแม่นยำเฉลี่ย</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon icon-amber">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                            </div>
+                            <div class="stat-data">
+                                <span class="stat-number" id="stat-mistakes">0</span>
+                                <span class="stat-label">ข้อในสมุดจุดอ่อน</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon icon-cyan">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            </div>
+                            <div class="stat-data">
+                                <span class="stat-number" id="stat-time-spent">0 นาที</span>
+                                <span class="stat-label">เวลาที่ใช้ฝึกฝน</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Subject Cards Section -->
+                    <!-- Subject Cards Section & Category Filter Toolbar -->
+                    <div class="section-header">
+                        <div>
+                            <h3 class="section-title">คลังวิชาสอบตามหมวดหมู่ (TCAS Subjects)</h3>
+                            <p class="section-subtitle">เลือกวิชาเพื่อดูสัดส่วน Blueprint หรือเข้าทำข้อสอบจำลองเสมือนจริง</p>
+                        </div>
+                    </div>
+
+                    <!-- Subject Filter Toolbar -->
+                    <div class="subject-filter-toolbar glass-panel">
+                        <div class="category-tabs-scroll custom-scrollbar" id="subject-category-tabs">
+                            <button class="cat-tab-btn active" data-cat="all" onclick="app.setSubjectCategoryFilter('all')">
+                                <span class="tab-icon">🌟</span>
+                                <span class="tab-label">ทั้งหมด</span>
+                                <span class="tab-badge" id="tab-badge-all">20</span>
+                            </button>
+                            <button class="cat-tab-btn" data-cat="TGAT" onclick="app.setSubjectCategoryFilter('TGAT')">
+                                <span class="tab-icon">🎯</span>
+                                <span class="tab-label">TGAT</span>
+                                <span class="tab-badge" id="tab-badge-tgat">3</span>
+                            </button>
+                            <button class="cat-tab-btn" data-cat="TPAT" onclick="app.setSubjectCategoryFilter('TPAT')">
+                                <span class="tab-icon">⚙️</span>
+                                <span class="tab-label">TPAT</span>
+                                <span class="tab-badge" id="tab-badge-tpat">1</span>
+                            </button>
+                            <button class="cat-tab-btn" data-cat="ALEVEL_MATH_SCI" onclick="app.setSubjectCategoryFilter('ALEVEL_MATH_SCI')">
+                                <span class="tab-icon">📐</span>
+                                <span class="tab-label">A-Level วิทย์-คณิต</span>
+                                <span class="tab-badge" id="tab-badge-mathsci">6</span>
+                            </button>
+                            <button class="cat-tab-btn" data-cat="ALEVEL_HUMANITIES" onclick="app.setSubjectCategoryFilter('ALEVEL_HUMANITIES')">
+                                <span class="tab-icon">📚</span>
+                                <span class="tab-label">ภาษา-สังคม</span>
+                                <span class="tab-badge" id="tab-badge-humanities">3</span>
+                            </button>
+                            <button class="cat-tab-btn" data-cat="ALEVEL_LANG" onclick="app.setSubjectCategoryFilter('ALEVEL_LANG')">
+                                <span class="tab-icon">🌍</span>
+                                <span class="tab-label">ภาษาต่างประเทศ</span>
+                                <span class="tab-badge" id="tab-badge-languages">7</span>
+                            </button>
+                        </div>
+
+                        <div class="filter-controls-right">
+                            <label class="toggle-pill-ready" title="แสดงเฉพาะวิชาที่มีข้อสอบพร้อมทำแล้ว">
+                                <input type="checkbox" id="toggle-ready-only" onchange="app.toggleReadyOnlyFilter(this.checked)">
+                                <span class="toggle-pill-track">
+                                    <span class="toggle-pill-thumb"></span>
+                                </span>
+                                <span class="toggle-pill-text">⚡ พร้อมสอบเท่านั้น</span>
+                            </label>
+
+                            <div class="subject-search-box">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                                <input type="text" id="subject-search-input" placeholder="ค้นหาวิชา หรือรหัส..." oninput="app.handleSubjectSearch(this.value)">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="subjects-grid" id="subjects-container">
+                        <!-- Rendered by JS -->
+                        <div class="loading-state">กำลังโหลดข้อมูลวิชาและพิมพ์เขียว...</div>
+                    </div>
+
+                    <!-- Recent Exam History -->
+                    <div class="section-header" style="margin-top: 2.5rem;">
+                        <div>
+                            <h3 class="section-title">ประวัติการทำข้อสอบล่าสุด (Recent Mock Sessions)</h3>
+                            <p class="section-subtitle">ผลคะแนนและการประเมินย้อนหลัง</p>
+                        </div>
+                    </div>
+
+                    <div class="recent-sessions-card glass-panel" id="recent-sessions-container">
+                        <div class="empty-state">ยังไม่มีประวัติการทำข้อสอบ เลือกลองทำชุดแรกดูเลย!</div>
+                    </div>
+                </section>
+
+                <!-- VIEW 2: BLUEPRINT EXPLORER -->
+                <section class="view-section" id="view-blueprint">
+                    <div class="blueprint-header-panel glass-panel">
+                        <div class="blueprint-subject-tabs" id="blueprint-tabs">
+                            <!-- Populated by JS -->
+                        </div>
+                        <div class="blueprint-summary" id="blueprint-summary-box">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <div class="blueprint-domains-container" id="blueprint-domains-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </section>
+
+                <!-- VIEW 3: EXAM SIMULATOR (ห้องสอบเสมือนจริง) -->
+                <section class="view-section" id="view-exam">
+                    <div class="exam-header-bar glass-panel">
+                        <div class="exam-info">
+                            <span class="exam-subject-badge" id="exam-badge">TGAT1</span>
+                            <span class="exam-title-text" id="exam-subject-name">การสื่อสารภาษาอังกฤษ</span>
+                            <span class="exam-mode-badge" id="exam-mode-text">Full Mock</span>
+                        </div>
+
+                        <div class="exam-timer-box" id="exam-timer-wrapper">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <span class="timer-display" id="exam-timer">60:00</span>
+                        </div>
+
+                        <div class="exam-header-actions">
+                            <!-- CBT Text Resizer Controls -->
+                            <div class="cbt-resizer-group" title="ปรับขนาดตัวอักษรข้อสอบ">
+                                <button class="cbt-resizer-btn" id="btn-font-sm" onclick="app.setExamFontSize('sm')" title="ตัวอักษรขนาดเล็ก">A⁻</button>
+                                <button class="cbt-resizer-btn active" id="btn-font-md" onclick="app.setExamFontSize('md')" title="ตัวอักษรขนาดปกติ">A</button>
+                                <button class="cbt-resizer-btn" id="btn-font-lg" onclick="app.setExamFontSize('lg')" title="ตัวอักษรขนาดใหญ่">A⁺</button>
+                            </div>
+
+                            <!-- Focus / Zen Mode Toggle -->
+                            <button class="btn btn-outline btn-sm" id="btn-toggle-zen" onclick="app.toggleZenMode()" title="โหมดสมาธิ ซ่อนแถบเครื่องมือ">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                                <span id="zen-btn-text">โหมดสมาธิ</span>
+                            </button>
+
+                            <button class="btn btn-warning btn-sm" id="btn-exam-cheatsheet" onclick="app.openCheatSheetModal()" title="เปิดดูแผ่นสรุปสูตรและแนวข้อสอบ">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg>
+                                <span>📖 สรุปสูตร & แนวข้อสอบ</span>
+                            </button>
+                            <button class="btn btn-outline btn-sm" id="btn-toggle-scratchpad" onclick="app.toggleScratchpad()" title="เปิดกระดานทดเลขและวาดรูปคณิตศาสตร์">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+                                <span>✏️ กระดานทด/วาดรูป</span>
+                            </button>
+                            <button class="btn btn-outline btn-sm" id="btn-toggle-highlighter" onclick="app.toggleHighlightMode()" title="เปิด/ปิดโหมดเน้นข้อความ">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 11-6 6v3h3l6-6"/><path d="m22 2-2 2-4-4 2-2a2.828 2.828 0 1 1 4 4z"/></svg>
+                                <span id="hl-mode-label">🖍️ โหมดไฮไลต์</span>
+                            </button>
+                            <button class="btn btn-outline btn-sm" id="btn-toggle-grid" onclick="app.toggleQuestionPalette()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                                กระดาษคำตอบ (<span id="answered-count-badge">0</span>/<span id="total-count-badge">0</span>)
+                            </button>
+                            <button class="btn btn-success btn-sm" onclick="app.confirmSubmitExam()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                                ส่งกระดาษคำตอบ
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Exam Arena -->
+                    <div class="exam-arena">
+                        <!-- Interactive Section Navigation Pills Bar (เลือกทำส่วนที่ถนัดก่อน) -->
+                        <div class="exam-section-bar glass-panel" id="exam-section-bar">
+                            <!-- Populated dynamically by JS -->
+                        </div>
+
+                        <!-- Split View Container -->
+                        <div class="exam-content-split" id="exam-split-wrapper">
+                            <!-- Left: Stimulus / Passage (shown if question has stimulus) -->
+                            <div class="stimulus-pane glass-panel" id="stimulus-pane">
+                                <div class="pane-header">
+                                    <span class="pane-title">📄 บริบท / เนื้อเรื่องประกอบโจทย์</span>
+                                </div>
+                                <div class="stimulus-body" id="stimulus-content">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+
+                            <!-- Right: Question and Choices -->
+                            <div class="question-pane glass-panel" id="question-pane">
+                                <div class="question-top-meta">
+                                    <div class="q-number-pill">ข้อที่ <span id="current-q-index">1</span></div>
+                                    <div class="q-domain-pill" id="current-q-domain">Domain Name</div>
+                                    <div class="q-difficulty-pill" id="current-q-difficulty">Medium</div>
+                                    <div class="q-time-tracker-pill" id="q-time-tracker" title="เวลาที่ใช้กับข้อนี้">⏱️ ข้อนี้: <span id="q-time-spent-display">00:00</span></div>
+                                    
+                                    <!-- AI Actions (Bookmark to ask AI later) -->
+                                    <button class="btn-ai-save-toggle" id="btn-save-ai" onclick="app.toggleSaveCurrentQuestionForAi()" title="บันทึกข้อสอบข้อนี้ไว้ในคลังถาม AI">
+                                        <span id="ai-save-icon">🔖</span>
+                                        <span id="ai-save-text">เก็บไว้ถาม AI</span>
+                                    </button>
+
+                                    <button class="btn-flag-toggle" id="btn-flag" onclick="app.toggleFlagCurrentQuestion()" title="ปักหมุดข้อนี้ไว้ทบทวน">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+                                        <span id="flag-text">ปักหมุด</span>
+                                    </button>
+                                </div>
+
+                                <div class="question-text-box" id="question-text">
+                                    <!-- Populated by JS -->
+                                </div>
+
+                                <div class="options-container" id="options-list">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Floating Side Tab Button (Pinned to right edge) -->
+                    <button class="palette-side-tab-btn" id="btn-palette-side-tab" onclick="app.toggleQuestionPalette()" title="เปิดผังกระดานคำตอบ (กดเปิด/ปิดผังคำตอบจากด้านข้างได้ตลอดเวลา)">
+                        <span class="side-tab-icon">📋</span>
+                        <span class="side-tab-text">ผังคำตอบ</span>
+                        <span class="side-tab-badge" id="side-tab-badge">0/0</span>
+                    </button>
+
+                    <!-- Off-canvas Backdrop for Answer Sheet -->
+                    <div class="palette-backdrop" id="palette-backdrop" onclick="app.toggleQuestionPalette(false)"></div>
+
+                    <!-- Question Navigator Off-Canvas Side Drawer -->
+                    <div class="question-palette-drawer glass-panel" id="question-palette">
+                        <div class="palette-header">
+                            <div>
+                                <div style="font-weight: 700; color: #fff; display: flex; align-items: center; gap: 0.5rem;">
+                                    <span>📋 ผังกระดาษคำตอบ</span>
+                                </div>
+                                <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.2rem;">
+                                    ทำแล้ว <span id="palette-answered-count" style="color: var(--accent-emerald); font-weight: 700;">0</span> / <span id="palette-total-count">0</span> ข้อ
+                                </div>
+                            </div>
+                            <button class="btn-close-palette" onclick="app.toggleQuestionPalette(false)" title="ปิดผังกระดาษคำตอบ">✕</button>
+                        </div>
+                        <div class="palette-legend">
+                            <span class="legend-item"><span class="legend-dot current"></span> ข้อปัจจุบัน</span>
+                            <span class="legend-item"><span class="legend-dot answered"></span> ตอบแล้ว</span>
+                            <span class="legend-item"><span class="legend-dot flagged"></span> ปักหมุด</span>
+                            <span class="legend-item"><span class="legend-dot unanswered"></span> ยังไม่ตอบ</span>
+                        </div>
+                        <div class="palette-grid" id="palette-grid">
+                            <!-- Populated by JS -->
+                        </div>
+                        <div style="padding-top: 1rem; border-top: 1px solid var(--border-glass); margin-top: 0.75rem;">
+                            <button class="btn btn-success btn-sm" onclick="app.confirmSubmitExam()" style="width: 100%;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                                ส่งกระดาษคำตอบทันที
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Nav Controls -->
+                    <div class="exam-bottom-bar glass-panel">
+                        <button class="btn btn-outline" id="btn-prev-q" onclick="app.prevQuestion()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                            ข้อย้อนหลัง
+                        </button>
+                        
+                        <div class="exam-quick-indicators" id="quick-dots-bar">
+                            <!-- Render dots -->
+                        </div>
+
+                        <button class="btn btn-primary" id="btn-next-q" onclick="app.nextQuestion()">
+                            ข้อถัดไป
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- VIEW 4: RESULTS & ANALYTICS -->
+                <section class="view-section" id="view-results">
+                    <!-- Top Subject & Exam Meta Banner -->
+                    <div class="results-subject-header glass-panel" id="res-subject-header">
+                        <div class="results-subject-left">
+                            <span class="subject-badge-pill" id="res-subject-code">TGAT1</span>
+                            <div>
+                                <h2 class="results-subject-title" id="res-subject-title">TGAT1 การสื่อสารภาษาอังกฤษ</h2>
+                                <p class="results-subject-desc" id="res-subject-desc">ระบบประเมินความแม่นยำรายส่วนตามเกณฑ์ Blueprint ทปอ.</p>
+                            </div>
+                        </div>
+                        <div class="results-subject-right">
+                            <span class="exam-session-tag" id="res-session-type-badge">🎯 Full Mock Exam</span>
+                        </div>
+                    </div>
+
+                    <div class="results-hero glass-panel">
+                        <div class="results-score-circle">
+                            <div class="score-ring">
+                                <span class="score-main" id="res-score-earned">0</span>
+                                <span class="score-sub">/ <span id="res-score-max">100</span> คะแนน</span>
+                            </div>
+                            <div class="accuracy-badge" id="res-accuracy-badge">ความแม่นยำ 0%</div>
+                        </div>
+
+                        <div class="results-summary-info">
+                            <h2 class="res-title" id="res-headline">ยินดีด้วย! ทำข้อสอบเสร็จสิ้น</h2>
+                            <p class="res-subtext" id="res-feedback-text">นี่คือผลการวิเคราะห์คะแนนและจุดอ่อนตามสัดส่วน Blueprint ของ ทปอ.</p>
+                            
+                            <div class="res-mini-stats">
+                                <div class="mini-stat">
+                                    <span class="mini-stat-label">ตอบถูก</span>
+                                    <span class="mini-stat-val text-success" id="res-correct-count">0 ข้อ</span>
+                                </div>
+                                <div class="mini-stat">
+                                    <span class="mini-stat-label">ตอบผิด / ไม่ตอบ</span>
+                                    <span class="mini-stat-val text-danger" id="res-wrong-count">0 ข้อ</span>
+                                </div>
+                                <div class="mini-stat">
+                                    <span class="mini-stat-label">เวลาที่ใช้</span>
+                                    <span class="mini-stat-val text-cyan" id="res-time-spent">0:00</span>
+                                </div>
+                            </div>
+
+                            <div class="results-actions">
+                                <button class="btn btn-primary" onclick="app.navigate('dashboard')">กลับหน้าหลัก</button>
+                                <button class="btn btn-secondary" onclick="app.navigate('mistakes')">ดูสมุดจุดอ่อน</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Competency Radar & Domain Breakdown Row -->
+                    <div class="section-header" style="margin-top: 2rem;">
+                        <h3 class="section-title">📊 วิเคราะห์ความแม่นยำและสมรรถนะรายโดเมน (Competency Matrix)</h3>
+                    </div>
+
+                    <div class="results-matrix-grid">
+                        <!-- Left: Radar Chart Panel -->
+                        <div class="results-radar-panel glass-panel">
+                            <div class="results-panel-header">
+                                <h4 style="margin: 0; font-size: 1rem; color: #f8fafc;">🕸️ แผนภูมิใยแมงมุมสมรรถนะ (Competency Radar)</h4>
+                                <span class="badge-pill-cyan">TCAS Matrix</span>
+                            </div>
+                            <div class="results-radar-wrapper" id="exam-radar-container">
+                                <!-- Populated with high-res crisp SVG by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Right: Detailed Domain Bars -->
+                        <div class="results-domains-panel glass-panel">
+                            <div class="results-panel-header">
+                                <h4 style="margin: 0; font-size: 1rem; color: #f8fafc;">📈 สถิติความแม่นยำรายพาร์ต (Domain Accuracy)</h4>
+                                <span class="badge-pill-emerald">สัดส่วนคะแนน</span>
+                            </div>
+                            <div class="domain-analysis-grid" id="res-domain-breakdown">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Strengths, Focus Areas & Pacing Diagnosis -->
+                    <div class="diagnosis-callout-grid" id="res-diagnosis-callout">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <!-- Detailed Solution Review -->
+                    <div class="section-header" style="margin-top: 2.5rem;">
+                        <div>
+                            <h3 class="section-title">💡 เฉลยละเอียดและจุดหลอก (Detailed Explanations & Traps)</h3>
+                            <p class="section-subtitle">ทบทวนหลักการคิดและวิธีแก้จุดผิดพลาดอย่างละเอียด</p>
+                        </div>
+                    </div>
+
+                    <div class="solutions-list" id="res-solutions-container">
+                        <!-- Populated by JS -->
+                    </div>
+                </section>
+
+                <!-- VIEW 5: MISTAKE NOTEBOOK -->
+                <section class="view-section" id="view-mistakes">
+                    <div class="mistakes-header-bar glass-panel">
+                        <div class="filter-group">
+                            <span class="filter-label">กรองสถานะ:</span>
+                            <button class="filter-btn active" data-status="all" onclick="app.filterMistakes('all')">ทั้งหมด</button>
+                            <button class="filter-btn" data-status="need_review" onclick="app.filterMistakes('need_review')">⚠️ ต้องทบทวนด่วน</button>
+                            <button class="filter-btn" data-status="reviewing" onclick="app.filterMistakes('reviewing')">🔄 กำลังฝึกฝน</button>
+                            <button class="filter-btn" data-status="mastered" onclick="app.filterMistakes('mastered')">✅ แม่นยำแล้ว</button>
+                        </div>
+
+                        <div class="mistake-actions">
+                            <button class="btn btn-outline-danger btn-sm" id="btn-clear-all-mistakes" onclick="app.confirmClearAllMistakes()" title="ลบข้อที่บันทึกไว้ในสมุดจุดอ่อนทั้งหมด">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6"/></svg>
+                                <span>ลบทั้งหมด</span>
+                            </button>
+                            <button class="btn btn-primary btn-sm" onclick="app.practiceMistakes()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                                <span>ตะลุยเฉพาะข้อที่เคยผิด</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mistakes-container" id="mistakes-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </section>
+
+                <!-- VIEW 5.1: MASTERED QUESTIONS BANK (คลังข้อสอบที่พิชิตแล้ว) -->
+                <section class="view-section" id="view-mastered">
+                    <div class="mastered-header-bar glass-panel">
+                        <div class="mastered-info-badge">
+                            <span class="badge-icon">🏆</span>
+                            <div>
+                                <h3 class="mastered-main-title">คลังข้อสอบที่พิชิตแล้ว (Mastered Bank)</h3>
+                                <p class="mastered-sub-title">ข้อสอบที่คุณตอบถูกแล้วจะถูกย้ายมาเก็บที่นี่ และนำออกจากข้อสอบปกติ เพื่อให้คุณได้ฝึกเฉพาะข้อที่ไม่เคยทำหรือยังทำไม่ถูก</p>
+                            </div>
+                        </div>
+
+                        <div class="mastered-actions-bar">
+                            <button class="btn btn-primary btn-sm" onclick="app.startMasteredReview()">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                                <span>🎯 ทบทวนข้อสอบที่ผ่านแล้ว</span>
+                            </button>
+                            <button class="btn btn-outline-danger btn-sm" onclick="app.confirmResetMastered()">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><polyline points="3 3 3 8 8 8"/></svg>
+                                <span>รีเซ็ตกลับเข้าคลังหลัก</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Subject filter pills -->
+                    <div class="mastered-subject-filters" id="mastered-subject-pills">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <!-- Questions List Container -->
+                    <div class="mastered-container" id="mastered-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </section>
+
+                <!-- VIEW 6: ADD CUSTOM QUESTION / AI IMPORT -->
+                <section class="view-section" id="view-add">
+                    <div class="add-container glass-panel">
+                        <div class="tab-pill-switcher">
+                            <button class="tab-pill active" id="tab-add-manual" onclick="app.switchAddMode('manual')">กรอกโจทย์ด้วยตนเอง</button>
+                            <button class="tab-pill" id="tab-add-ai" onclick="app.switchAddMode('ai')">🤖 คัดลอก Prompt สำหรับ AI ออกข้อสอบ</button>
+                        </div>
+
+                        <!-- Manual Add Form -->
+                        <form id="form-add-question" class="add-form" onsubmit="app.handleSaveCustomQuestion(event)">
+                            <div class="form-row">
+                                <div class="form-group col-6">
+                                    <label class="form-label">เลือกวิชาสอบ (Subject)</label>
+                                    <select class="form-input" id="add-subject-select" onchange="app.handleSubjectChangeInAddForm(this.value)" required>
+                                        <option value="">-- เลือกวิชา --</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-6">
+                                    <label class="form-label">เลือกส่วนของ Blueprint</label>
+                                    <select class="form-input" id="add-blueprint-select" required>
+                                        <option value="">-- กรุณาเลือกวิชาก่อน --</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">เนื้อเรื่อง / บทความส่วนกลาง / Stimulus (ถ้ามี เช่น Passage, ข่าว, สถานการณ์)</label>
+                                <textarea class="form-input" id="add-stimulus" rows="3" placeholder="ระบุเนื้อเรื่องหรือสถานการณ์ส่วนกลาง (เว้นว่างได้)"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">คำถาม / โจทย์ (Question Text) *</label>
+                                <textarea class="form-input" id="add-question-text" rows="3" placeholder="พิมพ์ข้อความโจทย์คำถาม รองรับสูตรคณิตศาสตร์ในรูปแบบ $x^2$" required></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">ระดับความยาก (Difficulty)</label>
+                                <select class="form-input" id="add-difficulty">
+                                    <option value="easy">ง่าย (Easy)</option>
+                                    <option value="medium" selected>ปานกลาง (Medium)</option>
+                                    <option value="hard">ยาก / สปีดเทสต์ (Hard)</option>
+                                </select>
+                            </div>
+
+                            <!-- Options Section -->
+                            <div class="options-editor-section">
+                                <label class="form-label">ตัวเลือกและคำตอบ (ติ๊กเลือกข้อที่ถูกต้องที่สุด 1 ข้อ)</label>
+                                <div class="option-inputs-list" id="add-options-list">
+                                    <div class="option-input-row">
+                                        <input type="radio" name="correct_opt" value="0" checked required>
+                                        <span class="opt-label-badge">1</span>
+                                        <input type="text" class="form-input opt-content" placeholder="เนื้อหาตัวเลือกที่ 1" required>
+                                    </div>
+                                    <div class="option-input-row">
+                                        <input type="radio" name="correct_opt" value="1">
+                                        <span class="opt-label-badge">2</span>
+                                        <input type="text" class="form-input opt-content" placeholder="เนื้อหาตัวเลือกที่ 2" required>
+                                    </div>
+                                    <div class="option-input-row">
+                                        <input type="radio" name="correct_opt" value="2">
+                                        <span class="opt-label-badge">3</span>
+                                        <input type="text" class="form-input opt-content" placeholder="เนื้อหาตัวเลือกที่ 3" required>
+                                    </div>
+                                    <div class="option-input-row">
+                                        <input type="radio" name="correct_opt" value="3">
+                                        <span class="opt-label-badge">4</span>
+                                        <input type="text" class="form-input opt-content" placeholder="เนื้อหาตัวเลือกที่ 4" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">เฉลยละเอียดและหลักการคิด (Detailed Explanation) *</label>
+                                <textarea class="form-input" id="add-explanation" rows="3" placeholder="อธิบายเหตุผลว่าทำไมตัวเลือกนี้ถึงถูก และตัวเลือกอื่นผิดอย่างไร" required></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">จุดที่คนชอบโดนหลอก (Common Trap Analysis)</label>
+                                <textarea class="form-input" id="add-trap" rows="2" placeholder="เช่น ระวังตัวเลือก ก ที่แปลตรงตัว หรือระวังลืมกลับเครื่องหมายอสมการ"></textarea>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary" id="btn-save-question">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                                    บันทึกข้อสอบเข้าคลัง SQLite
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- AI Prompt Helper Panel -->
+                        <div id="panel-add-ai" class="ai-helper-panel" style="display: none;">
+                            <div class="ai-info-box">
+                                <h3 class="ai-title">🤖 วิธีใช้ AI ช่วยออกข้อสอบตาม Blueprint ทปอ.</h3>
+                                <p class="ai-desc">
+                                    คุณสามารถคัดลอก Prompt ด้านล่างนี้ไปวางใน ChatGPT หรือ Gemini จากนั้น AI จะสร้างข้อสอบชุดใหม่ที่ตรงตามพิมพ์เขียวของ ทปอ. พร้อมเฉลยละเอียดและวิเคราะห์จุดหลอกให้ทันที
+                                </p>
+                            </div>
+
+                            <div class="prompt-preview-box">
+                                <div class="prompt-header">
+                                    <span>TCAS Exam Generator Prompt Template</span>
+                                    <button class="btn btn-outline btn-sm" onclick="app.copyAIPrompt()">📋 คัดลอก Prompt</button>
+                                </div>
+                                <pre class="prompt-text" id="ai-prompt-template">
+คุณคือผู้เชี่ยวชาญการออกข้อสอบ TCAS ตามเกณฑ์ Test Blueprint ของ ทปอ.
+กรุณาสร้างข้อสอบจำลองวิชา [เลือกวิชา: TGAT1 / TGAT2 / TGAT3 / A-Level คณิต 1] จำนวน 5 ข้อ
+โดยให้มีองค์ประกอบดังนี้:
+1. ระบุพาร์ทตาม Blueprint ให้ชัดเจน
+2. มีโจทย์และตัวเลือก 4 ช้อยส์ (หรือ 5 ช้อยส์สำหรับ A-Level)
+3. มีเฉลยละเอียด Step-by-Step
+4. มี "วิเคราะห์จุดหลอก (Trap Analysis)" ที่ผู้สอบมักเสียคะแนน
+5. จัดฟอร์แมตให้อ่านเข้าใจง่าย
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 7: VOCABULARY BANK (คลังคำศัพท์ภาษาอังกฤษ) -->
+                <section class="view-section" id="view-vocab">
+                    <div class="vocab-header-panel glass-panel">
+                        <div class="filter-group">
+                            <span class="filter-label">กรองคำศัพท์:</span>
+                            <button class="filter-btn active" data-vstatus="all" onclick="app.filterVocab('all')">ทั้งหมด</button>
+                            <button class="filter-btn" data-vstatus="learning" onclick="app.filterVocab('learning')">📖 กำลังจำ</button>
+                            <button class="filter-btn" data-vstatus="reviewing" onclick="app.filterVocab('reviewing')">🔄 ทบทวน</button>
+                            <button class="filter-btn" data-vstatus="mastered" onclick="app.filterVocab('mastered')">✅ จำแม่นแล้ว</button>
+                        </div>
+                        <div class="vocab-header-actions">
+                            <input type="text" class="form-input vocab-search-input" id="vocab-search" placeholder="🔍 ค้นหาคำศัพท์..." oninput="app.searchVocab(this.value)">
+                            <button class="btn btn-primary btn-sm" onclick="app.startVocabFlashcards()">
+                                ⚡ โหมดการ์ดท่องศัพท์ (Flashcards)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Flashcard Runner -->
+                    <div class="flashcard-runner glass-panel" id="flashcard-runner" style="display: none;">
+                        <div class="flashcard-runner-top">
+                            <span class="fc-counter">คำที่ <span id="fc-index">1</span> / <span id="fc-total">10</span></span>
+                            <button class="btn btn-outline btn-sm" onclick="app.stopVocabFlashcards()">✕ ปิดโหมดการ์ด</button>
+                        </div>
+                        <div class="flashcard-box" id="flashcard-box" onclick="app.flipFlashcard()">
+                            <div class="fc-card-face fc-front">
+                                <span class="fc-hint">แตะการ์ดเพื่อดูคำแปล 🔄</span>
+                                <h2 class="fc-word" id="fc-word-front">Word</h2>
+                                <span class="fc-phonetic" id="fc-phonetic-front">/phonetic/</span>
+                                <span class="fc-pos" id="fc-pos-front">pos</span>
+                            </div>
+                            <div class="fc-card-face fc-back">
+                                <span class="fc-hint">ความหมายภาษาไทย</span>
+                                <h3 class="fc-def" id="fc-def-back">คำแปล</h3>
+                                <p class="fc-context" id="fc-context-back">ประโยคตัวอย่าง</p>
+                            </div>
+                        </div>
+                        <div class="fc-controls">
+                            <button class="btn btn-outline" onclick="app.prevFlashcard()">ข้อย้อนหลัง</button>
+                            <button class="btn btn-success btn-sm" onclick="app.markFlashcardMastered()">✓ จำได้แล้ว</button>
+                            <button class="btn btn-primary" onclick="app.nextFlashcard()">คำถัดไป</button>
+                        </div>
+                    </div>
+
+                    <!-- Vocab Cards Grid -->
+                    <div class="vocab-grid" id="vocab-list-container">
+                        <!-- Populated by JS -->
+                    </div>
+                </section>
+
+                <!-- VIEW 8: CEFR VOCABULARY QUIZ (A1 - C2) -->
+                <section class="view-section" id="view-cefr">
+                    <!-- Screen 1: Overview & Level Cards -->
+                    <div id="cefr-screen-overview">
+                        <!-- Hero Banner -->
+                        <div class="cefr-hero-banner glass-panel">
+                            <div class="cefr-hero-content">
+                                <div class="cefr-badge-tag">🎯 CEFR Proficiency Challenge</div>
+                                <h2 class="cefr-hero-title">ควิซคำศัพท์ภาษาอังกฤษมาตรฐานสากล</h2>
+                                <p class="cefr-hero-desc">
+                                    ฝึกฝนและทดสอบคลังคำศัพท์แบ่งตามระดับความสามารถสากล <strong>A1 ถึง C2</strong> เพื่อปูพื้นฐานสู่ความแม่นยำใน <strong>TGAT1</strong> (ระดับ B1–B2) และ <strong>A-Level อังกฤษ</strong> (ระดับ B2–C1) พร้อมระบบคำนวณ EXP สู่ตัวละคร RPG
+                                </p>
+                                <div class="cefr-hero-stats">
+                                    <div class="cefr-stat-chip">
+                                        <span class="cefr-stat-icon">📚</span>
+                                        <div class="cefr-stat-info">
+                                            <span class="cefr-stat-val" id="cefr-total-words-val">50</span>
+                                            <span class="cefr-stat-lbl">คำในคลังระบบ</span>
+                                        </div>
+                                    </div>
+                                    <div class="cefr-stat-chip">
+                                        <span class="cefr-stat-icon">✅</span>
+                                        <div class="cefr-stat-info">
+                                            <span class="cefr-stat-val" id="cefr-mastered-words-val">0</span>
+                                            <span class="cefr-stat-lbl">คำที่จำแม่นแล้ว</span>
+                                        </div>
+                                    </div>
+                                    <div class="cefr-stat-chip">
+                                        <span class="cefr-stat-icon">🔥</span>
+                                        <div class="cefr-stat-info">
+                                            <span class="cefr-stat-val" id="cefr-quizzes-taken-val">0</span>
+                                            <span class="cefr-stat-lbl">รอบควิซที่เล่น</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cefr-hero-action">
+                                <button class="btn btn-primary btn-lg" onclick="app.startCefrQuiz('MIXED', 'meaning')" style="box-shadow: 0 0 25px rgba(99, 102, 241, 0.45); font-weight: 700;">
+                                    ⚡ สุ่มคละทุกระดับ (Mixed 10 ข้อ)
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Section Title -->
+                        <div class="section-header" style="margin-top: 1.5rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+                            <div>
+                                <h3 style="font-size: 1.25rem; font-weight: 700; color: #fff;">เลือกระดับ CEFR ที่ต้องการทดสอบ</h3>
+                                <p style="font-size: 0.85rem; color: var(--text-secondary);">เลือกจำนวนคำศัพท์ได้ตั้งแต่ 10 - 100 คำ พร้อมกำหนดเวลาได้ตามต้องการ</p>
+                            </div>
+                            <div class="cefr-view-modes">
+                                <span class="badge" style="background: rgba(99, 102, 241, 0.2); color: #818cf8; font-weight: 600; font-size: 0.8rem; padding: 0.4rem 0.75rem;">⚙️ เลือก 10 - 100 คำ & ตั้งเวลาได้</span>
+                            </div>
+                        </div>
+
+                        <!-- 6 Level Cards Grid -->
+                        <div class="cefr-levels-grid" id="cefr-levels-container">
+                            <!-- Populated dynamically by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Screen 2: Active Quiz Runner -->
+                    <div id="cefr-screen-quiz" class="glass-panel" style="display: none; max-width: 820px; margin: 0 auto; padding: 2.25rem;">
+                        <div class="cefr-quiz-topbar">
+                            <div class="cefr-quiz-meta">
+                                <span class="cefr-level-pill" id="cefr-quiz-level-pill">Level B2</span>
+                                <span class="cefr-q-counter" id="cefr-quiz-counter">คำที่ 1 / 10</span>
+                            </div>
+                            <div class="cefr-timer-box" id="cefr-timer-box">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                <span id="cefr-timer-text">15s</span>
+                            </div>
+                            <button class="btn btn-outline btn-sm" onclick="app.exitCefrQuiz()">✕ ยกเลิกควิซ</button>
+                        </div>
+
+                        <!-- Visual Progress Bar -->
+                        <div class="cefr-quiz-progress-track">
+                            <div class="cefr-quiz-progress-bar" id="cefr-progress-bar" style="width: 10%;"></div>
+                        </div>
+
+                        <!-- Word Card Display -->
+                        <div class="cefr-word-card">
+                            <div class="cefr-word-header">
+                                <div class="cefr-word-main">
+                                    <h1 class="cefr-main-word" id="cefr-active-word">reconciliation</h1>
+                                    <div class="cefr-sub-info">
+                                        <span class="cefr-phonetic" id="cefr-active-phonetic">/ˌrek.ənˌsɪl.iˈeɪ.ʃən/</span>
+                                        <span class="cefr-pos-badge" id="cefr-active-pos">noun</span>
+                                    </div>
+                                </div>
+                                <button class="btn-star-word" id="cefr-star-btn" onclick="app.toggleCurrentWordStar()" title="ปักหมุดคำนี้ไว้ทบทวน">
+                                    ⭐
+                                </button>
+                            </div>
+
+                            <!-- Example Sentence -->
+                            <div class="cefr-example-box">
+                                <span class="cefr-example-label">บริบทตัวอย่างประโยค:</span>
+                                <p class="cefr-example-text" id="cefr-active-example">"The lab completed its chemical inventory reconciliation before the deadline."</p>
+                            </div>
+                        </div>
+
+                        <!-- Question Prompt -->
+                        <div class="cefr-prompt-title">จงเลือกความหมายภาษาไทยที่ถูกต้องที่สุด:</div>
+
+                        <!-- Options Grid -->
+                        <div class="cefr-options-grid" id="cefr-options-container">
+                            <!-- 4 Choice buttons populated by JS -->
+                        </div>
+
+                        <!-- Instant Feedback Banner -->
+                        <div class="cefr-feedback-banner" id="cefr-feedback-banner" style="display: none;">
+                            <div class="cefr-feedback-content">
+                                <span class="cefr-feedback-icon" id="cefr-feedback-icon">✅</span>
+                                <div class="cefr-feedback-text">
+                                    <h4 id="cefr-feedback-title">ถูกต้อง!</h4>
+                                    <p id="cefr-feedback-desc">คำแปล: การตรวจกระทบยอด / การคืนดีกัน</p>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" id="cefr-next-btn" onclick="app.nextCefrQuestion()">
+                                คำถัดไป ➔
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Screen 3: Quiz Victory & Results -->
+                    <div id="cefr-screen-results" class="glass-panel" style="display: none; max-width: 820px; margin: 0 auto; padding: 2.5rem; text-align: center;">
+                        <div class="cefr-result-trophy" id="cefr-result-trophy">🏆</div>
+                        <h2 class="cefr-result-heading" id="cefr-result-heading">ยอดเยี่ยมมาก!</h2>
+                        <p class="cefr-result-subtitle" id="cefr-result-subtitle">คุณทำคะแนนระดับ B2 ได้ในเกณฑ์ดีเยี่ยม</p>
+
+                        <!-- Stats Circle Row -->
+                        <div class="cefr-result-stats-row">
+                            <div class="cefr-stat-circle-box">
+                                <div class="cefr-score-big" id="cefr-result-score">8 / 10</div>
+                                <span class="cefr-stat-sub">คะแนนที่ได้</span>
+                            </div>
+                            <div class="cefr-stat-circle-box">
+                                <div class="cefr-score-big" style="color: var(--accent-emerald);" id="cefr-result-pct">80%</div>
+                                <span class="cefr-stat-sub">ความแม่นยำ</span>
+                            </div>
+                            <div class="cefr-stat-circle-box">
+                                <div class="cefr-score-big" style="color: var(--accent-amber);" id="cefr-result-exp">+170</div>
+                                <span class="cefr-stat-sub">EXP ที่ได้รับ 🔥</span>
+                            </div>
+                        </div>
+
+                        <!-- Words Breakdown List -->
+                        <div class="cefr-breakdown-section" style="margin-top: 2rem; text-align: left;">
+                            <h4 style="font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 0.75rem;">สรุปผลคำศัพท์ในรอบนี้:</h4>
+                            <div class="cefr-breakdown-list" id="cefr-breakdown-list">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+
+                        <div class="cefr-result-actions" style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center;">
+                            <button class="btn btn-outline" onclick="app.showCefrOverview()">➔ กลับหน้าเลือกระดับ</button>
+                            <button class="btn btn-primary" onclick="app.retryCefrQuiz()">⚡ เล่นรอบใหม่อีกครั้ง</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 7: RPG CHARACTER STATUS & RADAR ATTRIBUTES -->
+                <section class="view-section" id="view-status">
+                    <!-- Hero Character Status Card -->
+                    <div class="rpg-hero-card glass-panel">
+                        <div class="rpg-hero-main">
+                            <div class="rpg-avatar-wrapper">
+                                <div class="rpg-avatar-box">
+                                    <span class="rpg-avatar-icon">⚔️</span>
+                                    <div class="rpg-lvl-badge" id="rpg-hero-level">Lv.1</div>
+                                </div>
+                            </div>
+                            <div class="rpg-hero-details">
+                                <div class="rpg-tier-row">
+                                    <span class="rpg-rank-badge" id="rpg-hero-badge">🥉 Tier V</span>
+                                    <span class="streak-flame-badge" id="rpg-hero-streak">🔥 0 วันติด</span>
+                                </div>
+                                <h2 class="rpg-hero-title" id="rpg-hero-title">ผู้เริ่มต้นการเดินทาง (Novice Explorer)</h2>
+                                <p class="rpg-hero-subtitle" id="rpg-hero-subtitle">TCAS Challenger • กำลังประเมินสมรรถนะ...</p>
+                                
+                                <!-- EXP Bar -->
+                                <div class="rpg-exp-wrapper">
+                                    <div class="rpg-exp-header">
+                                        <span>ค่าประสบการณ์ (EXP)</span>
+                                        <span id="rpg-exp-text">0 / 80 XP (0%)</span>
+                                    </div>
+                                    <div class="rpg-exp-track">
+                                        <div class="rpg-exp-fill" id="rpg-exp-fill" style="width: 0%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Combat Power Rating Display -->
+                        <div class="rpg-power-card">
+                            <span class="power-label">COMBAT POWER (CP)</span>
+                            <div class="power-value" id="rpg-combat-power">0</div>
+                            <span class="power-sub">ประเมินจากสมรรถนะ 5 ด้าน</span>
+                        </div>
+                    </div>
+
+                    <!-- Split Section: Radar Chart & Stat Breakdown -->
+                    <div class="rpg-grid-layout">
+                        <!-- Radar Chart Panel -->
+                        <div class="rpg-panel glass-panel">
+                            <div class="rpg-panel-header">
+                                <div>
+                                    <h3 class="panel-title">🕸️ เรดาร์สมรรถนะ 5 ด้าน (Status Radar)</h3>
+                                    <p class="section-subtitle" style="margin: 0;">ภาพรวมจุดแข็งและจุดที่ต้องเสริมสร้าง</p>
+                                </div>
+                                <span class="panel-tag">Pentagon Attributes</span>
+                            </div>
+                            <div class="rpg-radar-container" id="rpg-radar-container">
+                                <!-- Populated with crisp SVG by JS -->
+                            </div>
+                        </div>
+
+                        <!-- 5 Core Attributes List -->
+                        <div class="rpg-panel glass-panel">
+                            <div class="rpg-panel-header">
+                                <div>
+                                    <h3 class="panel-title">📊 รายละเอียดค่าพลัง (Core Stats)</h3>
+                                    <p class="section-subtitle" style="margin: 0;">สเกลคะแนนเต็ม 100 ในแต่ละด้าน</p>
+                                </div>
+                                <span class="panel-tag">Max: 100</span>
+                            </div>
+                            <div class="attr-cards-list" id="rpg-attr-list">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Achievements & Quests Section -->
+                    <div class="rpg-panel glass-panel" style="margin-top: 1.75rem;">
+                        <div class="rpg-panel-header">
+                            <div>
+                                <h3 class="panel-title">🎖️ เหรียญตราเกียรติยศและความสำเร็จ (Achievements)</h3>
+                                <p class="section-subtitle" style="margin: 0;">ปลดล็อกภารกิจเพื่อรับฉายาและ EXP พิเศษ</p>
+                            </div>
+                            <span class="panel-tag" id="rpg-achieve-count">3/6 สำเร็จ</span>
+                        </div>
+                        <div class="achievements-grid" id="rpg-achieve-grid">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Floating Selection Action Bubble (Highlighter & Translation) -->
+    <div class="selection-action-bubble glass-panel" id="selection-action-bubble" style="display: none;">
+        <button class="action-bubble-btn" onclick="app.highlightSelection('yellow')" title="ไฮไลต์สีเหลือง">
+            <span class="color-dot dot-yellow"></span>
+        </button>
+        <button class="action-bubble-btn" onclick="app.highlightSelection('emerald')" title="ไฮไลต์สีเขียว">
+            <span class="color-dot dot-emerald"></span>
+        </button>
+        <button class="action-bubble-btn" onclick="app.highlightSelection('rose')" title="ไฮไลต์สีชมพู">
+            <span class="color-dot dot-rose"></span>
+        </button>
+        <button class="action-bubble-btn" onclick="app.removeSelectionHighlight()" title="ลบไฮไลต์">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <div class="bubble-divider"></div>
+        <button class="action-bubble-btn btn-text-label" onclick="app.translateSelectedText()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
+            แปลศัพท์ & บันทึก
+        </button>
+    </div>
+
+    <!-- Scratchpad Math Canvas Center Modal & Backdrop -->
+    <div class="scratchpad-backdrop" id="scratchpad-backdrop" onclick="app.toggleScratchpad()"></div>
+    <div class="scratchpad-overlay" id="scratchpad-dock">
+        <div class="scratchpad-container glass-panel">
+            <div class="scratchpad-toolbar" id="scratchpad-toolbar-handle">
+                <div class="tool-group">
+                    <span class="tool-title">✏️ กระดานทดเลข & วาดรูปคณิตศาสตร์</span>
+                </div>
+                <div class="tool-group">
+                    <button class="tool-btn active" id="sp-tool-pen" onclick="app.setScratchTool('pen')" title="ดินสอ/ปากกาวาดอิสระ">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+                    </button>
+                    <button class="tool-btn" id="sp-tool-line" onclick="app.setScratchTool('line')" title="วาดเส้นตรง (Math Line)">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="20" x2="20" y2="4"/></svg>
+                    </button>
+                    <button class="tool-btn" id="sp-tool-rect" onclick="app.setScratchTool('rect')" title="วาดรูปสี่เหลี่ยม">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                    </button>
+                    <button class="tool-btn" id="sp-tool-circle" onclick="app.setScratchTool('circle')" title="วาดรูปวงกลม">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>
+                    </button>
+                    <button class="tool-btn" id="sp-tool-eraser" onclick="app.setScratchTool('eraser')" title="ยางลบ">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"/><path d="M22 21H7"/><path d="m5 11 9 9"/></svg>
+                    </button>
+                    <div class="color-picker-group">
+                        <button class="color-btn active" style="background: #06b6d4;" onclick="app.setScratchColor('#06b6d4')" title="Cyber Cyan"></button>
+                        <button class="color-btn" style="background: #f59e0b;" onclick="app.setScratchColor('#f59e0b')" title="Amber"></button>
+                        <button class="color-btn" style="background: #f43f5e;" onclick="app.setScratchColor('#f43f5e')" title="Rose"></button>
+                        <button class="color-btn" style="background: #10b981;" onclick="app.setScratchColor('#10b981')" title="Emerald"></button>
+                        <button class="color-btn" style="background: #ffffff;" onclick="app.setScratchColor('#ffffff')" title="White"></button>
+                    </div>
+                    <div class="size-group">
+                        <input type="range" id="sp-stroke-size" min="1" max="10" value="2" oninput="app.setScratchStrokeSize(this.value)" title="ขนาดเส้น">
+                    </div>
+                </div>
+                <div class="tool-group">
+                    <button class="tool-btn tool-btn-labeled active" onclick="app.toggleScratchGrid()" id="sp-grid-toggle" title="สลับลายเส้นตารางกริดคณิตศาสตร์">
+                        📐 กริด
+                    </button>
+                    <button class="tool-btn tool-btn-labeled" onclick="app.clearScratchpad()" title="ล้างกระดาน">
+                        🗑️ ล้าง
+                    </button>
+                    <button class="tool-btn tool-btn-labeled btn-popout" onclick="app.openScratchpadWindow()" title="เปิดเป็นหน้าต่างเบราว์เซอร์แยกอิสระ (Pop-up Window สำหรับแยกจอ)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                        <span>⧉ หน้าต่างแยก</span>
+                    </button>
+                    <button class="tool-btn tool-btn-labeled" onclick="app.toggleScratchpad()" title="ปิดกระดาน">
+                        ✕ ปิด
+                    </button>
+                </div>
+            </div>
+            <div class="canvas-wrapper grid-bg" id="canvas-wrapper">
+                <canvas id="scratchpad-canvas"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vocab Lookup & Translation Modal -->
+    <div class="modal-overlay" id="vocab-lookup-modal">
+        <div class="modal-card glass-panel vocab-modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title">📖 แปลคำศัพท์และบันทึกช่วยจำ</h3>
+                <button class="modal-close" onclick="app.closeVocabModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="vocab-word-banner">
+                    <div>
+                        <h2 class="vocab-term" id="vocab-modal-word">reluctant</h2>
+                        <span class="vocab-phonetic" id="vocab-modal-phonetic">/rɪˈlʌk.tənt/</span>
+                        <span class="vocab-pos" id="vocab-modal-pos">adj.</span>
+                    </div>
+                    <button class="btn btn-outline btn-sm" id="btn-speak-word" onclick="app.speakWord()" title="ฟังการออกเสียง">
+                        🔊 ฟังเสียง
+                    </button>
+                </div>
+
+                <div class="form-group" style="margin-top: 1.25rem;">
+                    <label class="form-label">ความหมายภาษาไทย (แก้ไขหรือเพิ่มเติมได้):</label>
+                    <input type="text" class="form-input" id="vocab-modal-def" placeholder="ระบุความหมายภาษาไทย">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">บริบทประโยคที่พบ (Context Sentence):</label>
+                    <textarea class="form-input" id="vocab-modal-context" rows="2" placeholder="ประโยคที่พบคำศัพท์นี้"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="app.closeVocabModal()">ปิด</button>
+                <button class="btn btn-primary" onclick="app.saveCurrentVocab()">
+                    💾 บันทึกลงคลังคำศัพท์
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TCAS Master AI Interactive Hub Modal -->
+    <div class="modal-overlay" id="ai-tutor-modal">
+        <div class="modal-card glass-panel ai-tutor-modal-card ai-hub-expanded">
+            <!-- Modal Top Header -->
+            <div class="modal-header ai-tutor-modal-header">
+                <div class="ai-header-info">
+                    <div class="ai-avatar-glow">🤖</div>
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                            <h3 class="modal-title" style="margin: 0; font-size: 1.15rem;">TCAS Master AI</h3>
+                            <span class="ai-model-tag" id="ai-tutor-model-badge">AI Assistant</span>
+                        </div>
+                        <p class="ai-header-sub" id="ai-tutor-q-context">คู่คิดวิเคราะห์ข้อสอบ • อิง Test Blueprint ทปอ.</p>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
+                    <button class="btn btn-outline btn-xs btn-ai-sidebar-toggle" id="btn-toggle-saved-panel" onclick="app.toggleAiSavedPanel()" title="สลับเปิด/ปิดรายการข้อสอบที่บันทึกไว้">
+                        📚 ข้อที่บันทึกไว้ (<span id="ai-hub-saved-badge">0</span>)
+                    </button>
+                    <button class="btn btn-outline btn-xs" onclick="app.clearCurrentAiChatHistory()" title="ล้างประวัติการสนทนาข้อนี้">
+                        🗑️ ล้างแชท
+                    </button>
+                    <button class="btn btn-outline btn-xs" onclick="app.openAiKeyModal()" title="ตั้งค่า Gemini API Key">
+                        🔑 ตั้งค่า Key
+                    </button>
+                    <button class="modal-close" onclick="app.closeAiTutorModal()">✕</button>
+                </div>
+            </div>
+
+            <!-- Main Hub Body: Split between Saved Questions Sidebar & Chat Pane -->
+            <div class="ai-hub-body">
+                <!-- Left: Saved Questions Panel (Collapsible/Off-canvas on mobile) -->
+                <div class="ai-hub-sidebar" id="ai-hub-sidebar">
+                    <div class="ai-sidebar-header">
+                        <span style="font-weight: 600; font-size: 0.85rem; color: #fff;">📚 คลังข้อสอบที่บันทึกไว้</span>
+                        <button class="btn btn-xs btn-outline" onclick="app.fetchSavedAiQuestions()" title="รีเฟรชรายการ">🔄</button>
+                    </div>
+                    <div class="ai-saved-filter-bar">
+                        <button class="ai-filter-chip active" onclick="app.filterSavedQuestions('all', this)">ทั้งหมด</button>
+                        <button class="ai-filter-chip" onclick="app.filterSavedQuestions('tgat1', this)">TGAT1</button>
+                        <button class="ai-filter-chip" onclick="app.filterSavedQuestions('tgat2', this)">TGAT2</button>
+                        <button class="ai-filter-chip" onclick="app.filterSavedQuestions('tgat3', this)">TGAT3</button>
+                        <button class="ai-filter-chip" onclick="app.filterSavedQuestions('alevel', this)">A-Level</button>
+                    </div>
+                    <div class="ai-saved-list" id="ai-saved-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Right: Active Chat & Question Context Pane -->
+                <div class="ai-hub-chat-pane">
+                    <!-- Collapsible Active Question Preview Card -->
+                    <div class="ai-question-context-box glass-panel" id="ai-question-context-box">
+                        <div class="ai-context-header" onclick="app.toggleAiContextCollapse()">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; flex: 1; min-width: 0;">
+                                <span class="ai-context-tag" id="ai-context-subject-badge">ข้อสอบ</span>
+                                <span class="ai-context-snippet" id="ai-context-snippet">กำลังโหลดข้อมูลข้อสอบ...</span>
+                            </div>
+                            <span class="ai-context-chevron" id="ai-context-chevron">▼</span>
+                        </div>
+                        <div class="ai-context-details" id="ai-context-details" style="display: none;">
+                            <div class="ai-context-full-text" id="ai-context-full-text"></div>
+                            <div class="ai-context-options" id="ai-context-options"></div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Action Prompt Chips -->
+                    <div class="ai-quick-chips">
+                        <button class="ai-chip" onclick="app.sendAiQuickPrompt('why_wrong')">
+                            ⚡ ทำไมตัวเลือกอื่นถึงผิด?
+                        </button>
+                        <button class="ai-chip" onclick="app.sendAiQuickPrompt('speed_hack')">
+                            💡 ขอวิธีคิดทีละสเต็ป
+                        </button>
+                        <button class="ai-chip" onclick="app.sendAiQuickPrompt('key_formula')">
+                            🧠 สรุปสูตร/คีย์เวิร์ด
+                        </button>
+                        <button class="ai-chip" onclick="app.sendAiQuickPrompt('drill_more')">
+                            🎯 ขอโจทย์แนวเดียวกันฝึกทำ
+                        </button>
+                    </div>
+
+                    <!-- Chat Messages Container -->
+                    <div class="ai-chat-thread" id="ai-chat-thread">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <!-- Chat Input Bar -->
+                    <div class="ai-chat-input-bar">
+                        <input type="text" id="ai-tutor-input" class="form-input ai-input-field" 
+                               placeholder="พิมพ์สนทนาหรือถามคำถามกับ TCAS Master AI ได้ทันที..." 
+                               onkeydown="if(event.key==='Enter') app.handleAiInputSubmit()">
+                        <button class="btn btn-primary ai-send-btn" id="btn-send-ai-query" onclick="app.handleAiInputSubmit()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                            <span>ส่งคำถาม</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gemini API Key Settings Modal -->
+    <div class="modal-overlay" id="ai-key-modal">
+        <div class="modal-card glass-panel" style="max-width: 480px;">
+            <div class="modal-header">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="font-size: 1.4rem;">🔑</span>
+                    <h3 class="modal-title">ตั้งค่า Gemini API Key</h3>
+                </div>
+                <button class="modal-close" onclick="app.closeAiKeyModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.5;">
+                    เชื่อมต่อ <strong>Google Gemini API</strong> เพื่อเปิดใช้งาน TCAS Master AI วิเคราะห์ข้อสอบเจาะลึก ตอบตรงประเด็น และวิเคราะห์แบบเรียลไทม์ (สามารถขอรับ Key ฟรีจาก Google AI Studio)
+                </p>
+
+                <div style="font-size: 0.75rem; color: #c4b5fd; margin-bottom: 0.85rem; background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.25); border-radius: 6px; padding: 0.45rem 0.65rem;">
+                    ⚡ รองรับอัตโนมัติ: <strong>Gemini 3.8 Flash</strong>, <strong>Gemini 3.5 Flash</strong>, <strong>Gemini 2.5 Flash</strong>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Google Gemini API Key:</label>
+                    <input type="password" class="form-input" id="input-gemini-key" placeholder="AIzaSy..." autocomplete="off">
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+                    <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" 
+                       style="font-size: 0.82rem; color: var(--accent-cyan); text-decoration: underline; display: flex; align-items: center; gap: 0.3rem;">
+                        <span>ขอ API Key ฟรีที่ Google AI Studio ↗</span>
+                    </a>
+                    <button class="btn btn-outline btn-xs" onclick="app.testGeminiKey()">🧪 ทดสอบ Key</button>
+                </div>
+
+                <div id="ai-key-test-result" style="margin-top: 0.75rem; font-size: 0.85rem; display: none;"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline btn-sm" onclick="app.removeGeminiKey()">ลบ Key</button>
+                <button class="btn btn-primary btn-sm" onclick="app.saveGeminiKey()">💾 บันทึก Key</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Key Recommendation Modal (ปรากฏเมื่อผู้ใช้กำลังจะใช้ AI โดยยังไม่มี Key) -->
+    <div class="modal-overlay" id="ai-key-recommend-modal">
+        <div class="modal-card glass-panel" style="max-width: 500px; text-align: center; padding: 2rem 1.8rem; position: relative;">
+            <button class="modal-close" style="position: absolute; top: 1rem; right: 1rem;" onclick="app.closeAiKeyRecommendModal()">✕</button>
+            <div style="font-size: 2.8rem; margin-bottom: 0.75rem;">🤖✨</div>
+            <h3 class="modal-title" style="font-size: 1.25rem; margin-bottom: 0.75rem; justify-content: center; color: #fff;">
+                แนะนำ: เชื่อมต่อ Gemini API Key เพื่อพลัง AI เต็มร้อย
+            </h3>
+            <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.25rem;">
+                ขณะนี้คุณกำลังจะเปิดใช้งาน <strong>TCAS Master AI ในโหมดออฟไลน์ (Offline Mode)</strong><br>
+                <span style="color: #a78bfa; font-weight: 600;">💡 หากใส่ Google Gemini API Key จะวิเคราะห์ได้ลึกและเร็วกว่ามาก!</span>
+            </p>
+
+            <div style="background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.25); border-radius: 8px; padding: 0.85rem 1rem; margin-bottom: 1.5rem; text-align: left; font-size: 0.82rem; color: #c4b5fd; line-height: 1.6;">
+                <div style="display: flex; gap: 0.4rem; margin-bottom: 0.3rem;">
+                    <span>⚡</span>
+                    <span><strong>ตอบเร็วและละเอียด:</strong> วิเคราะห์วิธีคิดทีละขั้นตอนแบบละเอียดยิบ</span>
+                </div>
+                <div style="display: flex; gap: 0.4rem; margin-bottom: 0.3rem;">
+                    <span>🎯</span>
+                    <span><strong>สร้างโจทย์ฝึกทำ:</strong> ขอโจทย์แนวเดียวกันฝึกทำพร้อมเฉลยสดๆ ได้ไม่จำกัด</span>
+                </div>
+                <div style="display: flex; gap: 0.4rem;">
+                    <span>🎁</span>
+                    <span><strong>ฟรี 100%:</strong> ขอรับ Key ฟรีจาก Google AI Studio ได้ใน 1 นาที</span>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+                <button class="btn btn-outline btn-sm" onclick="app.proceedAiWithoutKey()">
+                    ⚡ ใช้โหมดออฟไลน์ต่อไป
+                </button>
+                <button class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);" onclick="app.openAiKeyModalFromRecommend()">
+                    🔑 ตั้งค่า Gemini Key ฟรี (แนะนำ)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Start Modal -->
+    <div class="modal-overlay" id="quick-start-modal">
+        <div class="modal-card glass-panel">
+            <div class="modal-header">
+                <h3 class="modal-title">🎯 เริ่มต้นทำข้อสอบจำลอง</h3>
+                <button class="modal-close" onclick="app.closeQuickStartModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">เลือกวิชาที่ต้องการฝึก</label>
+                    <select class="form-input" id="modal-subject-select" onchange="app.handleModalSubjectChange(this.value)">
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">รูปแบบการฝึก</label>
+                    <div class="modal-mode-grid">
+                        <label class="mode-card active">
+                            <input type="radio" name="modal_session_type" value="full_mock" checked>
+                            <span class="mode-name">Full Mock Exam</span>
+                            <span class="mode-desc">จำลองสอบทั้งชุด จับเวลาเสมือนจริง</span>
+                        </label>
+                        <label class="mode-card">
+                            <input type="radio" name="modal_session_type" value="topic_drill">
+                            <span class="mode-name">Topic Drill (เจาะพาร์ท)</span>
+                            <span class="mode-desc">เลือกเน้นเฉพาะสาระที่ต้องการเสริม</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group" id="modal-blueprint-group" style="display: none;">
+                    <label class="form-label">เลือกพาร์ท Blueprint ที่ต้องการเจาะ</label>
+                    <select class="form-input" id="modal-blueprint-select">
+                        <option value="">ทั้งหมดในวิชานี้</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="app.closeQuickStartModal()">ยกเลิก</button>
+                <button class="btn btn-primary" onclick="app.startExamFromModal()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    เข้าสู่ห้องสอบ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submit Confirmation Modal -->
+    <div class="modal-overlay" id="confirm-submit-modal">
+        <div class="modal-card glass-panel">
+            <div class="modal-header">
+                <h3 class="modal-title">ยืนยันการส่งกระดาษคำตอบ</h3>
+                <button class="modal-close" onclick="app.closeSubmitModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="submit-check-stats">
+                    <div class="check-box answered">
+                        <span class="check-num" id="modal-answered-num">0</span>
+                        <span class="check-label">ข้อที่ตอบแล้ว</span>
+                    </div>
+                    <div class="check-box unanswered">
+                        <span class="check-num" id="modal-unanswered-num">0</span>
+                        <span class="check-label">ข้อที่ยังไม่ตอบ</span>
+                    </div>
+                    <div class="check-box flagged">
+                        <span class="check-num" id="modal-flagged-num">0</span>
+                        <span class="check-label">ข้อที่ปักหมุดไว้</span>
+                    </div>
+                </div>
+                <p class="submit-warning" id="submit-warning-text">
+                    เมื่อส่งกระดาษคำตอบ ระบบจะตรวจคะแนนทันทีและนำข้อที่ผิดเข้าสู่สมุดจุดอ่อน
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="app.closeSubmitModal()">กลับไปทำต่อ</button>
+                <button class="btn btn-success" onclick="app.executeSubmitExam()">ยืนยันส่งข้อสอบ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: CEFR Word Explorer / Word List -->
+    <div class="modal-overlay" id="modal-cefr-words">
+        <div class="modal-card glass-panel" style="max-width: 820px; max-height: 85vh; display: flex; flex-direction: column;">
+            <div class="modal-header">
+                <div>
+                    <h3 class="modal-title" id="modal-cefr-title">รายการคำศัพท์ระดับ B2</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);" id="modal-cefr-subtitle">คลังคำศัพท์ที่จำเป็นสำหรับ TGAT1</p>
+                </div>
+                <button class="modal-close" onclick="app.closeCefrWordList()">✕</button>
+            </div>
+            <div class="modal-body" style="overflow-y: auto; padding: 1.25rem;">
+                <div id="modal-cefr-word-list" class="cefr-word-explorer-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+            <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.85rem; color: var(--text-muted);" id="modal-cefr-count">ทั้งหมด 8 คำ</span>
+                <button class="btn btn-primary" id="modal-cefr-start-btn">⚡ เริ่มทำควิซระดับนี้</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Authentication (Login / Register) -->
+    <div class="modal-overlay" id="auth-modal">
+        <div class="modal-card auth-modal-card glass-panel">
+            <div class="auth-tabs">
+                <button class="auth-tab-btn active" id="tab-btn-login" onclick="app.switchAuthTab('login')">🔑 เข้าสู่ระบบ</button>
+                <button class="auth-tab-btn" id="tab-btn-register" onclick="app.switchAuthTab('register')">✨ สมัครสมาชิกใหม่</button>
+                <button class="modal-close" style="padding: 0.75rem 1rem;" onclick="app.closeAuthModal()">✕</button>
+            </div>
+
+            <!-- Login Form -->
+            <form class="auth-form" id="form-login" onsubmit="app.handleLoginForm(event)">
+                <div class="form-group">
+                    <label class="form-label">ชื่อผู้ใช้ (Username)</label>
+                    <input type="text" class="form-input" id="login-username" placeholder="เช่น student หรือ pun_tcas" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">รหัสผ่าน (Password)</label>
+                    <input type="password" class="form-input" id="login-password" placeholder="••••••••" required autocomplete="current-password">
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-muted);">
+                    <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+                        <input type="checkbox" id="login-remember" checked>
+                        <span>จดจำการเข้าสู่ระบบ</span>
+                    </label>
+                    <span style="cursor: pointer; color: #38bdf8;" onclick="app.switchAuthTab('register')">ยังไม่มีบัญชี? สมัครที่นี่</span>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.85rem; margin-top: 0.5rem;" id="btn-submit-login">
+                    🚀 เข้าสู่ระบบ
+                </button>
+                <div style="margin-top: 0.85rem; padding: 0.65rem 0.85rem; border-radius: 8px; background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.2); font-size: 0.8rem; color: #bae6fd; line-height: 1.4;">
+                    💡 <strong>บัญชีทดลองระบบ:</strong> ชื่อผู้ใช้ <code style="background: rgba(0,0,0,0.3); padding: 0.1rem 0.3rem; border-radius: 4px; color: #38bdf8;">student</code> / รหัสผ่าน <code style="background: rgba(0,0,0,0.3); padding: 0.1rem 0.3rem; border-radius: 4px; color: #38bdf8;">password123</code> หรือคลิกแท็บ <strong>"✨ สมัครสมาชิกใหม่"</strong> ด้านบนเพื่อสร้างบัญชีส่วนตัวของคุณ
+                </div>
+            </form>
+
+            <!-- Register Form -->
+            <form class="auth-form" id="form-register" onsubmit="app.handleRegisterForm(event)" style="display: none;">
+                <div class="form-group">
+                    <label class="form-label">ชื่อผู้ใช้ (Username ภาษาอังกฤษ/ตัวเลข)</label>
+                    <input type="text" class="form-input" id="register-username" placeholder="เช่น pun68_tcas (อย่างน้อย 3 ตัวอักษร)" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">ชื่อแสดงผล / นามปากกา (Display Name)</label>
+                    <input type="text" class="form-input" id="register-displayname" placeholder="เช่น ปุณณ์ เด็ก 68 หรือ ว่าที่หมอศิริราช" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">เลือกไอคอนประจำตัว (Avatar)</label>
+                    <div class="avatar-picker-grid" id="avatar-picker-grid">
+                        <button type="button" class="avatar-option-btn selected" onclick="app.selectAvatar('👨‍🎓', this)">👨‍🎓</button>
+                        <button type="button" class="avatar-option-btn" onclick="app.selectAvatar('👩‍🎓', this)">👩‍🎓</button>
+                        <button type="button" class="avatar-option-btn" onclick="app.selectAvatar('🧙‍♂️', this)">🧙‍♂️</button>
+                        <button type="button" class="avatar-option-btn" onclick="app.selectAvatar('🦊', this)">🦊</button>
+                        <button type="button" class="avatar-option-btn" onclick="app.selectAvatar('⚡', this)">⚡</button>
+                        <button type="button" class="avatar-option-btn" onclick="app.selectAvatar('💎', this)">💎</button>
+                        <button type="button" class="avatar-option-btn" onclick="app.selectAvatar('🚀', this)">🚀</button>
+                        <button type="button" class="avatar-option-btn" onclick="app.selectAvatar('👑', this)">👑</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">รหัสผ่าน (Password อย่างน้อย 4 ตัวอักษร)</label>
+                    <input type="password" class="form-input" id="register-password" placeholder="••••••••" required autocomplete="new-password">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">ยืนยันรหัสผ่าน (Confirm Password)</label>
+                    <input type="password" class="form-input" id="register-confirm-password" placeholder="••••••••" required autocomplete="new-password">
+                </div>
+                <div style="font-size: 0.85rem; color: var(--text-muted); text-align: right;">
+                    <span style="cursor: pointer; color: #38bdf8;" onclick="app.switchAuthTab('login')">มีบัญชีอยู่แล้ว? เข้าสู่ระบบ</span>
+                </div>
+                <button type="submit" class="btn btn-cyber-primary" style="width: 100%; padding: 0.85rem; margin-top: 0.5rem;" id="btn-submit-register">
+                    ✨ สร้างบัญชีและเริ่มบันทึกคะแนน
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Global Leaderboard -->
+    <div class="modal-overlay" id="leaderboard-modal">
+        <div class="modal-card leaderboard-modal-card glass-panel">
+            <div class="modal-header">
+                <div style="display: flex; align-items: center; gap: 0.65rem;">
+                    <span style="font-size: 1.5rem;">🏆</span>
+                    <div>
+                        <h3 class="modal-title" style="margin: 0;">ตารางอันดับเกียรติยศ (Leaderboard)</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">อันดับผู้เข้าฝึกสอบ TCAS Master ประจำระบบ</p>
+                    </div>
+                </div>
+                <button class="modal-close" onclick="app.closeLeaderboardModal()">✕</button>
+            </div>
+            <div class="leaderboard-table-wrap">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 60px;">อันดับ</th>
+                            <th>ผู้ใช้งาน</th>
+                            <th style="text-align: center;">เลเวล (RPG)</th>
+                            <th style="text-align: center;">สอบจบ (ชุด)</th>
+                            <th style="text-align: right;">คะแนนสะสม</th>
+                            <th style="text-align: right;">EXP รวม</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-rows">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.85rem; color: var(--text-muted);" id="leaderboard-my-rank">คุณอยู่อันดับที่ -</span>
+                <button class="btn btn-outline" onclick="app.closeLeaderboardModal()">ปิดหน้าต่าง</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: CEFR Quiz Configuration -->
+    <div class="modal-overlay" id="modal-cefr-config">
+        <div class="modal-card glass-panel" style="max-width: 520px; width: 92%;">
+            <div class="modal-header">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <span style="font-size: 1.5rem;" id="cefr-cfg-icon">⚡</span>
+                    <div>
+                        <h3 class="modal-title" id="cefr-cfg-title">ตั้งค่าควิซคำศัพท์ Level B2</h3>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">ปรับแต่งจำนวนคำศัพท์และตัวเลือกเวลาตามต้องการ</p>
+                    </div>
+                </div>
+                <button class="modal-close" onclick="app.closeCefrConfigModal()">✕</button>
+            </div>
+
+            <div class="modal-body" style="padding: 1.5rem 1.75rem; display: flex; flex-direction: column; gap: 1.5rem;">
+                <!-- Word Count Option -->
+                <div>
+                    <label class="form-label" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.65rem;">
+                        <span style="font-weight: 700; color: #fff;">📊 จำนวนคำศัพท์ที่ต้องการทำ:</span>
+                        <span class="badge" id="cefr-count-badge" style="background: rgba(99, 102, 241, 0.2); color: #818cf8; font-size: 0.9rem; font-weight: 800;">10 คำ</span>
+                    </label>
+                    <div class="cefr-count-preset-chips" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
+                        <button type="button" class="preset-chip active" onclick="app.setCefrWordCount(10, this)">10 คำ</button>
+                        <button type="button" class="preset-chip" onclick="app.setCefrWordCount(20, this)">20 คำ</button>
+                        <button type="button" class="preset-chip" onclick="app.setCefrWordCount(30, this)">30 คำ</button>
+                        <button type="button" class="preset-chip" onclick="app.setCefrWordCount(50, this)">50 คำ</button>
+                        <button type="button" class="preset-chip" onclick="app.setCefrWordCount(100, this)">100 คำ</button>
+                    </div>
+                    <input type="range" min="10" max="100" step="5" value="10" id="cefr-word-slider" class="range-slider" oninput="app.onCefrSliderChange(this.value)" style="width: 100%;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">
+                        <span>ขั้นต่ำ 10 คำ</span>
+                        <span>สูงสุด 100 คำ</span>
+                    </div>
+                </div>
+
+                <!-- Timer Option -->
+                <div>
+                    <label class="form-label" style="font-weight: 700; color: #fff; margin-bottom: 0.65rem; display: block;">
+                        ⏱️ โหมดและตัวเลือกจับเวลา:
+                    </label>
+                    <div class="timer-mode-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem;">
+                        <label class="timer-radio-card active" id="timer-card-per_15">
+                            <input type="radio" name="cefr-timer-mode" value="per_15" checked onchange="app.setCefrTimerMode('per_15')">
+                            <div class="radio-card-content">
+                                <span class="radio-title">⚡ 15 วิ/ข้อ</span>
+                                <span class="radio-desc">สปีดรันมาตรฐาน</span>
+                            </div>
+                        </label>
+                        <label class="timer-radio-card" id="timer-card-per_30">
+                            <input type="radio" name="cefr-timer-mode" value="per_30" onchange="app.setCefrTimerMode('per_30')">
+                            <div class="radio-card-content">
+                                <span class="radio-title">⏳ 30 วิ/ข้อ</span>
+                                <span class="radio-desc">คิดทบทวนสบายๆ</span>
+                            </div>
+                        </label>
+                        <label class="timer-radio-card" id="timer-card-round_total">
+                            <input type="radio" name="cefr-timer-mode" value="round_total" onchange="app.setCefrTimerMode('round_total')">
+                            <div class="radio-card-content">
+                                <span class="radio-title">🕒 เวลารวมทั้งรอบ</span>
+                                <span class="radio-desc" id="cefr-round-time-desc">3 นาที</span>
+                            </div>
+                        </label>
+                        <label class="timer-radio-card" id="timer-card-zen">
+                            <input type="radio" name="cefr-timer-mode" value="zen" onchange="app.setCefrTimerMode('zen')">
+                            <div class="radio-card-content">
+                                <span class="radio-title">🧘‍♂️ Zen Mode</span>
+                                <span class="radio-desc">ไม่จำกัดเวลา</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer" style="padding: 1rem 1.75rem; border-top: 1px solid var(--border-glass); display: flex; justify-content: flex-end; gap: 0.75rem;">
+                <button class="btn btn-secondary" onclick="app.closeCefrConfigModal()">ยกเลิก</button>
+                <button class="btn btn-primary" id="btn-start-configured-cefr" onclick="app.launchConfiguredCefrQuiz()">
+                    🚀 เริ่มทำควิซ (<span id="cefr-btn-word-count">10</span> คำ)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: EXAM CHEAT SHEET & BLUEPRINT GUIDE -->
+    <div class="modal-overlay" id="cheatsheet-modal" style="z-index: 1050;">
+        <div class="modal-card glass-panel" style="max-width: 960px; width: 95%; max-height: 88vh; display: flex; flex-direction: column; padding: 0; overflow: hidden; border: 1px solid rgba(245, 158, 11, 0.45); box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 40px rgba(245, 158, 11, 0.2);">
+            <div class="modal-header" style="padding: 1.25rem 1.5rem; margin: 0; border-bottom: 1px solid var(--border-glass); background: rgba(15, 23, 42, 0.85); display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <span class="subject-cat-badge" id="cs-modal-badge" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.4); padding: 0.25rem 0.6rem; border-radius: 6px; font-weight: 700; font-size: 0.85rem;">TGAT2</span>
+                    <div>
+                        <h3 class="modal-title" id="cs-modal-title" style="margin: 0; font-size: 1.25rem; color: #fff;">แนวข้อสอบ & สรุปสูตรช่วยจำ</h3>
+                        <p id="cs-modal-desc" style="margin: 0.2rem 0 0; font-size: 0.85rem; color: var(--text-muted);">สรุปสูตรคำนวณและเทคนิคพิชิตข้อสอบตามพิมพ์เขียว ทปอ.</p>
+                    </div>
+                </div>
+                <button class="modal-close" onclick="app.closeCheatSheetModal()" title="ปิดหน้าต่าง">✕</button>
+            </div>
+
+            <div class="modal-body custom-scrollbar" id="cs-modal-content" style="flex: 1; overflow-y: auto; padding: 1.5rem; max-height: calc(88vh - 145px);">
+                <!-- Populated dynamically by app.js -->
+            </div>
+
+            <div class="modal-footer" style="padding: 1rem 1.5rem; margin: 0; border-top: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center; background: rgba(15, 23, 42, 0.85);">
+                <div style="font-size: 0.85rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.5rem;">
+                    <span>💡 ทริก: คุณสามารถกดเปิดดูสรุปสูตรนี้ระหว่างทำข้อสอบได้ตลอดเวลา</span>
+                </div>
+                <div style="display: flex; gap: 0.75rem;">
+                    <button class="btn btn-secondary" onclick="app.closeCheatSheetModal()">ปิดหน้าต่าง</button>
+                    <button class="btn btn-primary" id="cs-modal-start-btn" onclick="app.startExamFromCheatSheet()">
+                        🎯 เริ่มทำ Full Mock ชุดนี้
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: EXAM SET SELECTION (ชุดที่ 1 - 5) -->
+    <div class="modal-overlay" id="exam-set-modal" style="z-index: 1060;">
+        <div class="modal-card glass-panel" style="max-width: 850px; width: 95%; max-height: 88vh; display: flex; flex-direction: column; padding: 0; overflow: hidden; border: 1px solid rgba(56, 189, 248, 0.45); box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 40px rgba(56, 189, 248, 0.2);">
+            <div class="modal-header" style="padding: 1.25rem 1.5rem; margin: 0; border-bottom: 1px solid var(--border-glass); background: rgba(15, 23, 42, 0.85); display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <span class="subject-cat-badge" id="set-modal-badge" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); padding: 0.25rem 0.6rem; border-radius: 6px; font-weight: 700; font-size: 0.85rem;">TGAT1</span>
+                    <div>
+                        <h3 class="modal-title" id="set-modal-title" style="margin: 0; font-size: 1.25rem; color: #fff;">เลือกชุดข้อสอบจำลองเสมือนจริง</h3>
+                        <p id="set-modal-desc" style="margin: 0.2rem 0 0; font-size: 0.85rem; color: var(--text-muted);">มีทั้งหมด 5 ชุดสมบูรณ์ (300 ข้อ) คาลิเบรตตรงตามพิมพ์เขียว MyTCAS</p>
+                    </div>
+                </div>
+                <button class="modal-close" onclick="app.closeSetModal()" title="ปิดหน้าต่าง">✕</button>
+            </div>
+
+            <div class="modal-body custom-scrollbar" id="set-modal-content" style="flex: 1; overflow-y: auto; padding: 1.5rem; max-height: calc(88vh - 145px);">
+                <!-- Populated dynamically by app.js -->
+            </div>
+
+            <div class="modal-footer" style="padding: 1rem 1.5rem; margin: 0; border-top: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center; background: rgba(15, 23, 42, 0.85);">
+                <div style="font-size: 0.85rem; color: var(--text-muted);">
+                    <span>🎯 ทุกชุดมี 60 ข้อ จับเวลา 60 นาที คะแนนเต็ม 100 คะแนน</span>
+                </div>
+                <button class="btn btn-secondary" onclick="app.closeSetModal()">ปิดหน้าต่าง</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- App Logic Script -->
+    <script src="js/app.js?v=2.8"></script>
+</body>
+</html>

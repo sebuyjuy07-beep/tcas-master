@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCAS Master - กระดานทดเลข & วาดรูปคณิตศาสตร์ (Math Scratchpad)</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #080d1a;
+            --bg-card: #0f172a;
+            --bg-toolbar: rgba(15, 23, 42, 0.96);
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --accent-cyan: #06b6d4;
+            --accent-emerald: #10b981;
+            --accent-rose: #f43f5e;
+            --accent-amber: #f59e0b;
+            --text-main: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-glass: rgba(255, 255, 255, 0.12);
+            --border-bright: rgba(255, 255, 255, 0.22);
+            --radius-md: 10px;
+            --radius-sm: 6px;
+            --radius-full: 9999px;
+            --transition-fast: 0.15s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Toolbar */
+        .sp-toolbar {
+            height: 60px;
+            background: var(--bg-toolbar);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-glass);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.25rem;
+            z-index: 100;
+            gap: 1rem;
+            flex-shrink: 0;
+        }
+
+        .toolbar-section {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sp-logo-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.05rem;
+            color: #ffffff;
+            letter-spacing: -0.01em;
+            padding-right: 0.85rem;
+            border-right: 1px solid var(--border-glass);
+        }
+        .sp-logo-badge span {
+            background: linear-gradient(135deg, #6366f1, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sp-question-tag {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            background: rgba(6, 182, 212, 0.12);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            padding: 0.25rem 0.65rem;
+            border-radius: var(--radius-full);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .btn-group {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-md);
+            padding: 2px;
+            gap: 2px;
+        }
+
+        .sp-btn {
+            height: 34px;
+            min-width: 34px;
+            padding: 0 0.55rem;
+            border-radius: var(--radius-sm);
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-family: inherit;
+            font-size: 0.84rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .sp-btn:hover:not(:disabled) {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.12);
+        }
+        .sp-btn.active {
+            background: var(--primary) !important;
+            color: #ffffff !important;
+            font-weight: 600;
+            box-shadow: 0 0 12px rgba(99, 102, 241, 0.45);
+        }
+        .sp-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        /* Color Palette */
+        .color-palette {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0 0.4rem;
+        }
+        .color-chip {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: transform var(--transition-fast), border-color var(--transition-fast);
+        }
+        .color-chip:hover {
+            transform: scale(1.15);
+        }
+        .color-chip.active {
+            border-color: #ffffff;
+            transform: scale(1.25);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Stroke Slider */
+        .stroke-slider-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0 0.5rem;
+        }
+        .stroke-slider-group input[type="range"] {
+            width: 70px;
+            accent-color: var(--accent-cyan);
+            cursor: pointer;
+        }
+        .stroke-val {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            min-width: 22px;
+        }
+
+        /* Sync Status Pill */
+        .sync-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.78rem;
+            color: #6ee7b7;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            padding: 0.3rem 0.7rem;
+            border-radius: var(--radius-full);
+            white-space: nowrap;
+        }
+        .sync-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 8px #10b981;
+            animation: pulseSync 2s infinite;
+        }
+        @keyframes pulseSync {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.85); }
+        }
+
+        /* Main Workspace */
+        .sp-workspace {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            background-color: #0b0f19;
+            cursor: crosshair;
+            display: flex;
+        }
+
+        /* Grid Backgrounds */
+        .grid-math {
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .grid-graph {
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.12) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.12) 1px, transparent 1px),
+                linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+        }
+        .grid-dots {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .grid-blank {
+            background-image: none;
+        }
+
+        #whiteboard-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+            display: block;
+        }
+
+        /* Question Preview Bar at Bottom (Collapsible) */
+        .sp-bottom-panel {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.94);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-bright);
+            border-radius: var(--radius-full);
+            padding: 0.45rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            z-index: 50;
+            max-width: 90vw;
+        }
+        .q-preview-text {
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 480px;
+        }
+        .q-preview-tag {
+            font-weight: 700;
+            color: #ffffff;
+            background: var(--primary);
+            padding: 0.15rem 0.55rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.78rem;
+        }
+
+        /* Formulas Drawer */
+        .formulas-drawer {
+            position: fixed;
+            top: 60px;
+            right: -360px;
+            width: 360px;
+            height: calc(100vh - 60px);
+            background: rgba(15, 23, 42, 0.98);
+            border-left: 1px solid var(--border-bright);
+            backdrop-filter: blur(24px);
+            padding: 1.5rem;
+            overflow-y: auto;
+            transition: right 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 150;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+        }
+        .formulas-drawer.open {
+            right: 0;
+        }
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-glass);
+        }
+        .drawer-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .formula-group {
+            margin-bottom: 1.25rem;
+        }
+        .formula-group-title {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+        .formula-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-sm);
+            padding: 0.65rem 0.85rem;
+            margin-bottom: 0.45rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            color: #f1f5f9;
+            line-height: 1.5;
+        }
+
+        /* Toast */
+        .sp-toast {
+            position: fixed;
+            top: 75px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.96);
+            border: 1px solid var(--border-bright);
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--radius-full);
+            color: #ffffff;
+            font-size: 0.85rem;
+            font-weight: 500;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            z-index: 200;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+        .sp-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(5px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Toolbar -->
+    <header class="sp-toolbar">
+        <div class="toolbar-section">
+            <div class="sp-logo-badge">
+                <span>TCAS</span> MathPad
+            </div>
+            <div class="sp-question-tag" id="sp-question-label">
+                <span>📝 ข้อที่ 1</span>
+            </div>
+            <!-- Undo / Redo -->
+            <div class="btn-group">
+                <button class="sp-btn" id="btn-undo" onclick="pad.undo()" title="ย้อนกลับ (Ctrl+Z)" disabled>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>
+                </button>
+                <button class="sp-btn" id="btn-redo" onclick="pad.redo()" title="ทำซ้ำ (Ctrl+Y)" disabled>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3L21 13"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Center Tools -->
+        <div class="toolbar-section">
+            <!-- Tool Modes -->
+            <div class="btn-group">
+                <button class="sp-btn active" id="tool-pen" onclick="pad.setTool('pen')" title="ปากกาวาดอิสระ">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+                    <span>ปากกา</span>
+                </button>
+                <button class="sp-btn" id="tool-highlighter" onclick="pad.setTool('highlighter')" title="ปากกาไฮไลต์เน้นข้อความ">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 11-6 6v3h3l6-6"/><path d="m22 2-2 2-4-4 2-2a2.828 2.828 0 1 1 4 4z"/></svg>
+                    <span>ไฮไลต์</span>
+                </button>
+                <button class="sp-btn" id="tool-line" onclick="pad.setTool('line')" title="เส้นตรง (Line / Graph Axis)">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="20" x2="20" y2="4"/></svg>
+                    <span>เส้นตรง</span>
+                </button>
+                <button class="sp-btn" id="tool-rect" onclick="pad.setTool('rect')" title="สี่เหลี่ยม (Rectangle)">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                    <span>สี่เหลี่ยม</span>
+                </button>
+                <button class="sp-btn" id="tool-circle" onclick="pad.setTool('circle')" title="วงกลม (Circle / Ellipse)">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>
+                    <span>วงกลม</span>
+                </button>
+                <button class="sp-btn" id="tool-eraser" onclick="pad.setTool('eraser')" title="ยางลบ">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"/><path d="M22 21H7"/><path d="m5 11 9 9"/></svg>
+                    <span>ยางลบ</span>
+                </button>
+            </div>
+
+            <!-- Color Palette -->
+            <div class="color-palette">
+                <button class="color-chip active" style="background: #06b6d4;" onclick="pad.setColor('#06b6d4')" title="Cyan"></button>
+                <button class="color-chip" style="background: #f59e0b;" onclick="pad.setColor('#f59e0b')" title="Amber"></button>
+                <button class="color-chip" style="background: #f43f5e;" onclick="pad.setColor('#f43f5e')" title="Rose"></button>
+                <button class="color-chip" style="background: #10b981;" onclick="pad.setColor('#10b981')" title="Emerald"></button>
+                <button class="color-chip" style="background: #ffffff;" onclick="pad.setColor('#ffffff')" title="White"></button>
+            </div>
+
+            <!-- Stroke Size Slider -->
+            <div class="stroke-slider-group">
+                <input type="range" id="sp-size-range" min="1" max="14" value="2" oninput="pad.setSize(this.value)">
+                <span class="stroke-val" id="sp-size-label">2px</span>
+            </div>
+        </div>
+
+        <!-- Right Side Actions -->
+        <div class="toolbar-section">
+            <!-- Grid Styles -->
+            <div class="btn-group">
+                <button class="sp-btn active" id="btn-grid-math" onclick="pad.setGrid('math')" title="ตารางกริดคณิตศาสตร์">📐 กริด</button>
+                <button class="sp-btn" id="btn-grid-graph" onclick="pad.setGrid('graph')" title="กริดกราฟพิกัด">📊 กราฟ</button>
+                <button class="sp-btn" id="btn-grid-blank" onclick="pad.setGrid('blank')" title="กระดาษว่าง">📄 เปล่า</button>
+            </div>
+
+            <button class="sp-btn" onclick="pad.toggleFormulas()" title="เปิดแผ่นสูตรคณิตศาสตร์-ฟิสิกส์เร่งด่วน">
+                📖 สูตรลัด
+            </button>
+
+            <button class="sp-btn" onclick="pad.clearCanvas()" title="ล้างกระดานทั้งหมด">
+                🗑️ ล้าง
+            </button>
+
+            <!-- Sync Status -->
+            <div class="sync-pill" title="ซิงค์ผลการทดเลขกับห้องสอบหลักตลอดเวลา">
+                <span class="sync-dot"></span>
+                <span>ซิงค์ห้องสอบ</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Canvas Workspace -->
+    <main class="sp-workspace grid-math" id="sp-workspace">
+        <canvas id="whiteboard-canvas"></canvas>
+
+        <!-- Bottom Question Snippet -->
+        <div class="sp-bottom-panel" id="bottom-panel">
+            <span class="q-preview-tag" id="bottom-q-badge">ข้อที่ 1</span>
+            <span class="q-preview-text" id="bottom-q-text">กำลังโหลดโจทย์ข้อสอบ...</span>
+        </div>
+    </main>
+
+    <!-- Quick Formulas Cheat-sheet Drawer -->
+    <aside class="formulas-drawer" id="formulas-drawer">
+        <div class="drawer-header">
+            <div class="drawer-title">
+                <span>📐 สูตรลัดคณิตศาสตร์ & ฟิสิกส์</span>
+            </div>
+            <button class="sp-btn" onclick="pad.toggleFormulas()">✕ ปิด</button>
+        </div>
+
+        <div class="formula-group">
+            <div class="formula-group-title">ตรีโกณมิติพื้นฐาน</div>
+            <div class="formula-card">sin²θ + cos²θ = 1</div>
+            <div class="formula-card">tan θ = sin θ / cos θ</div>
+            <div class="formula-card">sin(A±B) = sinA cosB ± cosA sinB</div>
+            <div class="formula-card">cos(A±B) = cosA cosB ∓ sinA sinB</div>
+        </div>
+
+        <div class="formula-group">
+            <div class="formula-group-title">แคลคูลัส (Calculus)</div>
+            <div class="formula-card">d/dx [xⁿ] = n·xⁿ⁻¹</div>
+            <div class="formula-card">d/dx [uv] = u'v + uv' (ผลคูณ)</div>
+            <div class="formula-card">d/dx [u/v] = (u'v - uv') / v² (ผลหาร)</div>
+            <div class="formula-card">∫ xⁿ dx = (xⁿ⁺¹)/(n+1) + C</div>
+        </div>
+
+        <div class="formula-group">
+            <div class="formula-group-title">เรขาคณิตวิเคราะห์</div>
+            <div class="formula-card">d = √[(x₂-x₁)² + (y₂-y₁)²]</div>
+            <div class="formula-card">m = (y₂ - y₁) / (x₂ - x₁)</div>
+            <div class="formula-card">ระยะจุดถึงเส้น: d = |Ax₀ + By₀ + C| / √(A² + B²)</div>
+        </div>
+
+        <div class="formula-group">
+            <div class="formula-group-title">การเคลื่อนที่แนวตรง (ฟิสิกส์)</div>
+            <div class="formula-card">v = u + at</div>
+            <div class="formula-card">s = ut + ½at²</div>
+            <div class="formula-card">v² = u² + 2as</div>
+            <div class="formula-card">s = ((u + v)/2)·t</div>
+        </div>
+    </aside>
+
+    <!-- Notification Toast -->
+    <div class="sp-toast" id="sp-toast"></div>
+
+    <script src="js/scratchpad.js?v=2.2"></script>
+</body>
+</html>
