@@ -65,6 +65,7 @@ function migrateUsers(targetDb) {
     }
 
     addColumnIfNotExists('exam_sessions', 'user_id', 'TEXT REFERENCES users(id)');
+    addColumnIfNotExists('exam_sessions', 'is_free_roam', 'INTEGER DEFAULT 0');
     addColumnIfNotExists('vocab_bank', 'user_id', 'TEXT REFERENCES users(id)');
     addColumnIfNotExists('cefr_quiz_history', 'user_id', 'TEXT REFERENCES users(id)');
     addColumnIfNotExists('questions', 'set_number', 'INTEGER DEFAULT 1');

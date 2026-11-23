@@ -1738,7 +1738,7 @@ const app = {
                                     <span style="font-size: 1.5rem;">${meta.icon}</span>
                                     <h4 style="margin: 0; font-size: 1.05rem; color: #f8fafc; font-weight: 700;">${meta.title}</h4>
                                 </div>
-                                <span style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 9999px;">
+                                <span style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.55rem; border-radius: 9999px; white-space: nowrap; flex-shrink: 0; margin-left: 0.5rem;">
                                     ${s.count} ข้อ
                                 </span>
                             </div>
@@ -1763,7 +1763,7 @@ const app = {
                                 <span style="font-size: 1.5rem;">🎲</span>
                                 <h4 style="margin: 0; font-size: 1.05rem; color: #e9d5ff; font-weight: 700;">สุ่มคละทุกชุด (Comprehensive Mix)</h4>
                             </div>
-                            <span style="background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 9999px;">
+                            <span style="background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.55rem; border-radius: 9999px; white-space: nowrap; flex-shrink: 0; margin-left: 0.5rem;">
                                 สุ่ม ${subject.total_questions || 60} ข้อ
                             </span>
                         </div>

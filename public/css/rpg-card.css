@@ -1,0 +1,866 @@
+/* ==========================================================================
+   TCAS MASTER - RPG CHARACTER CARD, LEVEL TIERS & RADAR STATUS STYLES
+   Owned by: RPG Card & Level Art Agent
+   IMPORTANT: Keep Two-Layer 3D Architecture (#tcas-card-tilt + #tcas-card-flip)
+   ========================================================================== */
+
+/* ==========================================================================
+   RPG CHARACTER STATUS & RADAR CHART STYLES
+   ========================================================================== */
+.tcas-card-showcase-wrapper {
+    margin-bottom: 2.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.card-showcase-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-glass);
+}
+.showcase-badge {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: var(--accent-amber);
+    background: rgba(245, 158, 11, 0.15);
+    padding: 0.2rem 0.65rem;
+    border-radius: var(--radius-full);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    display: inline-block;
+    margin-bottom: 0.35rem;
+}
+.showcase-title {
+    font-size: 1.55rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+}
+.showcase-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin: 0.2rem 0 0 0;
+}
+
+.card-action-toolbar {
+    display: flex;
+    gap: 0.65rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* 3D Stage & Card Container (Two-Layer Architecture: Tilt on outer, Flip on inner) */
+.tcas-card-stage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1400px;
+    padding: 1rem 0.5rem 1.5rem 0.5rem;
+}
+
+.tcas-card-3d-wrapper {
+    width: 380px;
+    height: 560px;
+    max-width: 92vw;
+    position: relative;
+    cursor: grab;
+    perspective: 1400px;
+}
+
+/* Outer Layer: Handles mouse tilt */
+.tcas-card-tilt {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.15s ease-out;
+    border-radius: 24px;
+}
+
+/* Inner Layer: Handles 180-degree flip */
+.tcas-card-flip {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    border-radius: 24px;
+}
+
+.tcas-card-flip.is-flipped {
+    transform: rotateY(180deg) !important;
+}
+
+.tcas-card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border-radius: 24px;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    overflow: hidden;
+    box-sizing: border-box;
+    box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.85), 0 0 40px rgba(99, 102, 241, 0.25);
+    transform-style: flat !important; /* CRITICAL: prevents internal elements from piercing 3D space */
+}
+
+.tcas-card-face * {
+    transform-style: flat !important;
+}
+
+.tcas-card-front {
+    transform: rotateY(0deg);
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.2s ease, visibility 0.2s;
+}
+
+.tcas-card-flip.is-flipped .tcas-card-front,
+.tcas-card-flip.is-flipped .tcas-card-front * {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+.tcas-card-back {
+    transform: rotateY(180deg);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s;
+}
+
+.tcas-card-flip:not(.is-flipped) .tcas-card-back,
+.tcas-card-flip:not(.is-flipped) .tcas-card-back * {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+.tcas-card-flip.is-flipped .tcas-card-back,
+.tcas-card-flip.is-flipped .tcas-card-back * {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+/* Card Holographic Sheen */
+.card-holo-glare {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    mix-blend-mode: overlay;
+    border-radius: 24px;
+}
+
+/* TIER BORDER FRAMES */
+.tcas-card-face.tier-bronze {
+    background: linear-gradient(145deg, #181412 0%, #291f1a 50%, #15110e 100%);
+    border: 3px solid #b45309;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(180, 83, 9, 0.35);
+}
+.tcas-card-face.tier-silver {
+    background: linear-gradient(145deg, #0f172a 0%, #1e293b 50%, #0b1120 100%);
+    border: 3px solid #94a3b8;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(56, 189, 248, 0.4);
+}
+.tcas-card-face.tier-gold {
+    background: linear-gradient(145deg, #1c1507 0%, #2d2007 50%, #120e03 100%);
+    border: 3px solid #f59e0b;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 45px rgba(245, 158, 11, 0.45);
+}
+.tcas-card-face.tier-mythic {
+    background: linear-gradient(145deg, #160a28 0%, #260f3d 50%, #0d041c 100%);
+    border: 3px solid #ec4899;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9), 0 0 50px rgba(236, 72, 153, 0.5);
+}
+
+/* Front Card Layout */
+.tcas-card-front {
+    display: flex;
+    flex-direction: column;
+    padding: 1.15rem 1.25rem;
+    position: relative;
+}
+
+.tc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 0.65rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+.tc-rarity {
+    color: #fbbf24;
+    letter-spacing: 0.05em;
+    text-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
+}
+.tc-season {
+    color: var(--text-muted);
+    font-size: 0.68rem;
+    letter-spacing: 0.05em;
+}
+.tc-serial {
+    font-family: 'Outfit', monospace;
+    color: var(--accent-cyan);
+    font-weight: 700;
+}
+
+/* Card Art Box & Avatar */
+.tc-art-box {
+    margin: 1rem auto 0.75rem auto;
+    position: relative;
+    width: 140px;
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.tc-art-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.4) 0%, transparent 70%);
+    animation: artPulse 3s infinite alternate ease-in-out;
+}
+@keyframes artPulse {
+    0% { transform: scale(0.95); opacity: 0.6; }
+    100% { transform: scale(1.2); opacity: 1; }
+}
+.tc-avatar-display {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #312e81, #1e1b4b);
+    border: 3px solid rgba(255, 255, 255, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+    box-shadow: 0 0 30px rgba(99, 102, 241, 0.65);
+    z-index: 2;
+    overflow: hidden;
+    user-select: none;
+}
+.tc-avatar-display svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+.tc-level-badge {
+    position: absolute;
+    bottom: 2px;
+    right: 6px;
+    background: linear-gradient(135deg, #f59e0b, #ef4444);
+    color: #ffffff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 800;
+    padding: 0.2rem 0.65rem;
+    border-radius: var(--radius-full);
+    border: 2px solid #080d1a;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    z-index: 3;
+}
+.tc-streak-pill {
+    position: absolute;
+    top: 4px;
+    left: -10px;
+    background: rgba(245, 158, 11, 0.2);
+    border: 1px solid rgba(245, 158, 11, 0.5);
+    color: #fef08a;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.15rem 0.55rem;
+    border-radius: var(--radius-full);
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+    z-index: 3;
+}
+
+/* Card Identity */
+.tc-identity {
+    text-align: center;
+    margin-bottom: 0.85rem;
+}
+.tc-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 0.2rem;
+}
+.tc-name {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+.tc-rank-tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.15rem 0.55rem;
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+}
+.tc-hero-title {
+    font-size: 0.85rem;
+    color: var(--accent-cyan-light);
+    font-weight: 600;
+    margin: 0;
+}
+.tc-hero-sub {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin: 0.2rem 0 0 0;
+}
+
+/* Combat Power & EXP Matrix */
+.tc-combat-strip {
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 0.85rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin-top: auto;
+}
+.tc-cp-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding-bottom: 0.4rem;
+}
+.tc-cp-lbl {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+}
+.tc-cp-num {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 900;
+    color: #38bdf8;
+    text-shadow: 0 0 16px rgba(56, 189, 248, 0.6);
+    line-height: 1;
+}
+.tc-exp-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+.tc-exp-lbls {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+.tc-exp-track {
+    height: 7px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+}
+.tc-exp-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #6366f1, #06b6d4);
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+    transition: width 0.5s ease;
+}
+
+/* Card Bottom Footer */
+.tc-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.75rem;
+    margin-top: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 0.65rem;
+}
+.tc-stamp {
+    font-weight: 800;
+    color: var(--accent-emerald);
+    letter-spacing: 0.05em;
+}
+.tc-trademark {
+    color: var(--text-dim);
+}
+
+/* BACK OF CARD */
+.tcas-card-back {
+    background: linear-gradient(145deg, #0d121f 0%, #172033 50%, #0a0e18 100%);
+    border: 3px solid rgba(99, 102, 241, 0.4);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.tc-back-inner {
+    height: 100%;
+    border: 2px dashed rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    padding: 1.5rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+    background: rgba(11, 16, 28, 0.5);
+}
+.tc-back-emblem {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(99, 102, 241, 0.15);
+    border: 2px solid rgba(99, 102, 241, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-light);
+    margin-bottom: 0.75rem;
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+}
+.tc-back-heading {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+    letter-spacing: 0.02em;
+}
+.tc-back-caption {
+    font-size: 0.68rem;
+    color: var(--accent-cyan);
+    letter-spacing: 0.08em;
+    margin: 0.25rem 0 1.25rem 0;
+}
+.tc-back-stats {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+.tc-bstat {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 0.6rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+.bstat-lbl {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+}
+.bstat-val {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #f8fafc;
+}
+.tc-back-seal-box {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.65rem;
+}
+.tc-back-hint {
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    margin: 0;
+}
+
+.rpg-hero-main {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex: 1;
+    min-width: 300px;
+}
+
+.rpg-avatar-box {
+    position: relative;
+    width: 86px;
+    height: 86px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4f46e5, #06b6d4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.3rem;
+    box-shadow: 0 0 28px rgba(99, 102, 241, 0.65);
+    flex-shrink: 0;
+    border: 3px solid rgba(255, 255, 255, 0.25);
+}
+
+.rpg-lvl-badge {
+    position: absolute;
+    bottom: -6px;
+    right: -6px;
+    background: linear-gradient(135deg, #f59e0b, #ef4444);
+    color: #ffffff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 800;
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-full);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.65);
+    border: 2px solid #080d1a;
+}
+
+.rpg-tier-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.35rem;
+}
+
+.rpg-rank-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.65rem;
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #f8fafc;
+}
+
+.streak-flame-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.65rem;
+    border-radius: var(--radius-full);
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    color: #fbbf24;
+}
+
+.rpg-hero-title {
+    font-family: 'Outfit', 'Prompt', sans-serif;
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.2;
+    margin-bottom: 0.15rem;
+}
+
+.rpg-hero-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.85rem;
+}
+
+.rpg-exp-wrapper {
+    max-width: 380px;
+    width: 100%;
+}
+
+.rpg-exp-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 0.35rem;
+    font-weight: 600;
+}
+
+.rpg-exp-track {
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    position: relative;
+}
+
+.rpg-exp-fill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    background: linear-gradient(90deg, #6366f1, #06b6d4, #10b981);
+    transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+}
+
+.rpg-power-card {
+    background: rgba(8, 12, 20, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-md);
+    padding: 1.25rem 1.85rem;
+    text-align: center;
+    min-width: 220px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.power-label {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    display: block;
+}
+
+.power-value {
+    font-family: 'Outfit', sans-serif;
+    font-size: 2.6rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #facc15, #f59e0b, #ef4444);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.1;
+    margin: 0.3rem 0;
+    text-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
+}
+
+.power-sub {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.rpg-grid-layout {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 1.75rem;
+}
+
+@media (max-width: 900px) {
+    .rpg-grid-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+.rpg-panel {
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.rpg-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.25rem;
+}
+
+.panel-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+}
+
+.panel-tag {
+    font-size: 0.72rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+/* Radar Chart Container */
+.rpg-radar-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 360px;
+    position: relative;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.radar-svg {
+    width: 100%;
+    max-width: 380px;
+    height: auto;
+    overflow: visible;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.radar-svg text {
+    user-select: none;
+    -webkit-user-select: none;
+    pointer-events: none;
+}
+
+.rpg-hero-card,
+.rpg-panel,
+.rpg-power-card,
+.attr-card,
+.achievement-card {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Attributes List */
+.attr-cards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.attr-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    padding: 0.9rem 1.1rem;
+    transition: all var(--transition-fast);
+}
+
+.attr-card:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.16);
+    transform: translateY(-2px);
+}
+
+.attr-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.45rem;
+}
+
+.attr-name {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.attr-score {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+}
+
+.attr-meter-track {
+    height: 6px;
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+}
+
+.attr-meter-fill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    transition: width 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.attr-desc {
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    margin-top: 0.35rem;
+}
+
+/* Achievements Grid */
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.achieve-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    display: flex;
+    gap: 0.85rem;
+    align-items: center;
+    transition: all var(--transition-fast);
+}
+
+.achieve-card.unlocked {
+    background: rgba(99, 102, 241, 0.1);
+    border-color: rgba(99, 102, 241, 0.35);
+    box-shadow: 0 0 16px rgba(99, 102, 241, 0.15);
+}
+
+.achieve-card.locked {
+    opacity: 0.45;
+    filter: grayscale(1);
+}
+
+.achieve-icon {
+    font-size: 1.8rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.achieve-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.achieve-title {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.achieve-desc {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    line-height: 1.35;
+    margin-top: 0.15rem;
+}
+
+
+@media (max-width: 768px) {
+    /* Collectible Trading Card on Mobile */
+    .card-showcase-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+    }
+    .card-action-toolbar {
+        width: 100% !important;
+    }
+    .card-action-toolbar .btn {
+        flex: 1 !important;
+        justify-content: center !important;
+    }
+    .tcas-card-3d-wrapper {
+        width: 340px !important;
+        height: 520px !important;
+    }
+    .tc-avatar-display {
+        width: 95px !important;
+        height: 95px !important;
+        font-size: 3rem !important;
+    }
+
+}

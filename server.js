@@ -238,17 +238,26 @@ app.get('/api/subjects/:id/cheatsheet', (req, res) => {
 // 2. Exam Session Management APIs (Per-User)
 // ==========================================
 
-// POST start an exam session (Full Mock, Topic Drill, or Mistake Drill)
+// POST start an exam session (Full Mock, Topic Drill, Mistake Drill, or Free Roam)
 app.post('/api/sessions/start', (req, res) => {
     try {
-        const { subject_id, session_type = 'full_mock', filter_blueprint_id, question_limit, set_number } = req.body;
+        const {
+            subject_id,
+            session_type = 'full_mock',
+            filter_blueprint_id,
+            question_limit,
+            set_number,
+            is_free_roam = false
+        } = req.body;
         const userId = req.user.id;
+        const isFreeRoam = Boolean(is_free_roam || session_type === 'free_roam');
+        const effectiveSessionType = session_type === 'free_roam' ? 'full_mock' : session_type;
 
         let subject;
         let questions = [];
 
         // Handle Mastered Review Mode (ฝึกทบทวนข้อสอบที่เคยทำถูกแล้ว)
-        if (session_type === 'mastered_review') {
+        if (effectiveSessionType === 'mastered_review') {
             let mQuery = `
                 SELECT q.id, q.subject_id, q.blueprint_id, q.stimulus, q.question_text, q.image_url, q.difficulty,
                        b.domain_name, b.subtopic_name
@@ -284,7 +293,7 @@ app.post('/api/sessions/start', (req, res) => {
                 total_score: questions.length * 1.5,
                 duration_minutes: questions.length * 1.5
             };
-        } else if (session_type === 'mistakes_review' || session_type === 'mistake_drill') {
+        } else if (effectiveSessionType === 'mistakes_review' || effectiveSessionType === 'mistake_drill') {
             // Handle Mistake Practice Mode
             let mQuery = `
                 SELECT q.id, q.subject_id, q.blueprint_id, q.stimulus, q.question_text, q.image_url, q.difficulty,
@@ -354,13 +363,13 @@ app.post('/api/sessions/start', (req, res) => {
                 params.push(userId);
             }
 
-            if (session_type === 'full_mock') {
+            if (effectiveSessionType === 'full_mock') {
                 query += ' ORDER BY b.order_index ASC, q.id ASC';
             } else {
                 query += ' ORDER BY RANDOM()';
             }
 
-            const limit = question_limit || (session_type === 'full_mock' ? subject.total_questions : 10);
+            const limit = question_limit || (effectiveSessionType === 'full_mock' ? subject.total_questions : 10);
             query += ` LIMIT ${parseInt(limit, 10)}`;
 
             questions = db.prepare(query).all(...params);
@@ -421,27 +430,30 @@ app.post('/api/sessions/start', (req, res) => {
         });
         const sections = Array.from(sectionsMap.values());
 
-        // Calculate time limit in seconds
-        const timeLimitSeconds = session_type === 'full_mock'
-            ? subject.duration_minutes * 60
-            : Math.max(questions.length * 60, 300);
+        // Calculate time limit in seconds (0 = untimed Free Roam mode)
+        const timeLimitSeconds = isFreeRoam
+            ? 0
+            : (effectiveSessionType === 'full_mock'
+                ? subject.duration_minutes * 60
+                : Math.max(questions.length * 60, 300));
 
         const sessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
 
         db.prepare(`
             INSERT INTO exam_sessions (
                 id, user_id, subject_id, session_type, filter_blueprint_id,
-                total_questions, max_score, time_limit_seconds, status, started_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'in_progress', CURRENT_TIMESTAMP)
+                total_questions, max_score, time_limit_seconds, is_free_roam, status, started_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'in_progress', CURRENT_TIMESTAMP)
         `).run(
             sessionId,
             userId,
             subject.id,
-            session_type,
+            effectiveSessionType,
             filter_blueprint_id || null,
             questionsWithOptions.length,
             subject.total_score,
-            timeLimitSeconds
+            timeLimitSeconds,
+            isFreeRoam ? 1 : 0
         );
 
         res.json({
@@ -454,7 +466,8 @@ app.post('/api/sessions/start', (req, res) => {
                     code: subject.code,
                     total_score: subject.total_score
                 },
-                session_type,
+                session_type: effectiveSessionType,
+                is_free_roam: isFreeRoam,
                 time_limit_seconds: timeLimitSeconds,
                 total_questions: questionsWithOptions.length,
                 sections,
@@ -631,6 +644,7 @@ app.post('/api/sessions/:id/submit', (req, res) => {
                 subject_name_en: subjectMeta.name_en,
                 subject_code: subjectMeta.code,
                 session_type: session.session_type,
+                is_free_roam: Boolean(session.is_free_roam),
                 correct_count: correctCount,
                 wrong_count: session.total_questions - correctCount,
                 accuracy_pct: Math.round((correctCount / session.total_questions) * 100),
@@ -1644,7 +1658,7 @@ async function getBestAvailableGeminiModel(apiKey) {
 // POST Ask AI Tutor
 app.post('/api/ai/tutor', async (req, res) => {
     try {
-        const { question_id, user_query, selected_option_id, chat_history, custom_key, preferred_model } = req.body;
+        const { question_id, user_query, selected_option_id, chat_history, custom_key, preferred_model, is_free_roam } = req.body;
         if (!question_id || !user_query) {
             return res.status(400).json({ success: false, error: 'กรุณาระบุ question_id และ user_query' });
         }
@@ -1691,7 +1705,7 @@ app.post('/api/ai/tutor', async (req, res) => {
    - แนะนำเทคนิคการตัดช้อยส์ การสังเกตคีย์เวิร์ด และการเชื่อมโยงความรู้ตาม Test Blueprint ของ ทปอ.
 4. ข้อกำหนดพิเศษ:
    - หากมีสมการหรือสูตรคณิตศาสตร์ ให้ใช้สัญลักษณ์ LaTeX Math เสมอ เช่น $x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$
-   - จัดรูปแบบ Markdown ให้อ่านง่าย สบายตา ชัดเจน`;
+   - จัดรูปแบบ Markdown ให้อ่านง่าย สบายตา ชัดเจน${is_free_roam ? `\n5. โหมด Free Roam (โหมดฟรีโรมขณะกำลังทำข้อสอบ):\n   - ขณะนี้ผู้เรียนกำลังทำข้อสอบในโหมด Free Roam (ไม่จับเวลา และฝึกคิดแบบมีผู้ช่วย AI)\n   - ให้เน้นช่วยอธิบายหลักการ แนะแนวทางทีละขั้น วิเคราะห์จุดหลอก และคีย์เวิร์ดสำคัญให้ผู้เรียนฝึกคิดตาม\n   - หากผู้เรียนยังไม่ได้ถามหาคำตอบตรงๆ ให้ไกด์แนวคิดและวิธีวิเคราะห์ก่อนโดยยังไม่เฉลยตัวอักษรคำตอบตรงๆ ทันที แต่หากผู้เรียนถามหาคำตอบหรือขอเฉลย สามารถบอกและอธิบายละเอียดได้ครับ` : ''}`;
 
                 const contextText = `ข้อมูลข้อสอบปัจจุบัน:
 - วิชา: ${question.subject_name} (${question.subject_code})

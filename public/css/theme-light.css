@@ -2751,14 +2751,24 @@ body.theme-dark-v4 .solar-stage {
     height: 310px;
     overflow: hidden;
     cursor: pointer;
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.25) 8%, #000 24%, #000 96%, transparent 100%);
-    mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.25) 8%, #000 24%, #000 96%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.08) 14%, rgba(0, 0, 0, 0.65) 28%, #000 38%, #000 96%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.08) 14%, rgba(0, 0, 0, 0.65) 28%, #000 38%, #000 96%, transparent 100%);
 }
 @media (min-width: 769px) {
     .hero-banner-hub:has(.hero-card-seamless) .fx-stage {
         height: 100%;
         min-height: 295px;
     }
+    .hero-banner-hub:has(.fx-stage) .hero-hub-left {
+        max-width: 50%;
+    }
+    .hero-banner-hub:has(.fx-stage) .hero-hub-right {
+        width: 56%;
+    }
+}
+body.theme-dark .btn-primary,
+body.theme-dark .btn-cyber-primary {
+    color: #ffffff !important;
 }
 .fx-hud {
     position: absolute;
@@ -4037,6 +4047,9 @@ body.theme-dark :is(.timer-display, .score-main, .stat-number, .exam-timer-box, 
     display: none;
 }
 @media (min-width: 901px) {
+    .exam-content-split {
+        padding-right: 42px;
+    }
     .exam-content-split.has-stimulus {
         grid-template-columns: 46% 10px 1fr;
         gap: 0.35rem;
