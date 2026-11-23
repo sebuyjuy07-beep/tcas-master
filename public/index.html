@@ -8,11 +8,11 @@
     <meta name="description"
         content="ระบบฝึกทำข้อสอบจำลอง TGAT, TPAT, A-Level อ้างอิงโครงสร้าง Test Blueprint ของ ทปอ. พร้อมระบบจับเวลา วิเคราะห์จุดอ่อน และสมุดบันทึกข้อผิดพลาด">
 
-    <!-- Google Fonts (Prompt & Kanit for Thai, Outfit for Numbers/Headers) -->
+    <!-- Google Fonts (Multi-Theme Editorial, Organic Nature, and Tech/Factory Pairings) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Prompt:wght@300;400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500;600;700&family=Chakra+Petch:wght@500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Kanit:wght@300;400;500;600;700&family=Maitree:wght@500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Noto+Serif+Thai:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Prompt:wght@300;400;500;600&family=Sarabun:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
         rel="stylesheet">
 
     <!-- KaTeX for crisp Math rendering -->
@@ -21,7 +21,9 @@
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
 
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="css/style.css?v=3.0">
+    <link rel="stylesheet" href="css/style.css?v=3.1">
+    <link rel="stylesheet" href="css/rpg-card.css?v=3.1">
+    <link rel="stylesheet" href="css/theme-light.css?v=3.2">
 </head>
 
 <body class="theme-dark">
@@ -240,6 +242,16 @@
                         </svg>
                         <span class="btn-text-responsive">ตารางอันดับ</span>
                     </button>
+                    <button class="btn btn-outline btn-sm btn-theme-toggle" id="btn-theme-toggle"
+                        onclick="app.toggleTheme()" title="สลับธีมสีหน้าเว็บ (เอสเปรสโซ / เขียวป่า-ทราย / Dark)">
+                        <span id="theme-icon-svg" style="display: inline-flex; align-items: center;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                            </svg>
+                        </span>
+                        <span class="btn-text-responsive" id="theme-text-label">ธีม: Dark</span>
+                    </button>
                     <button class="btn btn-outline btn-sm btn-sound-toggle" id="btn-sound-toggle"
                         onclick="app.toggleSound()" title="เปิด/ปิดเสียงเอฟเฟกต์">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -278,9 +290,14 @@
                                         <circle cx="12" cy="12" r="2" />
                                     </svg> TCAS68 EXAMINATION COMMAND HUB</span>
                                 <span class="hero-streak-pill" id="hero-streak-badge"
-                                    title="ฝึกฝนติดต่อกันเพื่อสร้างวินัย">🔥 สตรีค 3 วันติด</span>
+                                    title="ฝึกฝนติดต่อกันเพื่อสร้างวินัย">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
+                                    </svg>
+                                    0 วันติด
+                                </span>
                             </div>
-                            <h2 class="hero-title">ฝึกตรงจุดตาม Blueprint ทปอ. พร้อมจับเวลาเสมือนจริง</h2>
+                            <h2 class="hero-title">ฝึกตรงจุดตาม Blueprint ทปอ. <span class="hero-title-accent">พร้อมจับเวลาจริงหรือ Free Roam</span></h2>
                             <p class="hero-desc">
                                 คลังข้อสอบวิเคราะห์โครงสร้าง น้ำหนักคะแนน และรูปแบบโจทย์จากพิมพ์เขียวทางการ MyTCAS 68
                                 สุ่มทำแบบ Full Mock หรือเจาะพาร์ตจุดอ่อนได้ไม่จำกัด
@@ -304,29 +321,11 @@
                             </div>
                         </div>
 
-                        <!-- Right Hub: TCAS Countdown & Dream Target Widget -->
+                        <!-- Right Hub: Dream Target Faculty Widget / Animated Showcase -->
                         <div class="hero-hub-right">
-                            <div class="countdown-card">
-                                <div class="countdown-header">
-                                    <span class="countdown-label">⏳ นับถอยหลังวันสอบ TCAS68</span>
-                                    <div class="countdown-tabs">
-                                        <button class="countdown-tab active" id="tab-cd-tgat"
-                                            onclick="app.switchCountdownTarget('tgat')">TGAT/TPAT</button>
-                                        <button class="countdown-tab" id="tab-cd-alevel"
-                                            onclick="app.switchCountdownTarget('alevel')">A-Level</button>
-                                    </div>
-                                </div>
-                                <div class="countdown-digits-grid" id="tcas-countdown-grid">
-                                    <div class="cd-box"><span class="cd-num" id="cd-days">00</span><span
-                                            class="cd-txt">วัน</span></div>
-                                    <div class="cd-box"><span class="cd-num" id="cd-hours">00</span><span
-                                            class="cd-txt">ชม.</span></div>
-                                    <div class="cd-box"><span class="cd-num" id="cd-mins">00</span><span
-                                            class="cd-txt">นาที</span></div>
-                                    <div class="cd-box"><span class="cd-num" id="cd-secs">00</span><span
-                                            class="cd-txt">วินาที</span></div>
-                                </div>
-                                <div class="target-faculty-box">
+                            <div class="countdown-card" id="hero-right-card">
+                                <div class="hero-anim-showcase" id="hero-anim-showcase" style="display: none;"></div>
+                                <div class="target-faculty-box target-faculty-standalone" id="hero-target-faculty-box">
                                     <div class="faculty-label-row">
                                         <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none"
                                                 stroke="currentColor" stroke-width="2"
@@ -355,9 +354,52 @@
                                                 style="width: 75%;"></div>
                                         </div>
                                     </div>
+                                    <div class="hero-sparkline-box" id="hero-sparkline-box">
+                                        <div class="sparkline-header">
+                                            <span class="sparkline-title">แนวโน้มคะแนนล่าสุด</span>
+                                            <span class="sparkline-badge" id="hero-sparkline-badge">ยังไม่มีข้อมูลสอบ</span>
+                                        </div>
+                                        <div class="sparkline-chart" id="hero-sparkline-svg"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- 4-Column Quick Launch Bar (Dribbble ENIGMA Style) -->
+                    <div class="enigma-quick-bar glass-panel">
+                        <button type="button" class="enigma-col" onclick="app.setExamPlayMode('timed'); app.openQuickStartModal();">
+                            <span class="enigma-num">01</span>
+                            <div class="enigma-meta">
+                                <span class="enigma-title">จำลองสอบจับเวลา</span>
+                                <span class="enigma-sub">Standard Timed Mock</span>
+                            </div>
+                            <span class="enigma-arrow">→</span>
+                        </button>
+                        <button type="button" class="enigma-col enigma-col-freeroam" onclick="app.openFreeRoamQuickStart();">
+                            <span class="enigma-num">02</span>
+                            <div class="enigma-meta">
+                                <span class="enigma-title">โหมด Free Roam + AI</span>
+                                <span class="enigma-sub">ไม่จับเวลา • ถาม AI ได้</span>
+                            </div>
+                            <span class="enigma-arrow">→</span>
+                        </button>
+                        <button type="button" class="enigma-col" onclick="app.navigate('mistakes')">
+                            <span class="enigma-num">03</span>
+                            <div class="enigma-meta">
+                                <span class="enigma-title">แก้จุดอ่อน (Mistakes)</span>
+                                <span class="enigma-sub">ทวนข้อที่เคยพลาด</span>
+                            </div>
+                            <span class="enigma-arrow">→</span>
+                        </button>
+                        <button type="button" class="enigma-col" onclick="app.navigate('cefr')">
+                            <span class="enigma-num">04</span>
+                            <div class="enigma-meta">
+                                <span class="enigma-title">ควิซศัพท์ CEFR A1–C2</span>
+                                <span class="enigma-sub">สะสม EXP พิชิตศัพท์</span>
+                            </div>
+                            <span class="enigma-arrow">→</span>
+                        </button>
                     </div>
 
                     <!-- Metric Stats Grid -->
@@ -429,6 +471,13 @@
                             <p class="section-subtitle">เลือกวิชาเพื่อดูสัดส่วน Blueprint
                                 หรือเข้าทำข้อสอบจำลองเสมือนจริง</p>
                         </div>
+                        <div class="card-style-switcher" role="group" aria-label="เลือกรูปแบบการ์ดวิชา"
+                            title="สลับมุมมองการ์ด: แบบเดิมแสดงปุ่มครบทุกใบ หรือ Clean Hover แบบ Dribbble">
+                            <button type="button" class="card-style-pill active" data-card-style="classic"
+                                onclick="app.setCardStyle('classic')">การ์ดเดิม</button>
+                            <button type="button" class="card-style-pill" data-card-style="dribbble"
+                                onclick="app.setCardStyle('dribbble')">Clean Hover</button>
+                        </div>
                     </div>
 
                     <!-- Subject Filter Toolbar -->
@@ -499,6 +548,29 @@
                         </div>
 
                         <div class="filter-controls-right">
+                            <div class="play-mode-switcher" id="dashboard-play-mode-switch" role="group"
+                                aria-label="เลือกโหมดสนามสอบ"
+                                title="สลับระหว่างโหมดจับเวลาสอบจริง กับ โหมดฟรีโรม (ไม่จับเวลา + ใช้ AI ระหว่างทำได้)">
+                                <button type="button" class="play-mode-pill active" data-play-mode="timed"
+                                    onclick="app.setExamPlayMode('timed')">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2.2">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <polyline points="12 6 12 12 16 14" />
+                                    </svg>
+                                    <span>จับเวลาจริง</span>
+                                </button>
+                                <button type="button" class="play-mode-pill" data-play-mode="free_roam"
+                                    onclick="app.setExamPlayMode('free_roam')">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2.2">
+                                        <path
+                                            d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8-4.585 0-4.585 8 0 8 5.606 0 7.644-8 12.74-8z" />
+                                    </svg>
+                                    <span>Free Roam + AI</span>
+                                </button>
+                            </div>
+
                             <label class="toggle-pill-ready" title="แสดงเฉพาะวิชาที่มีข้อสอบพร้อมทำแล้ว">
                                 <input type="checkbox" id="toggle-ready-only"
                                     onchange="app.toggleReadyOnlyFilter(this.checked)">
@@ -513,6 +585,12 @@
                             </label>
 
                             <div class="subject-search-box">
+                                <select class="subject-search-scope" id="subject-search-scope"
+                                    onchange="app.handleSubjectSearchScope(this.value)" title="ขอบเขตการค้นหา">
+                                    <option value="all">ทั้งหมด</option>
+                                    <option value="name">ชื่อวิชา</option>
+                                    <option value="code">รหัส</option>
+                                </select>
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2">
                                     <circle cx="11" cy="11" r="8" />
@@ -551,6 +629,36 @@
                         <div class="blueprint-summary" id="blueprint-summary-box">
                             <!-- Populated by JS -->
                         </div>
+                        <div class="blueprint-playmode-bar">
+                            <span class="blueprint-playmode-label">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <polygon points="10 8 16 12 10 16 10 8" />
+                                </svg>
+                                โหมดก่อนเข้าทำข้อสอบ:
+                            </span>
+                            <div class="play-mode-switcher" role="group" aria-label="เลือกโหมดสนามสอบ">
+                                <button type="button" class="play-mode-pill active" data-play-mode="timed"
+                                    onclick="app.setExamPlayMode('timed')">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2.2">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <polyline points="12 6 12 12 16 14" />
+                                    </svg>
+                                    <span>จับเวลาจริง</span>
+                                </button>
+                                <button type="button" class="play-mode-pill" data-play-mode="free_roam"
+                                    onclick="app.setExamPlayMode('free_roam')">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2.2">
+                                        <path
+                                            d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8-4.585 0-4.585 8 0 8 5.606 0 7.644-8 12.74-8z" />
+                                    </svg>
+                                    <span>Free Roam (ไม่จับเวลา + AI)</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="blueprint-domains-container" id="blueprint-domains-list">
@@ -568,8 +676,8 @@
                         </div>
 
                         <div class="exam-timer-box" id="exam-timer-wrapper">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
+                            <svg id="exam-timer-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
                                 <circle cx="12" cy="12" r="10" />
                                 <polyline points="12 6 12 12 16 14" />
                             </svg>
@@ -587,63 +695,81 @@
                                     title="ตัวอักษรขนาดใหญ่">A⁺</button>
                             </div>
 
-                            <!-- Focus / Zen Mode Toggle -->
-                            <button class="btn btn-outline btn-sm" id="btn-toggle-zen" onclick="app.toggleZenMode()"
-                                title="โหมดสมาธิ ซ่อนแถบเครื่องมือ">
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path
-                                        d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
-                                </svg>
-                                <span id="zen-btn-text">โหมดสมาธิ</span>
-                            </button>
+                            <div class="exam-tool-cluster">
+                                <!-- Focus / Zen Mode Toggle -->
+                                <button class="btn btn-outline btn-sm" id="btn-toggle-zen" onclick="app.toggleZenMode()"
+                                    title="โหมดสมาธิ ซ่อนแถบเครื่องมือ">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path
+                                            d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+                                    </svg>
+                                    <span id="zen-btn-text">โหมดสมาธิ</span>
+                                </button>
 
-                            <button class="btn btn-warning btn-sm" id="btn-exam-cheatsheet"
-                                onclick="app.openCheatSheetModal()" title="เปิดดูแผ่นสรุปสูตรและแนวข้อสอบ">
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z" />
-                                    <path d="M6 6h10" />
-                                    <path d="M6 10h10" />
-                                </svg>
-                                <span>สรุปสูตร & แนวข้อสอบ</span>
-                            </button>
-                            <button class="btn btn-outline btn-sm" id="btn-toggle-scratchpad"
-                                onclick="app.toggleScratchpad()" title="เปิดกระดานทดเลขและวาดรูปคณิตศาสตร์">
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
-                                </svg>
-                                <span>กระดานทดเลข</span>
-                            </button>
-                            <button class="btn btn-outline btn-sm" id="btn-toggle-highlighter"
-                                onclick="app.toggleHighlightMode()" title="เปิด/ปิดโหมดเน้นข้อความ">
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="m9 11-6 6v3h3l6-6" />
-                                    <path d="m22 2-2 2-4-4 2-2a2.828 2.828 0 1 1 4 4z" />
-                                </svg>
-                                <span id="hl-mode-label">โหมดไฮไลต์</span>
-                            </button>
-                            <button class="btn btn-outline btn-sm" id="btn-toggle-grid"
-                                onclick="app.toggleQuestionPalette()">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <rect x="3" y="3" width="7" height="7" />
-                                    <rect x="14" y="3" width="7" height="7" />
-                                    <rect x="14" y="14" width="7" height="7" />
-                                    <rect x="3" y="14" width="7" height="7" />
-                                </svg>
-                                กระดาษคำตอบ (<span id="answered-count-badge">0</span>/<span
-                                    id="total-count-badge">0</span>)
-                            </button>
-                            <button class="btn btn-success btn-sm" onclick="app.confirmSubmitExam()">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <polyline points="20 6 9 17 4 12" />
-                                </svg>
-                                ส่งกระดาษคำตอบ
-                            </button>
+                                <button class="btn btn-ai-header-freeroam btn-sm" id="btn-header-ask-ai"
+                                    onclick="app.openAiChatForCurrentQuestion()" style="display: none;"
+                                    title="เปิด TCAS Master AI ช่วยคิดระหว่างทำข้อสอบ (Free Roam Mode)">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path
+                                            d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z" />
+                                    </svg>
+                                    <span>ถาม AI (Free Roam)</span>
+                                </button>
+                                <button class="btn btn-warning btn-sm" id="btn-exam-cheatsheet"
+                                    onclick="app.openCheatSheetModal()" title="เปิดดูแผ่นสรุปสูตรและแนวข้อสอบ">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z" />
+                                        <path d="M6 6h10" />
+                                        <path d="M6 10h10" />
+                                    </svg>
+                                    <span>สรุปสูตร</span>
+                                </button>
+                                <button class="btn btn-outline btn-sm" id="btn-toggle-scratchpad"
+                                    onclick="app.toggleScratchpad()" title="เปิดกระดานทดเลขและวาดรูปคณิตศาสตร์">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+                                    </svg>
+                                    <span>ทดเลข</span>
+                                </button>
+                                <button class="btn btn-outline btn-sm" id="btn-toggle-highlighter"
+                                    onclick="app.toggleHighlightMode()" title="เปิด/ปิดโหมดเน้นข้อความ">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m9 11-6 6v3h3l6-6" />
+                                        <path d="m22 2-2 2-4-4 2-2a2.828 2.828 0 1 1 4 4z" />
+                                    </svg>
+                                    <span id="hl-mode-label">ไฮไลต์</span>
+                                </button>
+                            </div>
+
+                            <div class="exam-nav-cluster">
+                                <button class="btn btn-outline btn-sm" id="btn-toggle-grid"
+                                    onclick="app.toggleQuestionPalette()">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <rect x="3" y="3" width="7" height="7" />
+                                        <rect x="14" y="3" width="7" height="7" />
+                                        <rect x="14" y="14" width="7" height="7" />
+                                        <rect x="3" y="14" width="7" height="7" />
+                                    </svg>
+                                    กระดาษคำตอบ (<span id="answered-count-badge">0</span>/<span
+                                        id="total-count-badge">0</span>)
+                                </button>
+                                <button class="btn btn-success btn-sm" onclick="app.confirmSubmitExam()">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <polyline points="20 6 9 17 4 12" />
+                                    </svg>
+                                    ส่งกระดาษคำตอบ
+                                </button>
+                            </div>
+                        </div>
+                        <div class="exam-progress-track" title="ความคืบหน้าการทำข้อสอบ">
+                            <div class="exam-progress-fill" id="exam-progress-fill" style="width: 0%;"></div>
                         </div>
                     </div>
 
@@ -671,16 +797,36 @@
                                 </div>
                             </div>
 
+                            <!-- Draggable Split Resizer -->
+                            <div class="exam-split-resizer" id="exam-split-resizer"
+                                title="ลากเพื่อปรับขนาดฝั่งบทความและโจทย์"><span></span></div>
+
                             <!-- Right: Question and Choices -->
                             <div class="question-pane glass-panel blueprint-card" id="question-pane">
                                 <div class="question-top-meta">
                                     <div class="q-number-pill">ข้อที่ <span id="current-q-index">1</span></div>
                                     <div class="q-domain-pill" id="current-q-domain">Domain Name</div>
                                     <div class="q-difficulty-pill" id="current-q-difficulty">Medium</div>
-                                    <div class="q-time-tracker-pill" id="q-time-tracker" title="เวลาที่ใช้กับข้อนี้">⏱️
-                                        ข้อนี้: <span id="q-time-spent-display">00:00</span></div>
+                                    <div class="q-time-tracker-pill" id="q-time-tracker" title="เวลาที่ใช้กับข้อนี้">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" style="vertical-align: -2px; margin-right: 2px;">
+                                            <circle cx="12" cy="12" r="10" />
+                                            <polyline points="12 6 12 12 16 14" />
+                                        </svg>
+                                        ข้อนี้: <span id="q-time-spent-display">00:00</span>
+                                    </div>
 
-                                    <!-- AI Actions (Bookmark to ask AI later) -->
+                                    <!-- AI Actions (Instant Ask in Free Roam + Bookmark to ask AI later) -->
+                                    <button class="btn-ai-instant-chat" id="btn-exam-ask-ai"
+                                        onclick="app.openAiChatForCurrentQuestion()" style="display: none;"
+                                        title="ปรึกษา TCAS Master AI ระหว่างทำข้อสอบข้อนี้ (โหมด Free Roam)">
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2">
+                                            <path
+                                                d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z" />
+                                        </svg>
+                                        <span>ถาม AI ข้อนี้</span>
+                                    </button>
                                     <button class="btn-ai-save-toggle" id="btn-save-ai"
                                         onclick="app.toggleSaveCurrentQuestionForAi()"
                                         title="บันทึกข้อสอบข้อนี้ไว้ในคลังถาม AI">
@@ -1327,8 +1473,9 @@
                                     10 - 100 คำ พร้อมกำหนดเวลาได้ตามต้องการ</p>
                             </div>
                             <div class="cefr-view-modes">
-                                <span class="badge"
-                                    style="background: rgba(99, 102, 241, 0.2); color: #818cf8; font-weight: 600; font-size: 0.8rem; padding: 0.4rem 0.75rem;">⚙️
+                                <span class="badge cefr-config-pill"
+                                    style="font-weight: 600; font-size: 0.8rem; padding: 0.4rem 0.75rem; display: inline-flex; align-items: center; gap: 0.4rem;">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
                                     เลือก 10 - 100 คำ & ตั้งเวลาได้</span>
                             </div>
                         </div>
@@ -2130,7 +2277,7 @@
                 <button class="btn btn-outline btn-sm" onclick="app.proceedAiWithoutKey()">
                     ⚡ ใช้โหมดออฟไลน์ต่อไป
                 </button>
-                <button class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);"
+                <button class="btn btn-primary btn-sm"
                     onclick="app.openAiKeyModalFromRecommend()">
                     🔑 ตั้งค่า Gemini Key ฟรี (แนะนำ)
                 </button>
@@ -2172,6 +2319,36 @@
                             <span class="mode-name">Topic Drill (เจาะพาร์ท)</span>
                             <span class="mode-desc">เลือกเน้นเฉพาะสาระที่ต้องการเสริม</span>
                         </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">โหมดสนามสอบ (จับเวลา &amp; ผู้ช่วย AI)</label>
+                    <div class="modal-play-mode-grid">
+                        <button type="button" class="play-mode-card active" data-play-mode="timed"
+                            onclick="app.setExamPlayMode('timed')">
+                            <span class="play-mode-card-title">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2.2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <polyline points="12 6 12 12 16 14" />
+                                </svg>
+                                Standard Timed (สอบจริง)
+                            </span>
+                            <span class="mode-desc">จับเวลาถอยหลังตาม ทปอ. • ล็อก AI ระหว่างสอบ</span>
+                        </button>
+                        <button type="button" class="play-mode-card" data-play-mode="free_roam"
+                            onclick="app.setExamPlayMode('free_roam')">
+                            <span class="play-mode-card-title">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2.2">
+                                    <path
+                                        d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8-4.585 0-4.585 8 0 8 5.606 0 7.644-8 12.74-8z" />
+                                </svg>
+                                Free Roam (โหมดฟรีโรม)
+                            </span>
+                            <span class="mode-desc">ไม่จับเวลา (∞) • เปิดใช้ AI ช่วยคิดได้ทุกข้อ</span>
+                        </button>
                     </div>
                 </div>
 
@@ -2563,7 +2740,8 @@
                         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.65rem;">
                         <span style="font-weight: 700; color: #fff;">📊 จำนวนคำศัพท์ที่ต้องการทำ:</span>
                         <span class="badge" id="cefr-count-badge"
-                            style="background: rgba(99, 102, 241, 0.2); color: #818cf8; font-size: 0.9rem; font-weight: 800;">10
+                            class="badge cefr-config-pill"
+                            style="font-size: 0.9rem; font-weight: 800;">10
                             คำ</span>
                     </label>
                     <div class="cefr-count-preset-chips"
@@ -2723,15 +2901,43 @@
                 <button class="modal-close" onclick="app.closeSetModal()" title="ปิดหน้าต่าง">✕</button>
             </div>
 
+            <div class="set-modal-mode-bar" id="set-modal-mode-bar">
+                <div class="set-modal-mode-info">
+                    <span class="set-modal-mode-title">เลือกโหมดก่อนเริ่มทำข้อสอบ</span>
+                    <span class="set-modal-mode-sub" id="set-modal-mode-sub">เลือกได้ว่าต้องการจับเวลาจริง หรือเล่นแบบ
+                        Free Roam ไม่จับเวลาและใช้ AI ได้</span>
+                </div>
+                <div class="play-mode-switcher" role="group" aria-label="เลือกโหมดสนามสอบ">
+                    <button type="button" class="play-mode-pill active" data-play-mode="timed"
+                        onclick="app.setExamPlayMode('timed')">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.2">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                        <span>จับเวลาจริง</span>
+                    </button>
+                    <button type="button" class="play-mode-pill" data-play-mode="free_roam"
+                        onclick="app.setExamPlayMode('free_roam')">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.2">
+                            <path
+                                d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8-4.585 0-4.585 8 0 8 5.606 0 7.644-8 12.74-8z" />
+                        </svg>
+                        <span>Free Roam (ไม่จับเวลา + AI)</span>
+                    </button>
+                </div>
+            </div>
+
             <div class="modal-body custom-scrollbar" id="set-modal-content"
-                style="flex: 1; overflow-y: auto; padding: 1.5rem; max-height: calc(88vh - 145px);">
+                style="flex: 1; overflow-y: auto; padding: 1.5rem; max-height: calc(88vh - 205px);">
                 <!-- Populated dynamically by app.js -->
             </div>
 
             <div class="modal-footer"
                 style="padding: 1rem 1.5rem; margin: 0; border-top: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center; background: rgba(15, 23, 42, 0.85);">
-                <div style="font-size: 0.85rem; color: var(--text-muted);">
-                    <span>🎯 ทุกชุดมี 60 ข้อ จับเวลา 60 นาที คะแนนเต็ม 100 คะแนน</span>
+                <div style="font-size: 0.85rem; color: var(--text-muted);" id="set-modal-footer-info">
+                    <span>ทุกชุดมี 60 ข้อ จับเวลา 60 นาที คะแนนเต็ม 100 คะแนน</span>
                 </div>
                 <button class="btn btn-secondary" onclick="app.closeSetModal()">ปิดหน้าต่าง</button>
             </div>
@@ -2813,7 +3019,14 @@
     <div class="toast-container" id="toast-container"></div>
 
     <!-- App Logic Script -->
-    <script src="js/app.js?v=3.0"></script>
+    <!-- Modular App Scripts (Zero-Build Multi-Agent Structure) -->
+    <script src="js/modules/icons.js?v=3.1"></script>
+    <script src="js/app.js?v=3.1"></script>
+    <script src="js/modules/rpg-card.js?v=3.1"></script>
+    <script src="js/modules/vocab-mistakes.js?v=3.1"></script>
+    <script src="js/modules/ai-tutor.js?v=3.1"></script>
+    <script src="js/modules/cefr.js?v=3.1"></script>
+    <script src="js/modules/auth.js?v=3.1"></script>
 </body>
 
 </html>

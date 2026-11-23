@@ -28,112 +28,16 @@ window.fetch = function (url, options = {}) {
 };
 
 // ==========================================
-// 0.2 VECTOR SVG ICON & AVATAR CREST SYSTEM
-// ==========================================
-const TCAS_ICONS = {
-    'check': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><polyline points="20 6 9 17 4 12"></polyline></svg>',
-    'check-circle': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
-    'alert-triangle': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
-    'alert-circle': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
-    'info': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
-    'flame': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>',
-    'target': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
-    'zap': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
-    'shield': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
-    'brain': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-4.54z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-4.54z"/></svg>',
-    'award': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H7"/><path d="M14 14.66V17c0 .55.45 1 1 1h2"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>',
-    'medal': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>',
-    'lock': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
-    'unlock': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>',
-    'lightbulb': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>',
-    'book': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
-    'clock': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
-    'file-text': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>',
-    'package': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>',
-    'clipboard': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>',
-    'play': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><polygon points="5 3 19 12 5 21 5 3"/></svg>',
-    'shuffle': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>',
-    'tool': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>',
-    'edit': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
-    'trash': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
-    'key': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M21 2l-2 2m-1.5 1.5L14 9l-1.5-1.5-2 2 1.5 1.5L4 19a3 3 0 1 1-2-2l8-8 1.5 1.5 2-2-1.5-1.5 3.5-3.5z"/></svg>',
-    'bookmark': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>',
-    'cpu': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>',
-    'user': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
-    'rotate-cw': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>',
-    'star': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
-    'x': '<svg width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" class="{cls}"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
-};
-
-const TCAS_AVATARS = {
-    'scholar-m': {
-        name: 'Scholar Prime',
-        svg: '<svg viewBox="0 0 64 64" width="100%" height="100%" fill="none"><circle cx="32" cy="32" r="30" fill="url(#tc-av-sm)"/><path d="M32 17l19 9.5-19 9.5-19-9.5 19-9.5z" fill="#60a5fa" stroke="#93c5fd" stroke-width="2.2" stroke-linejoin="round"/><path d="M20 31.5v11c0 4.5 5.5 8 12 8s12-3.5 12-8v-11" stroke="#93c5fd" stroke-width="2.5" fill="none"/><path d="M48 29v13" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round"/><circle cx="48" cy="44" r="2.5" fill="#fbbf24"/><defs><linearGradient id="tc-av-sm" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1e3a8a"/><stop offset="100%" stop-color="#312e81"/></linearGradient></defs></svg>'
-    },
-    'scholar-f': {
-        name: 'Scholar Elite',
-        svg: '<svg viewBox="0 0 64 64" width="100%" height="100%" fill="none"><circle cx="32" cy="32" r="30" fill="url(#tc-av-sf)"/><path d="M32 18l17 8.5-17 8.5-17-8.5 17-8.5z" fill="#34d399" stroke="#6ee7b7" stroke-width="2" stroke-linejoin="round"/><path d="M21 31v10c0 4 5 7 11 7s11-3 11-7V31" stroke="#6ee7b7" stroke-width="2.2" fill="none"/><path d="M14 43c2-4 2-10 6-13M50 43c-2-4-2-10-6-13" stroke="#a7f3d0" stroke-width="2" stroke-linecap="round"/><circle cx="32" cy="41" r="2" fill="#fbbf24"/><defs><linearGradient id="tc-av-sf" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#064e3b"/><stop offset="100%" stop-color="#0f766e"/></linearGradient></defs></svg>'
-    },
-    'mage': {
-        name: 'Grand Sage',
-        svg: '<svg viewBox="0 0 64 64" width="100%" height="100%" fill="none"><circle cx="32" cy="32" r="30" fill="url(#tc-av-mg)"/><path d="M32 12l10 32H22L32 12z" fill="#8b5cf6" stroke="#c4b5fd" stroke-width="2" stroke-linejoin="round"/><ellipse cx="32" cy="44" rx="19" ry="5.5" fill="#6d28d9" stroke="#c4b5fd" stroke-width="2"/><circle cx="32" cy="27" r="3" fill="#fef08a"/><path d="M32 23v8M28 27h8" stroke="#fef08a" stroke-width="1.8"/><defs><linearGradient id="tc-av-mg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#3b0764"/><stop offset="100%" stop-color="#581c87"/></linearGradient></defs></svg>'
-    },
-    'fox': {
-        name: 'Cyber Fox',
-        svg: '<svg viewBox="0 0 64 64" width="100%" height="100%" fill="none"><circle cx="32" cy="32" r="30" fill="url(#tc-av-fx)"/><path d="M32 46L19 32l3-16 10 9 10-9 3 16-13 14z" fill="#f97316" stroke="#fdba74" stroke-width="2" stroke-linejoin="round"/><polygon points="32 46 25 36 39 36" fill="#ffffff"/><circle cx="26" cy="31" r="2.2" fill="#18181b"/><circle cx="38" cy="31" r="2.2" fill="#18181b"/><circle cx="32" cy="43" r="2" fill="#0f172a"/><defs><linearGradient id="tc-av-fx" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7c2d12"/><stop offset="100%" stop-color="#c2410c"/></linearGradient></defs></svg>'
-    },
-    'lightning': {
-        name: 'Thunder Bolt',
-        svg: '<svg viewBox="0 0 64 64" width="100%" height="100%" fill="none"><circle cx="32" cy="32" r="30" fill="url(#tc-av-lt)"/><polygon points="36 12 18 32 32 32 28 52 46 32 32 32 36 12" fill="#fbbf24" stroke="#fef08a" stroke-width="2.5" stroke-linejoin="round"/><defs><linearGradient id="tc-av-lt" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#78350f"/><stop offset="100%" stop-color="#b45309"/></linearGradient></defs></svg>'
-    },
-    'diamond': {
-        name: 'Prism Diamond',
-        svg: '<svg viewBox="0 0 64 64" width="100%" height="100%" fill="none"><circle cx="32" cy="32" r="30" fill="url(#tc-av-dm)"/><path d="M22 22l10-10 10 10-10 30-10-30z" fill="#38bdf8" stroke="#bae6fd" stroke-width="2" stroke-linejoin="round"/><line x1="22" y1="22" x2="42" y2="22" stroke="#bae6fd" stroke-width="2"/><polyline points="22 22 32 32 42 22" stroke="#bae6fd" stroke-width="1.8"/><defs><linearGradient id="tc-av-dm" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#082f49"/><stop offset="100%" stop-color="#0369a1"/></linearGradient></defs></svg>'
-    },
-    'rocket': {
-        name: 'Aero Rocket',
-        svg: '<svg viewBox="0 0 64 64" width="100%" height="100%" fill="none"><circle cx="32" cy="32" r="30" fill="url(#tc-av-rk)"/><path d="M32 14c-5 6-8 15-8 23h16c0-8-3-17-8-23z" fill="#f43f5e" stroke="#fda4af" stroke-width="2" stroke-linejoin="round"/><path d="M24 37l-6 7 6-2M40 37l6 7-6-2" stroke="#fda4af" stroke-width="2" stroke-linejoin="round"/><circle cx="32" cy="28" r="3.5" fill="#38bdf8" stroke="#bae6fd" stroke-width="1.5"/><path d="M29 42l3 9 3-9" fill="#fbbf24"/><defs><linearGradient id="tc-av-rk" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#881337"/><stop offset="100%" stop-color="#be123c"/></linearGradient></defs></svg>'
-    },
-    'crown': {
-        name: 'Imperial Crown',
-        svg: '<svg viewBox="0 0 64 64" width="100%" height="100%" fill="none"><circle cx="32" cy="32" r="30" fill="url(#tc-av-cr)"/><path d="M16 43h32l4-21-9.5 7.5L32 15l-10.5 14.5L12 22l4 21z" fill="#fbbf24" stroke="#fef08a" stroke-width="2" stroke-linejoin="round"/><rect x="16" y="44" width="32" height="4.5" rx="1.5" fill="#f59e0b"/><circle cx="16" cy="21" r="2.2" fill="#fef08a"/><circle cx="32" cy="14" r="2.5" fill="#fef08a"/><circle cx="48" cy="21" r="2.2" fill="#fef08a"/><circle cx="32" cy="34" r="2.5" fill="#ef4444"/><defs><linearGradient id="tc-av-cr" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#713f12"/><stop offset="100%" stop-color="#a16207"/></linearGradient></defs></svg>'
-    }
-};
-
-const TCAS_AVATAR_MAP = {
-    '👨‍🎓': 'scholar-m',
-    '👩‍🎓': 'scholar-f',
-    '🧙‍♂️': 'mage',
-    '🦊': 'fox',
-    '⚡': 'lightning',
-    '💎': 'diamond',
-    '🚀': 'rocket',
-    '👑': 'crown'
-};
-
+// [Vector SVG Icons & Avatars moved to public/js/modules/icons.js]
 const app = {
     // SVG & Avatar Vector Generator
+    // Vector SVG & Avatar Helpers (implemented in public/js/modules/icons.js)
     svg(name, opts = {}) {
-        const template = TCAS_ICONS[name] || TCAS_ICONS['info'];
-        const s = opts.size || 18;
-        const c = opts.color || 'currentColor';
-        const w = opts.strokeWidth || 2;
-        const cls = opts.className || '';
-        return template.replace(/{s}/g, s).replace(/{c}/g, c).replace(/{w}/g, w).replace(/{cls}/g, cls);
+        return window.TCASIcons ? window.TCASIcons.svg(name, opts) : '';
     },
 
     renderAvatar(key, size = 48) {
-        if (!key) key = 'scholar-m';
-        // Map legacy emojis or return matched SVG
-        const resolvedKey = TCAS_AVATAR_MAP[key] || key;
-        const av = TCAS_AVATARS[resolvedKey];
-        if (av) {
-            return `<div class="avatar-vector-box" style="width:${size}px;height:${size}px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;overflow:hidden;flex-shrink:0;" title="${av.name}">${av.svg}</div>`;
-        }
-        if (typeof key === 'string' && (key.startsWith('http') || key.startsWith('data:'))) {
-            return `<img src="${key}" style="width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;display:block;" alt="Avatar" />`;
-        }
-        return `<div class="avatar-vector-box" style="width:${size}px;height:${size}px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;overflow:hidden;flex-shrink:0;">${TCAS_AVATARS['scholar-m'].svg}</div>`;
+        return window.TCASIcons ? window.TCASIcons.renderAvatar(key, size) : '';
     },
 
     // Current Application State
@@ -147,8 +51,14 @@ const app = {
         activeSession: null,
         currentQuestionIndex: 0,
         userAnswers: {}, // questionId -> { selected_option_id, time_spent_seconds, is_flagged }
+        struckOptions: {}, // questionId -> string[] of struck optionIds
         timerInterval: null,
         timeRemainingSeconds: 0,
+        examElapsedSeconds: 0,
+        examPlayMode: localStorage.getItem('tcas_exam_play_mode') || 'timed', // 'timed' | 'free_roam'
+        theme: localStorage.getItem('tcas_theme') || 'dark-v4', // 'dark-v4' (Espresso & Copper default) | ...
+        cardStyle: localStorage.getItem('tcas_card_style') || 'classic', // 'classic' | 'dribbble'
+        subjectSearchScope: 'all', // 'all' | 'name' | 'code'
         questionStartTime: 0,
         currentMistakeFilter: 'all',
         allMistakes: [],
@@ -228,6 +138,12 @@ const app = {
         this.initTcasCountdown();
         this.initDreamFaculty();
         this.applyExamFontSize();
+        const urlTheme = new URLSearchParams(window.location.search).get('theme');
+        this.applyTheme(urlTheme || this.state.theme);
+        this.initHeroShowcase();
+        this.initExamSplitResizer();
+        this.applyCardStyle(this.state.cardStyle);
+        this.syncPlayModeUI();
         await this.initAuth();
         await this.loadSubjects();
         await this.loadDashboard();
@@ -630,577 +546,664 @@ const app = {
                 document.getElementById('sidebar-mistakes-count').textContent = s.total_mistakes;
 
                 this.renderRecentSessions(s.recent_sessions);
+                this.renderHeroSparkline(s.recent_sessions);
             }
         } catch (err) {
             console.error('Failed to load dashboard stats', err);
         }
     },
 
-    async loadUserStatus(isInitial = false) {
-        try {
-            const res = await fetch('/api/stats/rpg-status');
-            const result = await res.json();
-            if (!result.success) return;
-            const d = result.data;
+    initHeroShowcase() {
+        const params = new URLSearchParams(window.location.search);
+        const heroParam = params.get('hero');
+        const forestParam = params.get('forest');
+        const slateParam = params.get('slate');
+        const showcase = document.getElementById('hero-anim-showcase');
+        const legacyBox = document.getElementById('hero-target-faculty-box');
+        const rightCard = document.getElementById('hero-right-card');
+        if (!showcase || !legacyBox) return;
 
-            // 1. Update Sidebar Badges & Header User Chip
-            const sideAvatar = document.getElementById('sidebar-user-avatar');
-            const sideName = document.getElementById('sidebar-user-name');
-            const sideSub = document.getElementById('sidebar-user-sub');
-            const sideBadge = document.getElementById('sidebar-level-badge');
-            const topBadge = document.querySelector('.topbar-user-badge');
+        if (heroParam === 'off') {
+            showcase.style.display = 'none';
+            legacyBox.style.display = '';
+            if (rightCard) rightCard.classList.remove('hero-card-seamless');
+            return;
+        }
 
-            if (this.state.currentUser) {
-                this.state.currentUser.stats = this.state.currentUser.stats || {};
-                this.state.currentUser.stats.level = d.level;
-                this.state.currentUser.stats.total_xp = d.total_xp;
-                if (!this.state.currentUser.avatar_url && d.user && d.user.avatar_url) {
-                    this.state.currentUser.avatar_url = d.user.avatar_url;
+        legacyBox.style.display = 'none';
+        showcase.style.display = 'flex';
+        if (rightCard) rightCard.classList.add('hero-card-seamless');
+
+        // Deep Slate (dark) theme: Factory Production Line (?factory=1..4 or auto when theme === 'dark')
+        const factoryParam = params.get('factory');
+        if (['1', '2', '3', '4', '5'].includes(factoryParam) || (this.state.theme === 'dark' && !heroParam && !forestParam && !slateParam)) {
+            const fxMode = ['1', '2', '3', '4', '5'].includes(factoryParam) ? factoryParam : '5';
+            const gearPath = (n, rTip, rRoot) => {
+                const step = (Math.PI * 2) / n;
+                let d = '';
+                for (let i = 0; i < n; i++) {
+                    const a = i * step;
+                    [[rRoot, a], [rTip, a + step * 0.18], [rTip, a + step * 0.42], [rRoot, a + step * 0.6]].forEach(([r, ang], j) => {
+                        d += `${i === 0 && j === 0 ? 'M' : 'L'}${(r * Math.cos(ang)).toFixed(2)},${(r * Math.sin(ang)).toFixed(2)} `;
+                    });
                 }
+                return `${d}Z`;
+            };
+            const gear = (x, y, n, m, dir, dur, cls = '', rot = 0) => {
+                const rp = (n * m) / 2;
+                const rTip = rp + m;
+                const rRoot = rp - m * 1.1;
+                const hub = Math.max(rp * 0.3, 5);
+                const web = rRoot * 0.72;
+                return `<g transform="translate(${x},${y}) rotate(${rot})"><g class="fx-gear ${dir} ${cls}" style="--dur:${dur}s;">
+                    <path d="${gearPath(n, rTip, rRoot)}"/>
+                    <circle r="${web.toFixed(1)}" class="fx-gear-web"/>
+                    <rect x="-2" y="${(-web).toFixed(1)}" width="4" height="${(web * 2).toFixed(1)}" class="fx-gear-spoke"/>
+                    <rect y="-2" x="${(-web).toFixed(1)}" height="4" width="${(web * 2).toFixed(1)}" class="fx-gear-spoke"/>
+                    <circle r="${hub.toFixed(1)}" class="fx-gear-hub"/>
+                    <circle r="${(hub * 0.4).toFixed(1)}" class="fx-gear-axle"/>
+                </g></g>`;
+            };
+            const fxDefs = `<defs>
+                <linearGradient id="fxMetal" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#64748b"/><stop offset="55%" stop-color="#334155"/><stop offset="100%" stop-color="#1e293b"/></linearGradient>
+                <linearGradient id="fxAccent" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#4f46e5"/></linearGradient>
+                <linearGradient id="fxLiquid" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22d3ee"/><stop offset="100%" stop-color="#4f46e5"/></linearGradient>
+            </defs>`;
+            const status = (label) => `<span class="fx-status"><i></i>${label}</span>`;
+            const beltHtml = () => {
+                const rollers = Array.from({ length: 11 }, () => '<span class="fx-roller"></span>').join('');
+                const boxes = [0, 1.5, 3, 4.5].map(d => `<span class="fx-box" style="animation-delay:-${d}s,-${d}s;"></span>`).join('');
+                return `<div class="fx-floor"></div><div class="fx-rollers">${rollers}</div><div class="fx-belt"></div>${boxes}`;
+            };
+            const open = `<div class="fx-stage" onclick="app.openQuickStartModal()" title="คลิกเพื่อเริ่มฝึกซ้อม">`;
+
+            if (fxMode === '5') {
+                const rollers = Array.from({ length: 11 }, () => '<span class="fx-roller"></span>').join('');
+                const legs = [22, 42, 62, 82].map(x => `<span class="fx5-leg" style="left:${x}%;"></span>`).join('');
+                const lamps = [40, 54, 82].map(x => `
+                    <div class="fx5-lamp" style="left:${x}%;">
+                        <div class="fx5-lamp-cord"></div>
+                        <div class="fx5-lamp-hood"></div>
+                        <div class="fx5-lamp-cone"></div>
+                    </div>`).join('');
+                const stackLight = (pos) => `<div class="fx5-stack-light" style="${pos}"><i class="sl-r"></i><i class="sl-y"></i><i class="sl-g"></i></div>`;
+                const items = [0, 2, 4, 6].map(d => `
+                    <div class="fx5-item" style="--d:-${d}s;">
+                        <span class="s s0"></span><span class="s s1"></span><span class="s s2"></span><span class="s s3"></span><span class="s s4"></span>
+                    </div>`).join('');
+                const labels = [[26, '01', 'RAW'], [40, '02', 'PRESS'], [54, '03', 'LASER'], [68, '04', 'ASSEMBLY'], [82, '05', 'QC SCAN']]
+                    .map(([x, n, t]) => `<span class="fx5-label" style="left:${x}%;"><b>${n}</b>${t}</span>`).join('');
+                const fd = -1.664;
+                showcase.innerHTML = `${open}
+                    ${status('LINE 05 · 5-STAGE ASSEMBLY')}
+                    <div class="fx5-truss"></div>
+                    <div class="fx5-pillar" style="left:16%;"></div>
+                    <div class="fx5-pillar" style="right:2.5%;"></div>
+                    ${lamps}
+                    <div class="fx5-cable"></div>
+                    <div class="fx-floor"></div>
+                    ${legs}
+                    <div class="fx-rollers">${rollers}</div>
+                    <div class="fx-belt fx5-belt"></div>
+                    <div class="fx5-motor"></div>
+                    <svg class="fx5-drive-gears" viewBox="0 0 62 44">${fxDefs}${gear(18, 22, 12, 2.2, 'cw', 4)}${gear(44, 22, 9, 2.2, 'ccw', 3, 'accent', 15)}</svg>
+                    ${items}
+                    <div class="fx5-hopper"><div class="fx5-hopper-body"></div><span class="fx5-hopper-gate"></span></div>
+                    <div class="fx5-exhaust" style="left:43%;"><span class="fx-steam" style="animation-delay:-0.43s;"></span></div>
+                    <div class="fx-press fx5-press"><div class="fx-press-housing">${stackLight('top:-20px;right:4px;')}</div><div class="fx-piston"><span class="fx-piston-head"></span></div></div>
+                    <span class="fx-spark fx5-spark-press" style="left:40%;"></span>
+                    <div class="fx5-exhaust" style="left:57%;height:68px;"><span class="fx-steam" style="animation-delay:-1.05s;"></span></div>
+                    <div class="fx5-laser"><div class="fx5-laser-carriage"><div class="fx5-laser-head"></div><span class="fx5-beam"></span></div>${stackLight('top:-14px;right:-4px;')}</div>
+                    <div class="fx-rail fx5-rail"></div>
+                    <div class="fx-robot fx5-robot" style="left:68%;">
+                        <span class="fx-robot-mount"></span>
+                        <div class="fx-arm1" style="animation-delay:${fd}s;">
+                            <div class="fx-arm2" style="animation-delay:${fd}s;">
+                                <div class="fx-grip"><i style="animation-delay:${fd}s;"></i><i style="animation-delay:${fd}s;"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="fx-spark weld fx5-weld" style="left:68%;"></span>
+                    <div class="fx5-gate">${stackLight('top:-24px;right:-6px;')}</div>
+                    <div class="fx5-bin"></div>
+                    ${labels}
+                </div>`;
+                return;
             }
 
-            const avatar = (this.state.currentUser && this.state.currentUser.avatar_url) ? this.state.currentUser.avatar_url : ((d.user && d.user.avatar_url) ? d.user.avatar_url : '👨‍🎓');
-            const username = (this.state.currentUser && this.state.currentUser.username) ? this.state.currentUser.username : ((d.user && d.user.username) ? d.user.username : 'student');
-
-            if (sideAvatar) sideAvatar.innerHTML = this.renderAvatar(avatar, 38);
-            if (sideName) sideName.textContent = (this.state.currentUser && this.state.currentUser.display_name) ? this.state.currentUser.display_name : (d.user && d.user.display_name ? d.user.display_name : d.rank_title);
-            if (sideSub) sideSub.textContent = `@${username} • Lv.${d.level}`;
-            if (sideBadge) sideBadge.textContent = `Lv.${d.level}`;
-            if (topBadge) topBadge.textContent = `Lv.${d.level}`;
-
-            // 2. Update Hero Card
-            const heroLvl = document.getElementById('rpg-hero-level');
-            const heroBadge = document.getElementById('rpg-hero-badge');
-            const heroStreak = document.getElementById('rpg-hero-streak');
-            const heroTitle = document.getElementById('rpg-hero-title');
-            const heroSubtitle = document.getElementById('rpg-hero-subtitle');
-            const expText = document.getElementById('rpg-exp-text');
-            const expFill = document.getElementById('rpg-exp-fill');
-            const combatPower = document.getElementById('rpg-combat-power');
-
-            if (heroLvl) heroLvl.textContent = `Lv.${d.level}`;
-            if (heroBadge) {
-                heroBadge.textContent = d.rank_badge;
-                heroBadge.style.borderColor = d.rank_color;
-                heroBadge.style.color = d.rank_color;
+            if (fxMode === '1') {
+                showcase.innerHTML = `${open}
+                    ${status('LINE 01 · RUNNING')}
+                    <svg class="fx-corner-gears" viewBox="0 0 130 90">${fxDefs}${gear(42, 45, 14, 4, 'cw', 7)}${gear(90, 45, 10, 4, 'ccw', 5, 'accent', 18)}</svg>
+                    ${beltHtml()}
+                    <div class="fx-press"><div class="fx-press-housing"></div><div class="fx-piston"><span class="fx-piston-head"></span></div></div>
+                    <span class="fx-spark" style="left:55%;"></span>
+                    <span class="fx-hud">STAMPING LINE // 01</span>
+                </div>`;
+            } else if (fxMode === '2') {
+                showcase.innerHTML = `${open}
+                    ${status('GEAR WORKS · ONLINE')}
+                    <svg class="fx-gear-svg" viewBox="0 0 700 280" preserveAspectRatio="xMaxYMid slice">${fxDefs}
+                        ${gear(297, 162, 28, 4, 'cw', 14)}
+                        ${gear(387, 110, 24, 4, 'ccw', 12, '', 7.5)}
+                        ${gear(470, 140, 20, 4, 'cw', 10, 'accent')}
+                        ${gear(534, 140, 12, 4, 'ccw', 6, '', 15)}
+                        ${gear(562, 92, 16, 4, 'cw', 8)}
+                        ${gear(460, 199, 10, 4, 'ccw', 5, '', 18)}
+                    </svg>
+                    <div class="fx-gauge"><span class="fx-needle"></span></div>
+                    <div class="fx-pistons">
+                        <div class="fx-cyl"><span class="fx-rod"></span><span class="fx-steam"></span></div>
+                        <div class="fx-cyl"><span class="fx-rod" style="animation-delay:-0.9s;"></span><span class="fx-steam" style="animation-delay:-0.9s;"></span></div>
+                    </div>
+                    <div class="fx-floor"></div>
+                    <span class="fx-hud">GEAR WORKS // 02</span>
+                </div>`;
+            } else if (fxMode === '3') {
+                const robot = (left, delay, flip) => `
+                    <div class="fx-robot${flip ? ' flip' : ''}" style="left:${left}%;">
+                        <span class="fx-robot-mount"></span>
+                        <div class="fx-arm1" style="animation-delay:${delay}s;">
+                            <div class="fx-arm2" style="animation-delay:${delay}s;">
+                                <div class="fx-grip"><i style="animation-delay:${delay}s;"></i><i style="animation-delay:${delay}s;"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="fx-spark weld" style="left:${left}%;animation-delay:${delay}s;"></span>`;
+                showcase.innerHTML = `${open}
+                    ${status('ROBOTICS CELL · AUTO')}
+                    <div class="fx-rail"><span class="fx-rail-beacon"></span></div>
+                    ${robot(46, 0, false)}
+                    ${robot(76, -1.5, true)}
+                    ${beltHtml()}
+                    <span class="fx-hud">ROBOTIC ASSEMBLY // 03</span>
+                </div>`;
+            } else {
+                const winRows = [];
+                [392, 414, 436, 458, 480, 502].forEach((x, i) => {
+                    winRows.push(`<rect class="fx-win" x="${x}" y="190" width="10" height="8" rx="1" fill="#22d3ee" style="animation-delay:-${(i * 0.45).toFixed(2)}s;"/>`);
+                    winRows.push(`<rect class="fx-win" x="${x}" y="215" width="10" height="8" rx="1" fill="#818cf8" style="animation-delay:-${(i * 0.6 + 0.3).toFixed(2)}s;"/>`);
+                });
+                [552, 574, 596, 618].forEach((x, i) => {
+                    [140, 162, 184, 206].forEach((y, j) => {
+                        winRows.push(`<rect class="fx-win" x="${x}" y="${y}" width="10" height="8" rx="1" fill="${(i + j) % 2 ? '#22d3ee' : '#a5b4fc'}" style="animation-delay:-${((i * 4 + j) * 0.37).toFixed(2)}s;"/>`);
+                    });
+                });
+                const smoke = (cx, cy) => [0, 1.3, 2.6].map(d => `<circle class="fx-smoke" cx="${cx}" cy="${cy}" r="8" fill="rgba(148,163,184,0.35)" style="animation-delay:-${d}s;"/>`).join('');
+                const pipe = (d, delay = 0) => `<path d="${d}" fill="none" stroke="#334155" stroke-width="6" stroke-linecap="round"/><path class="fx-flow" d="${d}" fill="none" stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round" style="animation-delay:-${delay}s;"/>`;
+                showcase.innerHTML = `${open}
+                    ${status('SMART FACTORY · SYNC')}
+                    <svg class="fx-skyline-svg" viewBox="0 0 700 280" preserveAspectRatio="xMaxYMax slice">${fxDefs}
+                        ${smoke(306, 138)}${smoke(568, 58)}${smoke(607, 76)}
+                        <rect x="250" y="190" width="110" height="60" fill="#172033" stroke="rgba(99,102,241,0.22)"/>
+                        <rect x="300" y="140" width="12" height="50" fill="#334155"/>
+                        <path d="M380,250 L380,170 L400,150 L400,170 L420,150 L420,170 L440,150 L440,170 L460,150 L460,170 L480,150 L480,170 L500,150 L500,170 L520,150 L520,250 Z" fill="#1e293b" stroke="rgba(99,102,241,0.3)"/>
+                        <rect x="540" y="120" width="100" height="130" fill="#1e293b" stroke="rgba(99,102,241,0.3)"/>
+                        <rect x="560" y="60" width="16" height="60" fill="#334155"/>
+                        <rect x="600" y="78" width="14" height="42" fill="#334155"/>
+                        <circle class="fx-beacon" cx="568" cy="56" r="3" fill="#f59e0b"/>
+                        ${winRows.join('')}
+                        <rect x="655" y="170" width="34" height="80" rx="6" fill="rgba(15,23,42,0.6)" stroke="#475569"/>
+                        <rect class="fx-liquid" x="659" y="190" width="26" height="56" rx="3" fill="url(#fxLiquid)" opacity="0.85"/>
+                        ${pipe('M140,244 H655', 0)}
+                        ${pipe('M360,215 H380', 0.4)}
+                        ${pipe('M520,185 H540', 0.8)}
+                        ${pipe('M640,200 H672 V170', 1.2)}
+                        <rect x="0" y="250" width="700" height="30" fill="rgba(15,23,42,0.85)"/>
+                        <line x1="0" y1="250" x2="700" y2="250" stroke="rgba(99,102,241,0.3)"/>
+                    </svg>
+                    <span class="fx-hud">SMART FACTORY // 04</span>
+                </div>`;
             }
-            const streakVal = document.getElementById('rpg-streak-days-val');
-            if (streakVal) streakVal.textContent = `${d.streak_days} วันติด`;
-            const topStreak = document.getElementById('hero-streak-badge');
-            if (topStreak) topStreak.innerHTML = `${this.svg('flame', { size: 14, color: '#f59e0b' })} ${d.streak_days} วันติด`;
-            if (heroTitle) heroTitle.textContent = d.rank_title;
-            if (heroSubtitle) heroSubtitle.textContent = `TCAS Challenger • ค่าประสบการณ์รวม ${d.total_xp.toLocaleString()} XP`;
-            if (expText) expText.textContent = `${d.xp_in_level.toLocaleString()} / ${d.xp_needed.toLocaleString()} XP (${d.xp_percent}%)`;
-            if (expFill) expFill.style.width = `${d.xp_percent}%`;
-            if (combatPower) combatPower.textContent = d.combat_power.toLocaleString();
+            return;
+        }
 
-            // 2.5 Update Collectible Trading Card Elements
-            const cardAvatar = document.getElementById('card-avatar-display');
-            const cardName = document.getElementById('card-player-name');
-            const cardSerial = document.getElementById('card-serial-no');
-            const cardRarity = document.getElementById('card-rarity-badge');
-            const cardFront = document.getElementById('tcas-card-front');
+        // Legacy Deep Slate animations (only via ?slate=1..4)
+        if (['1', '2', '3', '4'].includes(slateParam)) {
+            const sMode = ['1', '2', '3', '4'].includes(slateParam) ? slateParam : '1';
+            if (sMode === '1') {
+                showcase.innerHTML = `
+                    <div class="slate-stage" onclick="app.openQuickStartModal()" title="คลิกเพื่อเริ่มฝึกซ้อม">
+                        <svg class="slate-neural-svg" viewBox="0 0 700 280" preserveAspectRatio="xMaxYMid slice">
+                            <defs>
+                                <linearGradient id="slateNeuralGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#6366f1"/>
+                                    <stop offset="50%" stop-color="#22d3ee"/>
+                                    <stop offset="100%" stop-color="#a78bfa"/>
+                                </linearGradient>
+                            </defs>
+                            <g>
+                                <line class="neural-edge" x1="120" y1="145" x2="250" y2="75"/>
+                                <line class="neural-edge" x1="120" y1="145" x2="270" y2="210"/>
+                                <line class="neural-edge" x1="250" y1="75" x2="410" y2="120"/>
+                                <line class="neural-edge" x1="250" y1="75" x2="390" y2="48"/>
+                                <line class="neural-edge" x1="270" y1="210" x2="410" y2="120"/>
+                                <line class="neural-edge" x1="270" y1="210" x2="440" y2="225"/>
+                                <line class="neural-edge" x1="410" y1="120" x2="565" y2="80"/>
+                                <line class="neural-edge" x1="410" y1="120" x2="555" y2="185"/>
+                                <line class="neural-edge" x1="390" y1="48" x2="565" y2="80"/>
+                                <line class="neural-edge" x1="440" y1="225" x2="555" y2="185"/>
+                                <line class="neural-edge" x1="565" y1="80" x2="655" y2="135"/>
+                                <line class="neural-edge" x1="555" y1="185" x2="655" y2="135"/>
 
-            if (cardAvatar) cardAvatar.innerHTML = this.renderAvatar(avatar, 108);
-            if (cardName) cardName.textContent = (this.state.currentUser && this.state.currentUser.display_name) ? this.state.currentUser.display_name : (d.user && d.user.display_name ? d.user.display_name : username);
-            if (cardSerial) cardSerial.textContent = `#TCAS-68-${username.toUpperCase().slice(0, 8)}`;
-            if (cardRarity) {
-                cardRarity.textContent = d.level >= 20 ? '★ MYTHIC TCAS ★' : d.level >= 10 ? '★ UR EDITION ★' : d.level >= 5 ? '★ SSR EDITION ★' : '★ SR EDITION ★';
+                                <line class="neural-edge-flow" x1="120" y1="145" x2="250" y2="75"/>
+                                <line class="neural-edge-flow" x1="250" y1="75" x2="410" y2="120" style="animation-delay:-1.2s;"/>
+                                <line class="neural-edge-flow" x1="270" y1="210" x2="410" y2="120" style="animation-delay:-2.4s;"/>
+                                <line class="neural-edge-flow" x1="410" y1="120" x2="565" y2="80" style="animation-delay:-0.7s;"/>
+                                <line class="neural-edge-flow" x1="410" y1="120" x2="555" y2="185" style="animation-delay:-3.1s;"/>
+                                <line class="neural-edge-flow" x1="565" y1="80" x2="655" y2="135" style="animation-delay:-1.9s;"/>
+                            </g>
+                            <circle class="neural-node indigo" cx="120" cy="145" r="4"/>
+                            <circle class="neural-node" cx="250" cy="75" r="4.5" style="animation-delay:-0.8s;"/>
+                            <circle class="neural-node indigo" cx="270" cy="210" r="4" style="animation-delay:-1.6s;"/>
+                            <circle class="neural-node" cx="390" cy="48" r="3.5" style="animation-delay:-2.2s;"/>
+                            <circle class="neural-node indigo" cx="410" cy="120" r="5.5" style="animation-delay:-0.4s;"/>
+                            <circle class="neural-node" cx="440" cy="225" r="4" style="animation-delay:-2.8s;"/>
+                            <circle class="neural-node" cx="565" cy="80" r="4.5" style="animation-delay:-1.1s;"/>
+                            <circle class="neural-node indigo" cx="555" cy="185" r="4.5" style="animation-delay:-2.0s;"/>
+                            <circle class="neural-node" cx="655" cy="135" r="5" style="animation-delay:-0.5s;"/>
+                        </svg>
+                        <span class="slate-hud-label">NEURAL MESH // 01</span>
+                    </div>
+                `;
+            } else if (sMode === '2') {
+                const heights = [0.45, 0.72, 0.55, 0.9, 0.65, 0.98, 0.75, 0.5, 0.85, 0.6, 0.92, 0.68, 0.48, 0.82, 0.62, 0.78, 0.52, 0.7];
+                const barsHtml = heights.map((h, i) =>
+                    `<span class="spec-bar" style="height:${Math.round(h * 155)}px;animation-delay:-${(i * 0.18).toFixed(2)}s;"></span>`
+                ).join('');
+                showcase.innerHTML = `
+                    <div class="slate-stage" onclick="app.openQuickStartModal()" title="คลิกเพื่อเริ่มฝึกซ้อม">
+                        <div class="slate-spec-wrap">${barsHtml}</div>
+                        <span class="slate-hud-label">CYBER SPECTRUM // 02</span>
+                    </div>
+                `;
+            } else if (sMode === '3') {
+                showcase.innerHTML = `
+                    <div class="slate-stage" onclick="app.openQuickStartModal()" title="คลิกเพื่อเริ่มฝึกซ้อม">
+                        <div class="slate-grid-plane"></div>
+                        <div class="slate-holo-diamond"></div>
+                        <span class="slate-hud-label">BLUEPRINT WARP // 03</span>
+                    </div>
+                `;
+            } else if (sMode === '4') {
+                showcase.innerHTML = `
+                    <div class="slate-stage" onclick="app.openQuickStartModal()" title="คลิกเพื่อเริ่มฝึกซ้อม">
+                        <div class="slate-gyro-wrap">
+                            <div class="gyro-core"></div>
+                            <div class="gyro-ring g1"></div>
+                            <div class="gyro-ring g2"></div>
+                            <div class="gyro-ring g3"></div>
+                        </div>
+                        <span class="slate-hud-label">QUANTUM GYRO // 04</span>
+                    </div>
+                `;
             }
-            if (cardFront) {
-                cardFront.classList.remove('tier-bronze', 'tier-silver', 'tier-gold', 'tier-mythic');
-                if (d.level >= 20) cardFront.classList.add('tier-mythic');
-                else if (d.level >= 10) cardFront.classList.add('tier-gold');
-                else if (d.level >= 5) cardFront.classList.add('tier-silver');
-                else cardFront.classList.add('tier-bronze');
+            return;
+        }
+
+        // Forest & Sand theme animations (?forest=1..5 or auto swaying forest when dark-v3 is active)
+        if (['1', '2', '3', '4', '5'].includes(forestParam) || (this.state.theme === 'dark-v3' && !heroParam)) {
+            const fMode = ['1', '2', '3', '4', '5'].includes(forestParam) ? forestParam : '5';
+            if (fMode === '5') {
+                showcase.innerHTML = `
+                    <div class="forest-stage" onclick="app.openQuickStartModal()" title="คลิกเพื่อเริ่มฝึกซ้อม">
+                        <div class="forest-mist-layer"></div>
+                        <div class="forest-breeze-wrap">
+                            <span class="breeze-line" style="top:24%;left:14%;width:150px;animation-delay:-1s;"></span>
+                            <span class="breeze-line" style="top:44%;left:26%;width:190px;animation-delay:-3.8s;"></span>
+                            <span class="breeze-line" style="top:64%;left:18%;width:130px;animation-delay:-5.2s;"></span>
+                            <span class="breeze-leaf" style="top:30%;left:16%;animation-delay:-0.5s;"></span>
+                            <span class="breeze-leaf sand" style="top:52%;left:34%;animation-delay:-4.2s;"></span>
+                            <span class="breeze-leaf" style="top:22%;left:48%;animation-delay:-2.4s;"></span>
+                            <span class="breeze-leaf sand" style="top:40%;left:64%;animation-delay:-6.1s;"></span>
+                            <svg class="forest-canopy-svg" viewBox="0 0 760 280" preserveAspectRatio="xMaxYMax slice">
+                                <!-- Back Mist Mountain Silhouette -->
+                                <path d="M0,280 L0,210 Q140,155 290,198 T580,160 L760,185 L760,280 Z" fill="rgba(20, 38, 31, 0.72)"/>
+                                <!-- Back Layer Trees (stretching from near text to far right) -->
+                                <g class="sway-tree slow" style="animation-delay:-2.4s;">
+                                    <path d="M60,275 L86,138 L112,275 Z" fill="#162e24"/>
+                                    <path d="M68,215 L86,115 L104,215 Z" fill="#1a372b"/>
+                                </g>
+                                <g class="sway-tree slow" style="animation-delay:-1.2s;">
+                                    <path d="M150,275 L180,118 L210,275 Z" fill="#173026"/>
+                                    <path d="M158,205 L180,95 L202,205 Z" fill="#1c3b2e"/>
+                                </g>
+                                <g class="sway-tree slow" style="animation-delay:-3.1s;">
+                                    <path d="M265,275 L298,96 L331,275 Z" fill="#173026"/>
+                                    <path d="M274,195 L298,74 L322,195 Z" fill="#1b382d"/>
+                                </g>
+                                <g class="sway-tree slow" style="animation-delay:-0.6s;">
+                                    <path d="M415,275 L450,88 L485,275 Z" fill="#173026"/>
+                                    <path d="M425,190 L450,66 L475,190 Z" fill="#1b382d"/>
+                                </g>
+                                <g class="sway-tree slow" style="animation-delay:-4.0s;">
+                                    <path d="M585,275 L620,96 L655,275 Z" fill="#173026"/>
+                                    <path d="M595,194 L620,72 L645,194 Z" fill="#1b382d"/>
+                                </g>
+                                <!-- Mid Layer Trees -->
+                                <g class="sway-tree med" style="animation-delay:-1.7s;">
+                                    <path d="M105,278 L136,130 L167,278 Z" fill="#1e3f32"/>
+                                    <path d="M114,212 L136,108 L158,212 Z" fill="#23493a"/>
+                                </g>
+                                <g class="sway-tree med" style="animation-delay:-2.1s;">
+                                    <path d="M210,278 L244,112 L278,278 Z" fill="#1f4134"/>
+                                    <path d="M220,202 L244,90 L268,202 Z" fill="#244b3c"/>
+                                </g>
+                                <g class="sway-tree med" style="animation-delay:-4.4s;">
+                                    <path d="M340,278 L378,82 L416,278 Z" fill="#1f4134"/>
+                                    <path d="M350,196 L378,58 L406,196 Z" fill="#275241"/>
+                                    <path d="M360,136 L378,42 L396,136 Z" fill="#2f614d"/>
+                                </g>
+                                <g class="sway-tree med" style="animation-delay:-1.5s;">
+                                    <path d="M500,278 L536,100 L572,278 Z" fill="#1f4134"/>
+                                    <path d="M510,198 L536,76 L562,198 Z" fill="#275241"/>
+                                </g>
+                                <g class="sway-tree med" style="animation-delay:-3.3s;">
+                                    <path d="M665,278 L702,94 L739,278 Z" fill="#1f4134"/>
+                                    <path d="M675,194 L702,70 L729,194 Z" fill="#275241"/>
+                                </g>
+                                <!-- Front Accent Trees with Warm Sand / Sage Rim -->
+                                <g class="sway-tree fast" style="animation-delay:-0.8s;">
+                                    <path d="M292,280 L324,132 L356,280 Z" fill="#2a5947"/>
+                                    <path d="M301,210 L324,106 L347,210 Z" fill="#326b55"/>
+                                    <path d="M324,106 L347,210" stroke="rgba(230,199,156,0.35)" stroke-width="1.2"/>
+                                </g>
+                                <g class="sway-tree fast" style="animation-delay:-2.9s;">
+                                    <path d="M445,280 L480,118 L515,280 Z" fill="#2a5947"/>
+                                    <path d="M455,206 L480,92 L505,206 Z" fill="#326b55"/>
+                                    <path d="M480,92 L505,206" stroke="rgba(110,231,183,0.4)" stroke-width="1.2"/>
+                                </g>
+                                <g class="sway-tree fast" style="animation-delay:-1.9s;">
+                                    <path d="M610,280 L644,126 L678,280 Z" fill="#2a5947"/>
+                                    <path d="M619,208 L644,102 L669,208 Z" fill="#326b55"/>
+                                    <path d="M644,102 L669,208" stroke="rgba(230,199,156,0.32)" stroke-width="1.2"/>
+                                </g>
+                                <!-- Soft Ground Mist -->
+                                <path d="M0,280 L0,252 Q180,232 380,254 T760,244 L760,280 Z" fill="rgba(17, 25, 22, 0.88)"/>
+                            </svg>
+                        </div>
+                        <span class="forest-hud-label">FOREST BREEZE // 05</span>
+                    </div>
+                `;
+            } else if (fMode === '1') {
+                const fireflies = [
+                    { x: 24, y: 22, s: 5, cls: 'sage', anim: 'tcasFireflyA 7s ease-in-out infinite', d: '-1s' },
+                    { x: 42, y: 58, s: 6, cls: 'sand', anim: 'tcasFireflyB 8.5s ease-in-out infinite', d: '-3s' },
+                    { x: 64, y: 30, s: 7, cls: 'sage', anim: 'tcasFireflyA 6.5s ease-in-out infinite', d: '-2.2s' },
+                    { x: 78, y: 66, s: 5, cls: 'sand', anim: 'tcasFireflyB 9s ease-in-out infinite', d: '-4.5s' },
+                    { x: 52, y: 20, s: 4, cls: 'sand', anim: 'tcasFireflyA 7.8s ease-in-out infinite', d: '-5.1s' },
+                    { x: 35, y: 76, s: 6, cls: 'sage', anim: 'tcasFireflyB 8.2s ease-in-out infinite', d: '-1.8s' },
+                    { x: 84, y: 38, s: 6, cls: 'sage', anim: 'tcasFireflyA 7.2s ease-in-out infinite', d: '-3.6s' },
+                    { x: 58, y: 74, s: 5, cls: 'sand', anim: 'tcasFireflyB 6.8s ease-in-out infinite', d: '-0.8s' },
+                    { x: 70, y: 50, s: 8, cls: 'sage', anim: 'tcasFireflyA 9.5s ease-in-out infinite', d: '-6s' },
+                    { x: 46, y: 42, s: 4, cls: 'sand', anim: 'tcasFireflyB 7.5s ease-in-out infinite', d: '-2.7s' },
+                    { x: 88, y: 78, s: 5, cls: 'sage', anim: 'tcasFireflyA 8.8s ease-in-out infinite', d: '-4s' },
+                    { x: 28, y: 46, s: 4, cls: 'sand', anim: 'tcasFireflyB 9.2s ease-in-out infinite', d: '-5.5s' }
+                ];
+                const dotsHtml = fireflies.map(f =>
+                    `<span class="firefly-dot ${f.cls}" style="left:${f.x}%;top:${f.y}%;width:${f.s}px;height:${f.s}px;animation:${f.anim};animation-delay:${f.d};"></span>`
+                ).join('');
+                showcase.innerHTML = `
+                    <div class="forest-stage" onclick="app.openQuickStartModal()" title="คลิกเพื่อเริ่มฝึกซ้อม">
+                        <div class="forest-mist-layer"></div>
+                        ${dotsHtml}
+                        <span class="forest-hud-label">FOREST FIREFLIES // 01</span>
+                    </div>
+                `;
+            } else if (fMode === '2') {
+                showcase.innerHTML = `
+                    <div class="forest-stage" onclick="app.openQuickStartModal()" title="คลิกเพื่อเริ่มฝึกซ้อม">
+                        <div class="forest-aurora-ribbon"></div>
+                        <div class="forest-dunes-viewport">
+                            <svg class="forest-dune-track dune-3" viewBox="0 0 1200 185" preserveAspectRatio="none">
+                                <path d="M0,105 C180,65 360,135 540,95 C720,55 900,135 1200,95 L1200,185 L0,185 Z" fill="rgba(52,211,153,0.12)"/>
+                                <path d="M0,105 C180,65 360,135 540,95 C720,55 900,135 1200,95" fill="none" stroke="rgba(110,231,183,0.45)" stroke-width="1.5"/>
+                            </svg>
+                            <svg class="forest-dune-track dune-2" viewBox="0 0 1200 185" preserveAspectRatio="none">
+                                <path d="M0,125 C200,160 400,85 600,125 C800,160 1000,85 1200,125 L1200,185 L0,185 Z" fill="rgba(230,199,156,0.12)"/>
+                                <path d="M0,125 C200,160 400,85 600,125 C800,160 1000,85 1200,125" fill="none" stroke="rgba(230,199,156,0.5)" stroke-width="1.6"/>
+                            </svg>
+                            <svg class="forest-dune-track dune-1" viewBox="0 0 1200 185" preserveAspectRatio="none">
+                                <path d="M0,145 C150,115 300,168 450,140 C600,112 750,168 900,140 C1050,112 1150,155 1200,145 L1200,185 L0,185 Z" fill="rgba(16,185,129,0.16)"/>
+                                <path d="M0,145 C150,115 300,168 450,140 C600,112 750,168 900,140 C1050,112 1150,155 1200,145" fill="none" stroke="#34d399" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <span class="forest-hud-label">ZEN DUNES &amp; AURORA // 02</span>
+                    </div>
+                `;
+            } else if (fMode === '3') {
+                showcase.innerHTML = `
+                    <div class="forest-stage" onclick="app.openQuickStartModal()" title="คลิกเพื่อเริ่มฝึกซ้อม">
+                        <div class="forest-astrolabe-plane">
+                            <div class="astrolabe-core"></div>
+                            <div class="astrolabe-ring r1"><span class="astrolabe-node sand"></span></div>
+                            <div class="astrolabe-ring r2"><span class="astrolabe-node sage"></span></div>
+                            <div class="astrolabe-ring r3"><span class="astrolabe-node sand"></span></div>
+                        </div>
+                        <span class="forest-hud-label">BOTANICAL ASTROLABE // 03</span>
+                    </div>
+                `;
+            } else if (fMode === '4') {
+                showcase.innerHTML = `
+                    <div class="forest-stage" onclick="app.openQuickStartModal()" title="คลิกเพื่อเริ่มฝึกซ้อม">
+                        <div class="forest-pond-plane">
+                            <div class="pond-dewdrop"></div>
+                            <div class="pond-ripple rip-1"></div>
+                            <div class="pond-ripple rip-2"></div>
+                            <div class="pond-ripple rip-3"></div>
+                            <div class="pond-ripple rip-4"></div>
+                        </div>
+                        <span class="forest-hud-label">ZEN POND RIPPLES // 04</span>
+                    </div>
+                `;
             }
+            return;
+        }
 
-            // Card Back Stats
-            const bAns = document.getElementById('card-back-answered');
-            const bAcc = document.getElementById('card-back-accuracy');
-            const bMas = document.getElementById('card-back-mastered');
-            const bTime = document.getElementById('card-back-time');
-            if (bAns) bAns.textContent = `${d.raw ? d.raw.total_answered || 0 : 0} ข้อ`;
-            if (bAcc) bAcc.textContent = `${d.stats ? d.stats.accuracy || 0 : 0}%`;
-            if (bMas) bMas.textContent = `${d.raw ? d.raw.total_mastered || 0 : 0} คำ`;
-            if (bTime) bTime.textContent = `${d.raw ? Math.round((d.raw.total_time_spent_seconds || 0) / 60) : 0} นาที`;
+        const heroMode = ['1', '2', '3', '4'].includes(heroParam) ? heroParam : '1';
 
-            this.setupTradingCardTilt();
-
-            // If background update and user is not looking at status view, don't re-render chart
-            if (isInitial && this.state.currentView !== 'status') return;
-
-            // 3. Render Dynamic SVG Radar Chart
-            this.renderRpgRadarChart(d.stats);
-
-            // 4. Render Core Attributes List
-            this.renderRpgAttributes(d.stats, d.raw);
-
-            // 5. Render Achievements
-            this.renderRpgAchievements(d.achievements);
-
-        } catch (err) {
-            console.error('Failed to load RPG status', err);
+        if (heroMode === '1') {
+            showcase.innerHTML = `
+                <div class="solar-stage solar-mode-1" onclick="app.openQuickStartModal()" title="คลิกเพื่อเริ่มฝึกซ้อม">
+                    <div class="solar-plane">
+                        <div class="solar-sun"></div>
+                        <div class="solar-orbit orbit-1"><div class="solar-planet-anchor"><div class="solar-planet"></div></div></div>
+                        <div class="solar-orbit orbit-2"><div class="solar-planet-anchor"><div class="solar-planet"></div></div></div>
+                        <div class="solar-orbit orbit-3"><div class="solar-planet-anchor"><div class="solar-planet"></div></div></div>
+                        <div class="solar-orbit orbit-4"><div class="solar-planet-anchor"><div class="solar-planet"></div></div></div>
+                        <div class="solar-orbit orbit-5"><div class="solar-planet-anchor"><div class="solar-planet"></div></div></div>
+                        <div class="solar-orbit orbit-6"><div class="solar-planet-anchor"><div class="solar-planet"></div></div></div>
+                        <div class="solar-orbit orbit-7"><div class="solar-planet-anchor"><div class="solar-planet"></div></div></div>
+                        <div class="solar-orbit orbit-8"><div class="solar-planet-anchor"><div class="solar-planet"></div></div></div>
+                    </div>
+                    <span class="solar-hud-label">SOLAR SYSTEM // 8 PLANETS</span>
+                </div>
+            `;
+        } else if (heroMode === '2') {
+            showcase.innerHTML = `
+                <div class="solar-stage solar-mode-2" onclick="app.openQuickStartModal()" title="คลิกเพื่อเริ่มฝึกซ้อม">
+                    <div class="solar-flare-beam"></div>
+                    <div class="solar-plane">
+                        <div class="solar-sun"></div>
+                        <div class="solar-orbit orbit-a"><div class="solar-planet-anchor"><div class="solar-planet"></div></div></div>
+                        <div class="solar-orbit orbit-b"><div class="solar-planet-anchor"><div class="solar-planet"></div></div></div>
+                        <div class="solar-orbit orbit-c"><div class="solar-planet-anchor"><div class="solar-planet"></div></div></div>
+                    </div>
+                    <span class="solar-hud-label">ECLIPTIC HORIZON // 02</span>
+                </div>
+            `;
+        } else if (heroMode === '3') {
+            showcase.innerHTML = `
+                <div class="solar-stage solar-mode-3" onclick="app.openQuickStartModal()" title="คลิกเพื่อเริ่มฝึกซ้อม">
+                    <div class="solar-plane">
+                        <div class="solar-sun"></div>
+                        <div class="solar-orbit orbit-a"><div class="solar-planet-anchor"><div class="solar-planet"></div></div></div>
+                        <div class="solar-orbit orbit-b"><div class="solar-planet-anchor"><div class="solar-planet"></div></div></div>
+                        <div class="solar-orbit orbit-c"><div class="solar-planet-anchor"><div class="solar-planet"></div></div></div>
+                    </div>
+                    <span class="solar-hud-label">HOLOGRAPHIC ORBIT // 03</span>
+                </div>
+            `;
+        } else if (heroMode === '4') {
+            showcase.innerHTML = `
+                <div class="solar-stage solar-mode-4" onclick="app.openQuickStartModal()" title="คลิกเพื่อเริ่มฝึกซ้อม">
+                    <div class="solar-plane">
+                        <div class="solar-binary-core">
+                            <div class="solar-binary-star-a"></div>
+                            <div class="solar-binary-star-b"></div>
+                        </div>
+                        <div class="solar-orbit orbit-a"><div class="solar-planet-anchor"><div class="solar-planet"></div></div></div>
+                        <div class="solar-asteroid-belt"></div>
+                        <div class="solar-orbit orbit-b"><div class="solar-planet-anchor"><div class="solar-planet"></div></div></div>
+                    </div>
+                    <span class="solar-hud-label">BINARY SYSTEM // 04</span>
+                </div>
+            `;
         }
     },
 
-    renderRpgRadarChart(stats) {
-        const container = document.getElementById('rpg-radar-container');
-        if (!container) return;
+    // ==========================================
+    // DRIBBBLE THEME, CARD STYLE & SPARKLINE HELPERS
+    // ==========================================
+    toggleTheme() {
+        this.playSfx('select');
+        const order = ['dark-v4', 'dark-v3', 'dark'];
+        const currentIdx = order.indexOf(this.state.theme);
+        const nextTheme = order[(currentIdx + 1) % order.length];
+        this.applyTheme(nextTheme);
 
-        const cx = 190;
-        const cy = 185;
-        const R = 115;
-        const numAxes = 5;
+        const toastMessages = {
+            'dark-v4': 'ธีม: เอสเปรสโซ-ทองแดง (Espresso & Copper)',
+            'dark-v3': 'ธีม: เขียวป่าลึก-ทรายอุ่น (Deep Forest & Warm Sand)',
+            'dark': 'ธีม: Deep Slate Dark (โหมดเดิม)'
+        };
+        this.showToast(toastMessages[nextTheme] || toastMessages['dark-v4'], 'info');
+    },
 
-        // Angles for 5 vertices: -90° (top), -18°, 54°, 126°, 198°
-        const angles = [];
-        for (let i = 0; i < numAxes; i++) {
-            angles.push((i * (2 * Math.PI / numAxes)) - (Math.PI / 2));
+    applyTheme(theme) {
+        const validThemes = ['dark-v4', 'dark-v3', 'dark'];
+        const resolved = validThemes.includes(theme) ? theme : 'dark-v4';
+        this.state.theme = resolved;
+        localStorage.setItem('tcas_theme', resolved);
+        document.body.classList.remove(
+            'theme-dark', 'theme-light', 'theme-claude-light', 'theme-claude-dark',
+            'theme-claude-v1', 'theme-claude-v2', 'theme-claude-v3', 'theme-claude-v4',
+            'theme-dark-v1', 'theme-dark-v2', 'theme-dark-v3', 'theme-dark-v4'
+        );
+        document.body.classList.add(`theme-${resolved}`);
+
+        const iconEl = document.getElementById('theme-icon-svg');
+        const labelEl = document.getElementById('theme-text-label');
+        const moonSvg = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
+        const editorialSvg = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"/></svg>';
+
+        if (iconEl) {
+            iconEl.innerHTML = resolved === 'dark' ? moonSvg : editorialSvg;
+        }
+        if (labelEl) {
+            const labels = {
+                'dark-v4': 'ธีม: เอสเปรสโซ',
+                'dark-v3': 'ธีม: เขียวป่า-ทราย',
+                'dark': 'ธีม: Dark'
+            };
+            labelEl.textContent = labels[resolved] || 'ธีม: เอสเปรสโซ';
+        }
+        this.initHeroShowcase();
+    },
+
+    setCardStyle(style) {
+        this.playSfx('select');
+        this.applyCardStyle(style);
+        this.showToast(
+            style === 'dribbble'
+                ? 'เปิดมุมมอง Clean Hover (ชี้การ์ดเพื่อแสดงปุ่ม)'
+                : 'สลับเป็นมุมมองการ์ดเดิม (แสดงปุ่มครบทุกใบ)',
+            'info'
+        );
+    },
+
+    applyCardStyle(style) {
+        const resolved = style === 'dribbble' ? 'dribbble' : 'classic';
+        this.state.cardStyle = resolved;
+        localStorage.setItem('tcas_card_style', resolved);
+
+        const grid = document.getElementById('subjects-container');
+        if (grid) {
+            grid.classList.toggle('mode-clean-hover', resolved === 'dribbble');
+        }
+        document.querySelectorAll('.card-style-pill').forEach(btn => {
+            btn.classList.toggle('active', btn.getAttribute('data-card-style') === resolved);
+        });
+    },
+
+    openFreeRoamQuickStart() {
+        this.setExamPlayMode('free_roam');
+        this.openQuickStartModal();
+    },
+
+    renderHeroSparkline(sessions) {
+        const svgWrap = document.getElementById('hero-sparkline-svg');
+        const badgeEl = document.getElementById('hero-sparkline-badge');
+        if (!svgWrap || !badgeEl) return;
+
+        const completed = Array.isArray(sessions) ? [...sessions].reverse() : [];
+        if (completed.length === 0) {
+            badgeEl.textContent = 'ยังไม่มีประวัติสอบ';
+            badgeEl.style.color = '';
+            svgWrap.innerHTML = `
+                <svg viewBox="0 0 240 46" preserveAspectRatio="none">
+                    <line x1="4" y1="36" x2="236" y2="36" stroke="rgba(148, 163, 184, 0.35)" stroke-width="2" stroke-dasharray="4 4" />
+                    <circle cx="234" cy="36" r="3" fill="#64748b" />
+                </svg>
+            `;
+            return;
         }
 
-        // Web Rings (20%, 40%, 60%, 80%, 100%)
-        const ringLevels = [0.2, 0.4, 0.6, 0.8, 1.0];
-        const ringsSvg = ringLevels.map(lvl => {
-            const pts = angles.map(ang => {
-                const x = cx + R * lvl * Math.cos(ang);
-                const y = cy + R * lvl * Math.sin(ang);
-                return `${x.toFixed(1)},${y.toFixed(1)}`;
-            }).join(' ');
-            return `<polygon points="${pts}" fill="${lvl === 1.0 ? 'rgba(255,255,255,0.02)' : 'none'}" stroke="rgba(148, 163, 184, ${lvl === 1.0 ? 0.35 : 0.18})" stroke-width="${lvl === 1.0 ? '1.5' : '1'}" stroke-dasharray="${lvl === 1.0 ? 'none' : '3,3'}" />`;
-        }).join('\n');
-
-        // Axis Lines
-        const axisLinesSvg = angles.map(ang => {
-            const x = cx + R * Math.cos(ang);
-            const y = cy + R * Math.sin(ang);
-            return `<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="rgba(148, 163, 184, 0.25)" stroke-width="1.2" />`;
-        }).join('\n');
-
-        // Data Polygon points (scaled between 10 and 100, or 0 if completely uninitialized)
-        const hasAnyStats = ((stats.accuracy || 0) + (stats.speed || 0) + (stats.defense || 0) + (stats.mastery || 0) + (stats.consistency || 0)) > 0;
-        const values = [
-            hasAnyStats ? Math.max(10, Math.min(100, stats.accuracy || 0)) : 0,
-            hasAnyStats ? Math.max(10, Math.min(100, stats.speed || 0)) : 0,
-            hasAnyStats ? Math.max(10, Math.min(100, stats.defense || 0)) : 0,
-            hasAnyStats ? Math.max(10, Math.min(100, stats.mastery || 0)) : 0,
-            hasAnyStats ? Math.max(10, Math.min(100, stats.consistency || 0)) : 0
-        ];
-
-        const dataPts = values.map((val, i) => {
-            const scale = val / 100;
-            const x = cx + R * scale * Math.cos(angles[i]);
-            const y = cy + R * scale * Math.sin(angles[i]);
-            return { x, y, val };
+        const scores = completed.map(s => {
+            const maxS = Number(s.max_score) || 100;
+            const pct = Math.round(((Number(s.score_earned) || 0) / maxS) * 100);
+            return Math.max(0, Math.min(100, pct));
         });
 
-        const polygonPoints = dataPts.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+        // If only 1 session exists, duplicate it cleanly so a flat trend line draws across
+        const plotPts = scores.length === 1 ? [scores[0], scores[0]] : scores;
+        const W = 240;
+        const H = 46;
+        const padX = 6;
+        const padY = 6;
 
-        // Glowing Vertex Nodes
-        const nodesSvg = dataPts.map(p => `
-            <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4.5" fill="#38bdf8" stroke="#ffffff" stroke-width="2">
-                <title>${p.val}/100</title>
-            </circle>
-        `).join('\n');
+        const coords = plotPts.map((val, idx) => {
+            const x = padX + (idx / (plotPts.length - 1)) * (W - padX * 2);
+            const y = (H - padY) - (val / 100) * (H - padY * 2);
+            return { x: Number(x.toFixed(1)), y: Number(y.toFixed(1)), val };
+        });
 
-        // Labels definitions
-        const labelsData = [
-            { text: 'ACC แม่นยำ', score: stats.accuracy, color: '#38bdf8', anchor: 'middle', baseline: 'auto', dx: 0, dy: -14 },
-            { text: 'SPD สปีด', score: stats.speed, color: '#f59e0b', anchor: 'start', baseline: 'middle', dx: 14, dy: 0 },
-            { text: 'DEF ต้านจุดหลอก', score: stats.defense, color: '#10b981', anchor: 'start', baseline: 'hanging', dx: 8, dy: 14 },
-            { text: 'MST ทบทวนแม่น', score: stats.mastery, color: '#a78bfa', anchor: 'end', baseline: 'hanging', dx: -8, dy: 14 },
-            { text: 'CON วินัยต่อเนื่อง', score: stats.consistency, color: '#f43f5e', anchor: 'end', baseline: 'middle', dx: -14, dy: 0 }
-        ];
+        const polylineStr = coords.map(c => `${c.x},${c.y}`).join(' ');
+        const areaStr = `${coords[0].x},${H} ${polylineStr} ${coords[coords.length - 1].x},${H}`;
+        const latest = scores[scores.length - 1];
+        const prev = scores.length > 1 ? scores[scores.length - 2] : latest;
+        const delta = latest - prev;
+        const deltaStr = scores.length > 1 ? (delta >= 0 ? ` (+${delta}%)` : ` (${delta}%)`) : '';
 
-        const labelsSvg = labelsData.map((lbl, i) => {
-            const ang = angles[i];
-            const lx = cx + R * Math.cos(ang) + lbl.dx;
-            const ly = cy + R * Math.sin(ang) + lbl.dy;
-            return `
-                <text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${lbl.anchor}" dominant-baseline="${lbl.baseline}" font-size="11.5" font-weight="600" fill="#e2e8f0" font-family="'Prompt', sans-serif">
-                    ${lbl.text}
-                    <tspan font-weight="700" fill="${lbl.color}"> ${lbl.score}</tspan>
-                </text>
-            `;
-        }).join('\n');
+        badgeEl.textContent = `ล่าสุด ${latest}%${deltaStr}`;
+        badgeEl.style.color = delta >= 0 ? '#34d399' : '#fb7185';
 
-        container.innerHTML = `
-            <svg class="radar-svg" viewBox="0 0 380 370" width="100%" height="340" xmlns="http://www.w3.org/2000/svg">
+        svgWrap.innerHTML = `
+            <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
                 <defs>
-                    <radialGradient id="radarRadialGlow" cx="50%" cy="50%" r="50%">
-                        <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.18" />
-                        <stop offset="70%" stop-color="#6366f1" stop-opacity="0.08" />
-                        <stop offset="100%" stop-color="#0f172a" stop-opacity="0" />
-                    </radialGradient>
-                    <linearGradient id="radarPolyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.7" />
-                        <stop offset="50%" stop-color="#6366f1" stop-opacity="0.5" />
-                        <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0.35" />
+                    <linearGradient id="heroSparkGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.38" />
+                        <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.0" />
                     </linearGradient>
-                    <filter id="radarFilterGlow" x="-20%" y="-20%" width="140%" height="140%">
-                        <feGaussianBlur stdDeviation="3.5" result="blur" />
-                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                    </filter>
                 </defs>
-
-                <!-- Center Glow -->
-                <circle cx="${cx}" cy="${cy}" r="${R}" fill="url(#radarRadialGlow)" />
-
-                <!-- Grid Web & Axes -->
-                ${ringsSvg}
-                ${axisLinesSvg}
-
-                <!-- Stats Polygon Area -->
-                <polygon points="${polygonPoints}" fill="url(#radarPolyGrad)" stroke="#06b6d4" stroke-width="2.5" filter="url(#radarFilterGlow)" />
-
-                <!-- Node Markers -->
-                ${nodesSvg}
-
-                <!-- Center Bullseye -->
-                <circle cx="${cx}" cy="${cy}" r="3" fill="#94a3b8" opacity="0.6" />
-
-                <!-- Labels -->
-                ${labelsSvg}
+                <polygon points="${areaStr}" fill="url(#heroSparkGrad)" />
+                <polyline points="${polylineStr}" fill="none" stroke="#22d3ee" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+                ${coords.map((c, i) => `<circle cx="${c.x}" cy="${c.y}" r="${i === coords.length - 1 ? 3.8 : 2.3}" fill="${i === coords.length - 1 ? '#34d399' : '#38bdf8'}"><title>${c.val}%</title></circle>`).join('')}
             </svg>
         `;
     },
 
-    renderRpgAttributes(stats, raw = {}) {
-        const container = document.getElementById('rpg-attr-list');
-        if (!container) return;
-
-        const isGuestOrEmpty = !raw.total_answered || raw.total_answered === 0;
-
-        const attrs = [
-            {
-                code: 'ACC',
-                name: 'Accuracy (ความแม่นยำในการตอบ)',
-                icon: this.svg('target', { size: 18, color: '#06b6d4' }),
-                value: stats.accuracy || 0,
-                color: '#06b6d4',
-                desc: isGuestOrEmpty
-                    ? 'ยังไม่มีประวัติการทำข้อสอบ (เริ่มทำข้อสอบเพื่อวัดระดับ)'
-                    : `ตอบถูกทั้งหมด ${raw.total_correct} จาก ${raw.total_answered} ข้อ ในการทดสอบทั้งหมด`
-            },
-            {
-                code: 'SPD',
-                name: 'Speed (ความเร็วเฉลี่ยต่อข้อ)',
-                icon: this.svg('zap', { size: 18, color: '#f59e0b' }),
-                value: stats.speed || 0,
-                color: '#f59e0b',
-                desc: isGuestOrEmpty || !raw.avg_time_seconds
-                    ? 'ยังไม่มีประวัติการจับเวลา (เกณฑ์แนะนำ ทปอ. 45-60 วินาที/ข้อ)'
-                    : `ใช้เวลาเฉลี่ย ${raw.avg_time_seconds} วินาที/ข้อ (เกณฑ์แนะนำ ทปอ. 45-60 วินาที)`
-            },
-            {
-                code: 'DEF',
-                name: 'Trap Defense (ภูมิคุ้มกันจุดหลอก)',
-                icon: this.svg('shield', { size: 18, color: '#10b981' }),
-                value: stats.defense || 0,
-                color: '#10b981',
-                desc: raw.total_trap_q > 0
-                    ? `ตรวจจับและรอดพ้นจุดหลอก ${raw.trap_defended || 0} จาก ${raw.total_trap_q} ข้อ`
-                    : 'ความสามารถในการตรวจจับช้อยส์ลวงและจุดหลอกที่ ทปอ. มักตั้งไว้'
-            },
-            {
-                code: 'MST',
-                name: 'Mastery (การแก้ไขจุดอ่อน & คลังศัพท์)',
-                icon: this.svg('brain', { size: 18, color: '#8b5cf6' }),
-                value: stats.mastery || 0,
-                color: '#8b5cf6',
-                desc: (raw.mastered_mistakes > 0 || raw.mastered_vocab > 0)
-                    ? `พิชิตจุดอ่อน ${raw.mastered_mistakes || 0} ข้อ • แม่นยำคำศัพท์ ${raw.mastered_vocab || 0} คำ`
-                    : 'ยังไม่มีประวัติพิชิตจุดอ่อนหรือคำศัพท์'
-            },
-            {
-                code: 'CON',
-                name: 'Consistency (ไฟความต่อเนื่อง & วินัย)',
-                icon: this.svg('flame', { size: 18, color: '#f43f5e' }),
-                value: stats.consistency || 0,
-                color: '#f43f5e',
-                desc: raw.total_sessions > 0
-                    ? `ฝึกฝนต่อเนื่องและทำข้อสอบจำลองจบไปแล้ว ${raw.total_sessions} ชุดเต็ม`
-                    : 'ยังไม่มีประวัติการทำข้อสอบจำลองจบชุด'
-            }
-        ];
-
-        container.innerHTML = attrs.map(a => `
-            <div class="attr-card">
-                <div class="attr-header">
-                    <div class="attr-title-group">
-                        <span class="attr-icon">${a.icon}</span>
-                        <div>
-                            <span class="attr-name">${a.name}</span>
-                            <span class="attr-tag" style="background: ${a.color}22; color: ${a.color}; border: 1px solid ${a.color}44;">${a.code}</span>
-                        </div>
-                    </div>
-                    <span class="attr-score" style="color: ${a.color};">${a.value} <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 400;">/100</span></span>
-                </div>
-                <div class="attr-bar-track">
-                    <div class="attr-bar-fill" style="width: ${a.value}%; background: linear-gradient(90deg, ${a.color}aa, ${a.color});"></div>
-                </div>
-                <p class="attr-desc">${a.desc}</p>
-            </div>
-        `).join('');
-    },
-
-    renderRpgAchievements(achievements) {
-        const countEl = document.getElementById('rpg-achieve-count');
-        const container = document.getElementById('rpg-achieve-grid');
-        if (!container || !achievements) return;
-
-        const unlockedCount = achievements.filter(a => a.unlocked).length;
-        if (countEl) {
-            countEl.textContent = `${unlockedCount}/${achievements.length} สำเร็จ`;
-        }
-
-        container.innerHTML = achievements.map(a => `
-            <div class="achievement-card ${a.unlocked ? 'unlocked' : 'locked'}">
-                <div class="achieve-icon-box">
-                    <span class="achieve-icon">${a.icon}</span>
-                </div>
-                <div class="achieve-content">
-                    <div class="achieve-header">
-                        <h4 class="achieve-title">${a.name}</h4>
-                        <span class="achieve-status-badge ${a.unlocked ? 'status-unlocked' : 'status-locked'}">
-                            ${a.unlocked ? '<span style="display:inline-flex;align-items:center;gap:4px;">' + this.svg('check-circle', { size: 13, color: '#34d399' }) + ' ปลดล็อกแล้ว</span>' : '<span style="display:inline-flex;align-items:center;gap:4px;">' + this.svg('lock', { size: 13, color: '#94a3b8' }) + ' ล็อกอยู่</span>'}
-                        </span>
-                    </div>
-                    <p class="achieve-desc">${a.desc}</p>
-                </div>
-            </div>
-        `).join('');
-    },
-
-    // ==========================================
-    // 3D COLLECTIBLE TRADING CARD ENGINE
-    // ==========================================
-        // ==========================================
-    // 3D COLLECTIBLE TRADING CARD ENGINE
-    // ==========================================
-    setupTradingCardTilt() {
-        const card = document.getElementById('tcas-card-3d-wrapper');
-        const tilt = document.getElementById('tcas-card-tilt');
-        const flip = document.getElementById('tcas-card-flip');
-        const glare = document.getElementById('card-holo-glare');
-        if (!card || !tilt || card._tiltBound) return;
-        card._tiltBound = true;
-
-        const handleMove = (clientX, clientY) => {
-            if (flip && flip.classList.contains('is-flipped')) {
-                tilt.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-                if (glare) glare.style.opacity = '0';
-                return;
-            }
-            const rect = card.getBoundingClientRect();
-            const x = clientX - rect.left;
-            const y = clientY - rect.top;
-            const halfW = rect.width / 2;
-            const halfH = rect.height / 2;
-
-            const rotateX = ((halfH - y) / halfH) * 12;
-            const rotateY = ((x - halfW) / halfW) * 12;
-
-            tilt.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`;
-            if (glare) {
-                glare.style.opacity = '1';
-                glare.style.background = `radial-gradient(circle at ${(x / rect.width * 100).toFixed(1)}% ${(y / rect.height * 100).toFixed(1)}%, rgba(255,255,255,0.45) 0%, rgba(236,72,153,0.2) 35%, transparent 70%)`;
-            }
-        };
-
-        const handleReset = () => {
-            tilt.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-            if (glare) glare.style.opacity = '0';
-        };
-
-        card.addEventListener('mousemove', (e) => handleMove(e.clientX, e.clientY));
-        card.addEventListener('mouseleave', handleReset);
-
-        // Touch support for iPad / Mobile
-        card.addEventListener('touchmove', (e) => {
-            if (e.touches && e.touches[0]) {
-                handleMove(e.touches[0].clientX, e.touches[0].clientY);
-            }
-        }, { passive: true });
-        card.addEventListener('touchend', handleReset);
-    },
-
-    flipTradingCard() {
-        const flip = document.getElementById('tcas-card-flip');
-        if (!flip) return;
-        this.playSfx('select');
-        const isFlipped = flip.classList.toggle('is-flipped');
-        const tilt = document.getElementById('tcas-card-tilt');
-        if (tilt) {
-            tilt.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-        }
-        const glare = document.getElementById('card-holo-glare');
-        if (glare) glare.style.opacity = '0';
-
-        const btn = document.getElementById('btn-flip-card');
-        if (btn) {
-            btn.innerHTML = isFlipped
-                ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: text-bottom; margin-right: 4px;"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>พลิกดูหน้าการ์ด`
-                : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: text-bottom; margin-right: 4px;"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>พลิกดูหลังการ์ด`;
-        }
-    },
-
-    downloadTradingCard() {
-        this.playSfx('click');
-        this.showToast('กำลังสร้างรูปการ์ดพลังความละเอียดสูง...', 'info');
-
-        const canvas = document.createElement('canvas');
-        canvas.width = 750;
-        canvas.height = 1100;
-        const ctx = canvas.getContext('2d');
-
-        const u = this.state.currentUser || {};
-        const stats = u.stats || {};
-        const lvl = stats.level || 1;
-        const name = (u.display_name || u.username || 'นักรบ TCAS');
-        const avatar = u.avatar_url || '👨‍🎓';
-        const cp = document.getElementById('rpg-combat-power')?.textContent || '0';
-        const rank = document.getElementById('rpg-hero-badge')?.textContent || 'Tier V';
-        const title = document.getElementById('rpg-hero-title')?.textContent || 'ผู้เริ่มต้นการเดินทาง';
-
-        // 1. Background Frame
-        let borderCol = '#f59e0b';
-        let bgGrad = ctx.createLinearGradient(0, 0, 750, 1100);
-        if (lvl >= 20) {
-            borderCol = '#ec4899';
-            bgGrad.addColorStop(0, '#1c0b30');
-            bgGrad.addColorStop(0.5, '#2b1046');
-            bgGrad.addColorStop(1, '#0e031a');
-        } else if (lvl >= 10) {
-            borderCol = '#f59e0b';
-            bgGrad.addColorStop(0, '#221908');
-            bgGrad.addColorStop(0.5, '#352509');
-            bgGrad.addColorStop(1, '#140f03');
-        } else if (lvl >= 5) {
-            borderCol = '#38bdf8';
-            bgGrad.addColorStop(0, '#0f172a');
-            bgGrad.addColorStop(0.5, '#1e293b');
-            bgGrad.addColorStop(1, '#090d16');
-        } else {
-            borderCol = '#b45309';
-            bgGrad.addColorStop(0, '#1a130e');
-            bgGrad.addColorStop(0.5, '#2a1d15');
-            bgGrad.addColorStop(1, '#110b07');
-        }
-
-        // Draw Card Body
-        ctx.fillStyle = bgGrad;
-        ctx.beginPath();
-        if (ctx.roundRect) ctx.roundRect(20, 20, 710, 1060, 36);
-        else ctx.rect(20, 20, 710, 1060);
-        ctx.fill();
-        ctx.lineWidth = 8;
-        ctx.strokeStyle = borderCol;
-        ctx.stroke();
-
-        // Inner Border Ring
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
-        ctx.beginPath();
-        if (ctx.roundRect) ctx.roundRect(32, 32, 686, 1036, 28);
-        else ctx.rect(32, 32, 686, 1036);
-        ctx.stroke();
-
-        // 2. Header
-        ctx.fillStyle = borderCol;
-        ctx.font = 'bold 22px Outfit, sans-serif';
-        ctx.fillText(lvl >= 20 ? '★ MYTHIC TCAS ★' : lvl >= 10 ? '★ UR EDITION ★' : lvl >= 5 ? '★ SSR EDITION ★' : '★ SR EDITION ★', 50, 75);
-
-        ctx.fillStyle = '#94a3b8';
-        ctx.font = 'bold 18px Outfit, sans-serif';
-        ctx.textAlign = 'right';
-        ctx.fillText(`TCAS68 • #00${lvl}`, 700, 75);
-        ctx.textAlign = 'left';
-
-        // 3. Avatar Box
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(375, 260, 115, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(99, 102, 241, 0.25)';
-        ctx.fill();
-        ctx.lineWidth = 6;
-        ctx.strokeStyle = borderCol;
-        ctx.stroke();
-
-        ctx.font = '96px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(avatar, 375, 260);
-        ctx.restore();
-
-        // Level Badge
-        ctx.fillStyle = '#ef4444';
-        ctx.beginPath();
-        if (ctx.roundRect) ctx.roundRect(315, 365, 120, 42, 21);
-        else ctx.rect(315, 365, 120, 42);
-        ctx.fill();
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 22px Outfit, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText(`Lv.${lvl}`, 375, 393);
-
-        // 4. Character Title & Name
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 38px Kanit, sans-serif';
-        ctx.fillText(name, 375, 470);
-
-        ctx.fillStyle = borderCol;
-        ctx.font = '24px Prompt, sans-serif';
-        ctx.fillText(`${title} • ${rank}`, 375, 515);
-
-        // 5. Combat Power Box
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.75)';
-        ctx.beginPath();
-        if (ctx.roundRect) ctx.roundRect(65, 560, 620, 180, 24);
-        else ctx.rect(65, 560, 620, 180);
-        ctx.fill();
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
-        ctx.lineWidth = 2;
-        ctx.stroke();
-
-        ctx.fillStyle = '#94a3b8';
-        ctx.font = 'bold 20px Outfit, sans-serif';
-        ctx.fillText('COMBAT POWER (CP)', 375, 605);
-
-        ctx.fillStyle = '#38bdf8';
-        ctx.font = 'bold 64px Outfit, sans-serif';
-        ctx.fillText(cp, 375, 680);
-
-        // 6. Blueprint Certified Stamp
-        ctx.fillStyle = 'rgba(16, 185, 129, 0.15)';
-        ctx.beginPath();
-        if (ctx.roundRect) ctx.roundRect(200, 775, 350, 65, 12);
-        else ctx.rect(200, 775, 350, 65);
-        ctx.fill();
-        ctx.strokeStyle = '#10b981';
-        ctx.lineWidth = 3;
-        ctx.stroke();
-
-        ctx.fillStyle = '#34d399';
-        ctx.font = 'bold 24px Outfit, sans-serif';
-        ctx.fillText('✓ ทปอ. BLUEPRINT SPEC', 375, 816);
-
-        // 7. Footer Trademark
-        ctx.fillStyle = '#64748b';
-        ctx.font = '16px Outfit, sans-serif';
-        ctx.fillText('TCAS BLUEPRINT MASTER • OFFICIAL COLLECTIBLE TCG', 375, 960);
-        ctx.fillText('tcas-master.onrender.com', 375, 990);
-
-        // Trigger Download
-        setTimeout(() => {
-            const link = document.createElement('a');
-            link.download = `TCAS-Card-${u.username || 'Student'}.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-            this.playSfx('correct');
-            this.showToast('บันทึกรูปการ์ดพลังเรียบร้อยแล้ว!', 'success');
-        }, 300);
-    },
+    // [RPG Card, Level Tiers & Radar moved to public/js/modules/rpg-card.js]
 
     getSubjectGroupCategory(sub) {
         if (sub.category === 'TGAT') return 'TGAT';
@@ -1245,10 +1248,16 @@ const app = {
         this.renderSubjectCards(this.state.subjects);
     },
 
+    handleSubjectSearchScope(scope) {
+        this.state.subjectSearchScope = scope || 'all';
+        this.renderSubjectCards(this.state.subjects);
+    },
+
     resetSubjectFilters() {
         this.state.subjectCategoryFilter = 'all';
         this.state.subjectReadyOnlyFilter = false;
         this.state.subjectSearchQuery = '';
+        this.state.subjectSearchScope = 'all';
 
         document.querySelectorAll('#subject-category-tabs .cat-tab-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.cat === 'all');
@@ -1257,6 +1266,8 @@ const app = {
         if (toggle) toggle.checked = false;
         const searchInput = document.getElementById('subject-search-input');
         if (searchInput) searchInput.value = '';
+        const scopeSel = document.getElementById('subject-search-scope');
+        if (scopeSel) scopeSel.value = 'all';
 
         this.renderSubjectCards(this.state.subjects);
     },
@@ -1268,7 +1279,10 @@ const app = {
     initTcasCountdown() {
         if (this.state.tcasCountdownInterval) {
             clearInterval(this.state.tcasCountdownInterval);
+            this.state.tcasCountdownInterval = null;
         }
+        const daysEl = document.getElementById('cd-days');
+        if (!daysEl) return;
         this.updateCountdownDisplay();
         this.state.tcasCountdownInterval = setInterval(() => {
             this.updateCountdownDisplay();
@@ -1432,11 +1446,15 @@ const app = {
 
         if (this.state.subjectSearchQuery) {
             const q = this.state.subjectSearchQuery.toLowerCase();
-            filtered = filtered.filter(s =>
-                (s.name_th && s.name_th.toLowerCase().includes(q)) ||
-                (s.name_en && s.name_en.toLowerCase().includes(q)) ||
-                (s.code && s.code.toLowerCase().includes(q))
-            );
+            const scope = this.state.subjectSearchScope || 'all';
+            filtered = filtered.filter(s => {
+                const matchName = (s.name_th && s.name_th.toLowerCase().includes(q)) || (s.name_en && s.name_en.toLowerCase().includes(q));
+                const matchCode = s.code && s.code.toLowerCase().includes(q);
+                const matchDesc = s.description && s.description.toLowerCase().includes(q);
+                if (scope === 'name') return matchName;
+                if (scope === 'code') return matchCode;
+                return matchName || matchCode || matchDesc;
+            });
         }
 
         if (filtered.length === 0) {
@@ -1459,6 +1477,9 @@ const app = {
             const catClass = `cat-${sub.category.toLowerCase().replace('_', '')}`;
             const themeClass = this.getSubjectThemeClass(sub);
             const isComingSoon = sub.status === 'coming_soon' || (sub.total_db_questions === 0 && !['tgat1', 'tgat2', 'tgat3'].includes(sub.id));
+            const dbTotal = Number(sub.total_db_questions) || 0;
+            const masteredCount = Number(sub.mastered_count) || 0;
+            const masteredPct = dbTotal > 0 ? Math.min(100, Math.round((masteredCount / dbTotal) * 100)) : 0;
 
             return `
                 <div class="subject-card ${themeClass} ${isComingSoon ? 'is-coming-soon' : ''}">
@@ -1472,33 +1493,49 @@ const app = {
                         <h4 class="subject-name-th">${sub.name_th}</h4>
                         <div class="subject-name-en">${sub.name_en}</div>
                         <p class="subject-desc">${sub.description}</p>
+                        ${!isComingSoon ? `
+                            <div class="subject-progress-wrap">
+                                <div class="subject-progress-labels">
+                                    <span>พิชิตแล้ว ${masteredCount}/${dbTotal} ข้อ</span>
+                                    <strong>${masteredPct}%</strong>
+                                </div>
+                                <div class="subject-progress-track">
+                                    <div class="subject-progress-fill" style="width: ${masteredPct}%;"></div>
+                                </div>
+                            </div>
+                        ` : ''}
                     </div>
 
                     <div>
-                        <div class="subject-meta-chips">
-                            <span class="meta-chip">${this.svg('clock', {size: 13})} ${sub.duration_minutes} นาที</span>
-                            <span class="meta-chip">${this.svg('file-text', {size: 13})} ${sub.total_questions} ข้อ</span>
-                            <span class="meta-chip">${this.svg('award', {size: 13})} ${sub.total_score} คะแนน</span>
-                            <span class="meta-chip">${this.svg('package', {size: 13})} ${sub.total_db_questions} ข้อในคลัง</span>
-                            ${!isComingSoon ? `<span class="meta-chip" style="color: #34d399; background: rgba(16, 185, 129, 0.12); border-color: rgba(16, 185, 129, 0.35);">${this.svg('check-circle', {size: 13})} พิชิตแล้ว ${sub.mastered_count || 0}/${sub.total_db_questions}</span>` : ''}
+                        <div class="subject-hover-hint">
+                            <span>${this.state.examPlayMode === 'free_roam' ? `${this.svg('infinity', {size: 13})} Free Roam + AI` : `${this.svg('clock', {size: 13})} ${sub.duration_minutes} นาที • ${sub.total_questions} ข้อ`}</span>
+                            <span style="color: var(--primary-light); font-weight: 600;">ชี้เพื่อดูเมนูสอบ →</span>
                         </div>
+                        <div class="subject-hover-drawer">
+                            <div class="subject-meta-chips">
+                                <span class="meta-chip subject-time-chip" data-duration="${sub.duration_minutes}">${this.state.examPlayMode === 'free_roam' ? `${this.svg('infinity', {size: 13})} ไม่จับเวลา + AI` : `${this.svg('clock', {size: 13})} ${sub.duration_minutes} นาที`}</span>
+                                <span class="meta-chip">${this.svg('file-text', {size: 13})} ${sub.total_questions} ข้อ</span>
+                                <span class="meta-chip">${this.svg('award', {size: 13})} ${sub.total_score} คะแนน</span>
+                                <span class="meta-chip">${this.svg('package', {size: 13})} ${sub.total_db_questions} ข้อในคลัง</span>
+                            </div>
 
-                        <div class="subject-actions">
-                            ${isComingSoon ? `
-                                <button class="btn btn-secondary btn-sm" onclick="app.showComingSoonToast('${this.escapeHtml(sub.name_th)}')" style="opacity: 0.8; border-color: rgba(239, 68, 68, 0.4); color: #fca5a5;" title="อยู่ระหว่างจัดทำข้อสอบ">
-                                    ${this.svg('clock', {size: 13})} เร็วๆ นี้
+                            <div class="subject-actions">
+                                ${isComingSoon ? `
+                                    <button class="btn btn-secondary btn-sm" onclick="app.showComingSoonToast('${this.escapeHtml(sub.name_th)}')" style="opacity: 0.8; border-color: rgba(239, 68, 68, 0.4); color: #fca5a5;" title="อยู่ระหว่างจัดทำข้อสอบ">
+                                        ${this.svg('clock', {size: 13})} เร็วๆ นี้
+                                    </button>
+                                ` : `
+                                    <button class="btn btn-primary btn-sm" onclick="app.onFullMockClick('${sub.id}', ${sub.total_db_questions || 0}, ${sub.total_questions || 60})">
+                                        ${this.svg('target', {size: 14})} Full Mock ${sub.total_db_questions > sub.total_questions ? `<span style="font-size: 0.75rem; opacity: 0.9; margin-left: 2px;">(${Math.floor(sub.total_db_questions / sub.total_questions)} ชุด)</span>` : ''}
+                                    </button>
+                                `}
+                                <button class="btn btn-secondary btn-sm" onclick="app.openBlueprintView('${sub.id}')">
+                                    ${this.svg('clipboard', {size: 14})} Blueprint
                                 </button>
-                            ` : `
-                                <button class="btn btn-primary btn-sm" onclick="app.onFullMockClick('${sub.id}', ${sub.total_db_questions || 0}, ${sub.total_questions || 60})">
-                                    ${this.svg('target', {size: 14})} Full Mock ${sub.total_db_questions > sub.total_questions ? `<span style="font-size: 0.75rem; opacity: 0.9; margin-left: 2px;">(${Math.floor(sub.total_db_questions / sub.total_questions)} ชุด)</span>` : ''}
+                                <button class="btn btn-warning btn-sm" onclick="app.openCheatSheetModal('${sub.id}')" title="ดูสรุปสูตร & แนวข้อสอบ">
+                                    ${this.svg('book', {size: 14})} สรุปสูตร
                                 </button>
-                            `}
-                            <button class="btn btn-secondary btn-sm" onclick="app.openBlueprintView('${sub.id}')">
-                                ${this.svg('clipboard', {size: 14})} Blueprint
-                            </button>
-                            <button class="btn btn-warning btn-sm" onclick="app.openCheatSheetModal('${sub.id}')" title="ดูสรุปสูตร & แนวข้อสอบ">
-                                ${this.svg('book', {size: 14})} สรุปสูตร
-                            </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1525,7 +1562,7 @@ const app = {
             return `
                 <div class="session-row">
                     <div>
-                        <div class="session-subj">${sess.subject_name} (${sess.session_type === 'full_mock' ? 'Full Mock' : 'Topic Drill'})</div>
+                        <div class="session-subj">${sess.subject_name} (${sess.session_type === 'full_mock' ? 'Full Mock' : 'Topic Drill'})${sess.is_free_roam ? ` <span class="badge-freeroam-pill">${this.svg('infinity', {size: 11})} Free Roam</span>` : ''}</div>
                         <div style="font-size: 0.8rem; color: var(--text-muted);">${dateStr} • ใช้เวลา ${timeStr}</div>
                     </div>
                     <div style="display: flex; align-items: center; gap: 1rem;">
@@ -1586,12 +1623,15 @@ const app = {
                 return;
             }
 
-            domainsList.innerHTML = sub.blueprints.map(bp => `
+            domainsList.innerHTML = sub.blueprints.map((bp, idx) => `
                 <div class="domain-card">
                     <div class="domain-card-header">
-                        <div>
-                            <div class="domain-name">${bp.domain_name}</div>
-                            <div class="domain-subtopic">${bp.subtopic_name}</div>
+                        <div style="display: flex; align-items: flex-start;">
+                            <span class="editorial-step-num">${String(idx + 1).padStart(2, '0')}</span>
+                            <div>
+                                <div class="domain-name">${bp.domain_name}</div>
+                                <div class="domain-subtopic">${bp.subtopic_name}</div>
+                            </div>
                         </div>
                         <div class="domain-metrics">
                             <span class="meta-chip" style="color: var(--accent-cyan);">เป้าหมาย ทปอ.: ${bp.target_questions} ข้อ</span>
@@ -1603,10 +1643,10 @@ const app = {
 
                     <div class="domain-footer">
                         <span class="domain-q-count">
-                            📚 มีข้อสอบในระบบแล้ว: <strong>${bp.current_question_count} ข้อ</strong>
+                            ${this.svg('book', {size: 14})} มีข้อสอบในระบบแล้ว: <strong>${bp.current_question_count} ข้อ</strong>
                         </span>
                         <button class="btn btn-outline btn-sm" onclick="app.startExam('${sub.id}', 'topic_drill', '${bp.id}')">
-                            🎯 เจาะข้อสอบพาร์ทนี้ (${bp.current_question_count} ข้อ)
+                            ${this.svg('target', {size: 14})} เจาะข้อสอบพาร์ทนี้ (${bp.current_question_count} ข้อ)
                         </button>
                     </div>
                 </div>
@@ -1705,7 +1745,7 @@ const app = {
                             <p style="font-size: 0.85rem; color: #94a3b8; line-height: 1.5; margin: 0 0 1rem 0;">${meta.desc}</p>
                         </div>
                         <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.75rem;">
-                            <span style="font-size: 0.8rem; color: #64748b;">⏱️ ${subject.duration_minutes || 60} นาที • ${subject.total_score || 100} คะแนน</span>
+                            <span class="set-card-time-label" data-duration="${subject.duration_minutes || 60}" data-score="${subject.total_score || 100}" style="font-size: 0.8rem; color: ${this.state.examPlayMode === 'free_roam' ? '#34d399' : '#64748b'};">${this.state.examPlayMode === 'free_roam' ? `${this.svg('infinity', {size: 13})} ไม่จับเวลา • เปิดใช้ AI ได้` : `${this.svg('clock', {size: 13})} ${subject.duration_minutes || 60} นาที • ${subject.total_score || 100} คะแนน`}</span>
                             <button class="btn btn-primary btn-sm" onclick="app.startExamFromSetModal('${subjectId}', ${s.set_number})">
                                 ${this.svg('play', {size: 14})} เริ่มทำชุดนี้
                             </button>
@@ -1730,7 +1770,7 @@ const app = {
                         <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.5; margin: 0 0 1rem 0;">สุ่มข้อสอบ ${subject.total_questions || 60} ข้อจากคลังทั้งหมด ${subject.total_db_questions || 400} ข้อ เพื่อทดสอบความพร้อมรอบด้านโดยไม่จำกัดชุด</p>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.75rem;">
-                        <span style="font-size: 0.8rem; color: #a855f7;">⏱️ ${subject.duration_minutes || 60} นาที • ${subject.total_score || 100} คะแนน</span>
+                        <span class="set-card-time-label" data-duration="${subject.duration_minutes || 60}" data-score="${subject.total_score || 100}" style="font-size: 0.8rem; color: ${this.state.examPlayMode === 'free_roam' ? '#34d399' : '#a855f7'};">${this.state.examPlayMode === 'free_roam' ? `${this.svg('infinity', {size: 13})} ไม่จับเวลา • เปิดใช้ AI ได้` : `${this.svg('clock', {size: 13})} ${subject.duration_minutes || 60} นาที • ${subject.total_score || 100} คะแนน`}</span>
                         <button class="btn btn-secondary btn-sm" style="border-color: #a855f7; color: #e9d5ff;" onclick="app.startExamFromSetModal('${subjectId}', null)">
                             ${this.svg('shuffle', {size: 14})} เริ่มสอบแบบสุ่ม
                         </button>
@@ -1740,8 +1780,59 @@ const app = {
 
             html += `</div>`;
             if (contentEl) contentEl.innerHTML = html;
+            this.syncPlayModeUI();
         } catch (err) {
             if (contentEl) contentEl.innerHTML = `<div style="color: #f87171; text-align: center; padding: 2rem;">เกิดข้อผิดพลาดในการโหลดชุดข้อสอบ: ${err.message}</div>`;
+        }
+    },
+
+    setExamPlayMode(mode) {
+        this.playSfx('select');
+        this.state.examPlayMode = (mode === 'free_roam') ? 'free_roam' : 'timed';
+        localStorage.setItem('tcas_exam_play_mode', this.state.examPlayMode);
+        this.syncPlayModeUI();
+        this.showToast(
+            this.state.examPlayMode === 'free_roam'
+                ? 'เปิดโหมด Free Roam: ไม่จับเวลา และเปิดใช้ AI ระหว่างทำข้อสอบได้'
+                : 'สลับเป็นโหมดสอบจริง: จับเวลาถอยหลังตามเกณฑ์ ทปอ.',
+            'info'
+        );
+    },
+
+    syncPlayModeUI() {
+        const mode = this.state.examPlayMode === 'free_roam' ? 'free_roam' : 'timed';
+        const isFreeRoam = mode === 'free_roam';
+
+        document.querySelectorAll('.play-mode-pill, .play-mode-card').forEach(el => {
+            el.classList.toggle('active', el.getAttribute('data-play-mode') === mode);
+        });
+
+        // Update Subject Cards time chip dynamically
+        document.querySelectorAll('.subject-time-chip').forEach(chip => {
+            const mins = chip.getAttribute('data-duration') || '60';
+            chip.innerHTML = isFreeRoam
+                ? `${this.svg('infinity', { size: 13 })} ไม่จับเวลา + AI`
+                : `${this.svg('clock', { size: 13 })} ${mins} นาที`;
+            chip.style.color = isFreeRoam ? '#34d399' : '';
+            chip.style.borderColor = isFreeRoam ? 'rgba(16, 185, 129, 0.35)' : '';
+            chip.style.background = isFreeRoam ? 'rgba(16, 185, 129, 0.1)' : '';
+        });
+
+        // Update Exam Set Modal cards & footer dynamically
+        document.querySelectorAll('.set-card-time-label').forEach(lbl => {
+            const mins = lbl.getAttribute('data-duration') || '60';
+            const score = lbl.getAttribute('data-score') || '100';
+            lbl.innerHTML = isFreeRoam
+                ? `${this.svg('infinity', { size: 13 })} ไม่จับเวลา • เปิดใช้ AI ได้`
+                : `${this.svg('clock', { size: 13 })} ${mins} นาที • ${score} คะแนน`;
+            lbl.style.color = isFreeRoam ? '#34d399' : '#64748b';
+        });
+
+        const setFooterInfo = document.getElementById('set-modal-footer-info');
+        if (setFooterInfo) {
+            setFooterInfo.innerHTML = isFreeRoam
+                ? `<span style="color:#34d399;">${this.svg('infinity', { size: 14 })} โหมด Free Roam: ไม่จำกัดเวลา และเปิดใช้ TCAS Master AI ระหว่างทำข้อสอบได้ทุกข้อ</span>`
+                : `<span>ทุกชุดมี 60 ข้อ จับเวลา 60 นาที คะแนนเต็ม 100 คะแนน</span>`;
         }
     },
 
@@ -1755,12 +1846,14 @@ const app = {
         this.startExam(subjectId, 'full_mock', null, setNumber);
     },
 
-    async startExam(subjectId, sessionType = 'full_mock', filterBlueprintId = null, setNumber = null) {
+    async startExam(subjectId, sessionType = 'full_mock', filterBlueprintId = null, setNumber = null, overridePlayMode = null) {
         try {
+            const isFreeRoam = (overridePlayMode || this.state.examPlayMode) === 'free_roam';
             const bodyPayload = {
                 subject_id: subjectId,
                 session_type: sessionType,
-                filter_blueprint_id: filterBlueprintId
+                filter_blueprint_id: filterBlueprintId,
+                is_free_roam: isFreeRoam
             };
             if (setNumber) bodyPayload.set_number = setNumber;
 
@@ -1787,13 +1880,29 @@ const app = {
             this.state.currentQuestionIndex = 0;
             this.state.userAnswers = {};
             this.state.timeRemainingSeconds = data.data.time_limit_seconds;
+            this.state.examElapsedSeconds = 0;
+
+            const sessionFreeRoam = Boolean(data.data.is_free_roam);
 
             // Setup Header
             document.getElementById('exam-badge').textContent = data.data.subject.code;
             document.getElementById('exam-subject-name').textContent = data.data.subject.name_th;
             const setLabel = setNumber ? ` (ชุดที่ ${setNumber})` : '';
-            document.getElementById('exam-mode-text').textContent = (sessionType === 'full_mock' ? 'Full Mock' : 'Topic Drill') + setLabel;
+            const modeLabelBase = sessionType === 'full_mock'
+                ? 'Full Mock'
+                : (sessionType === 'mistakes_review' ? 'Mistakes Drill' : (sessionType === 'mastered_review' ? 'Mastered Review' : 'Topic Drill'));
+            const examModeEl = document.getElementById('exam-mode-text');
+            if (examModeEl) {
+                examModeEl.textContent = modeLabelBase + setLabel + (sessionFreeRoam ? ' • Free Roam' : '');
+                examModeEl.classList.toggle('freeroam', sessionFreeRoam);
+            }
             document.getElementById('total-count-badge').textContent = data.data.total_questions;
+
+            // Toggle In-Exam AI buttons (Only unlocked in Free Roam mode)
+            const askAiBtn = document.getElementById('btn-exam-ask-ai');
+            const headerAskAiBtn = document.getElementById('btn-header-ask-ai');
+            if (askAiBtn) askAiBtn.style.display = sessionFreeRoam ? 'inline-flex' : 'none';
+            if (headerAskAiBtn) headerAskAiBtn.style.display = sessionFreeRoam ? 'inline-flex' : 'none';
 
             // Switch to exam view
             this.navigate('exam');
@@ -1803,7 +1912,7 @@ const app = {
             this.renderCurrentQuestion();
             this.renderQuestionPalette();
 
-            // Start countdown timer
+            // Start timer (untimed count-up in Free Roam, countdown in Standard)
             this.startTimer();
 
         } catch (err) {
@@ -1817,6 +1926,36 @@ const app = {
 
         const timerEl = document.getElementById('exam-timer');
         const timerWrapper = document.getElementById('exam-timer-wrapper');
+        const timerIcon = document.getElementById('exam-timer-icon');
+        const isFreeRoam = Boolean(this.state.activeSession && this.state.activeSession.is_free_roam);
+
+        if (isFreeRoam) {
+            if (timerWrapper) {
+                timerWrapper.classList.remove('timer-warning');
+                timerWrapper.classList.add('timer-freeroam');
+                timerWrapper.title = 'โหมด Free Roam: ไม่จับเวลา และสามารถเปิดใช้ AI ได้ระหว่างทำข้อสอบ';
+            }
+            if (timerIcon) {
+                timerIcon.innerHTML = '<path d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8-4.585 0-4.585 8 0 8 5.606 0 7.644-8 12.74-8z" />';
+            }
+            if (timerEl) {
+                timerEl.textContent = 'Free Roam • ไม่จับเวลา';
+            }
+
+            // Track elapsed seconds silently in background for session record without showing any ticking clock
+            this.state.timerInterval = setInterval(() => {
+                this.state.examElapsedSeconds++;
+            }, 1000);
+            return;
+        }
+
+        if (timerWrapper) {
+            timerWrapper.classList.remove('timer-freeroam');
+            timerWrapper.title = 'เวลาสอบที่เหลือ';
+        }
+        if (timerIcon) {
+            timerIcon.innerHTML = '<circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />';
+        }
 
         const updateTimer = () => {
             if (this.state.timeRemainingSeconds <= 0) {
@@ -1827,13 +1966,14 @@ const app = {
             }
 
             this.state.timeRemainingSeconds--;
+            this.state.examElapsedSeconds++;
 
             const mins = Math.floor(this.state.timeRemainingSeconds / 60);
             const secs = this.state.timeRemainingSeconds % 60;
             timerEl.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 
-            // Warn when less than 2 minutes
-            if (this.state.timeRemainingSeconds < 120) {
+            // Warn when less than 5 minutes
+            if (this.state.timeRemainingSeconds < 300) {
                 timerWrapper.classList.add('timer-warning');
             } else {
                 timerWrapper.classList.remove('timer-warning');
@@ -1878,12 +2018,12 @@ const app = {
         if (saveAiBtn) {
             if (isSavedForAi) {
                 saveAiBtn.classList.add('saved');
-                if (saveAiText) saveAiText.textContent = '✓ เก็บแล้ว';
-                if (saveAiIcon) saveAiIcon.textContent = '📌';
+                if (saveAiText) saveAiText.textContent = 'เก็บแล้ว';
+                if (saveAiIcon) saveAiIcon.innerHTML = this.svg('check', { size: 14 });
             } else {
                 saveAiBtn.classList.remove('saved');
                 if (saveAiText) saveAiText.textContent = 'เก็บไว้ถาม AI';
-                if (saveAiIcon) saveAiIcon.textContent = '🔖';
+                if (saveAiIcon) saveAiIcon.innerHTML = this.svg('bookmark', { size: 14 });
             }
         }
 
@@ -1906,24 +2046,52 @@ const app = {
             splitWrapper.classList.add('has-stimulus');
             stimulusPane.style.display = 'block';
             stimulusContent.textContent = cleanStimulus;
+            if (this.state.examSplitLeftPct && window.innerWidth > 900) {
+                splitWrapper.style.gridTemplateColumns = `${this.state.examSplitLeftPct}% 10px 1fr`;
+            }
         } else {
             splitWrapper.classList.remove('has-stimulus');
             stimulusPane.style.display = 'none';
+            splitWrapper.style.gridTemplateColumns = '';
         }
 
         // Question text
         document.getElementById('question-text').innerHTML = cleanQuestionText;
 
-        // Options
+        // Options (with Strike-through support)
         const optionsList = document.getElementById('options-list');
         const currentAnswer = this.state.userAnswers[q.id]?.selected_option_id;
+        const struckList = this.state.struckOptions[q.id] || [];
 
-        optionsList.innerHTML = q.options.map((opt, idx) => `
-            <div class="option-card ${currentAnswer === opt.id ? 'selected' : ''}" onclick="app.selectOption('${opt.id}')">
+        optionsList.innerHTML = q.options.map((opt, idx) => {
+            const isSelected = currentAnswer === opt.id;
+            const isStruck = struckList.includes(opt.id);
+            return `
+            <div class="option-card ${isSelected ? 'selected' : ''} ${isStruck ? 'struck' : ''}"
+                onclick="app.selectOption('${opt.id}')"
+                oncontextmenu="app.toggleStrikeOption('${opt.id}', event)">
                 <span class="opt-badge">${opt.label || idx + 1}</span>
                 <span class="opt-text">${opt.content}</span>
-            </div>
-        `).join('');
+                <button type="button" class="opt-strike-btn ${isStruck ? 'active' : ''}"
+                    onclick="app.toggleStrikeOption('${opt.id}', event)"
+                    title="${isStruck ? 'ยกเลิกขีดฆ่าตัวเลือกนี้' : 'ขีดฆ่าตัดตัวเลือกนี้ (หรือคลิกขวา)'}">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                        <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                        <line x1="1" y1="1" x2="23" y2="23"/>
+                    </svg>
+                </button>
+            </div>`;
+        }).join('');
+
+        // Smooth question enter transition
+        const qPane = document.getElementById('question-pane');
+        if (qPane) {
+            qPane.classList.remove('q-pane-enter');
+            void qPane.offsetWidth;
+            qPane.classList.add('q-pane-enter');
+        }
+        this.updateExamProgressBar();
 
         // Navigation button states
         document.getElementById('btn-prev-q').disabled = this.state.currentQuestionIndex === 0;
@@ -1940,7 +2108,12 @@ const app = {
         // Update palette drawer states
         this.updatePaletteActiveStates();
 
-        // Start live question stopwatch
+        const qTracker = document.getElementById('q-time-tracker');
+        if (qTracker) {
+            qTracker.style.display = session.is_free_roam ? 'none' : '';
+        }
+
+        // Start live question stopwatch (silent in Free Roam)
         this.startQuestionStopwatch();
     },
 
@@ -1962,12 +2135,72 @@ const app = {
             this.state.userAnswers[q.id].selected_option_id = optionId;
         }
 
-        // Update answered count badge
+        // Update answered count badge & progress bar
         const answeredCount = Object.values(this.state.userAnswers).filter(a => !!a.selected_option_id).length;
         document.getElementById('answered-count-badge').textContent = answeredCount;
+        this.updateExamProgressBar();
 
         // Refresh UI
         this.renderCurrentQuestion();
+    },
+
+    toggleStrikeOption(optionId, event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        const session = this.state.activeSession;
+        if (!session) return;
+        const q = session.questions[this.state.currentQuestionIndex];
+        if (!q) return;
+
+        const list = this.state.struckOptions[q.id] || [];
+        const idx = list.indexOf(optionId);
+        if (idx >= 0) {
+            list.splice(idx, 1);
+        } else {
+            list.push(optionId);
+        }
+        this.state.struckOptions[q.id] = list;
+        this.playSfx('select');
+        this.renderCurrentQuestion();
+    },
+
+    updateExamProgressBar() {
+        const fill = document.getElementById('exam-progress-fill');
+        const session = this.state.activeSession;
+        if (!fill || !session || !session.questions || !session.questions.length) return;
+        const answeredCount = Object.values(this.state.userAnswers).filter(a => !!a.selected_option_id).length;
+        const pct = Math.min(100, Math.round((answeredCount / session.questions.length) * 100));
+        fill.style.width = `${pct}%`;
+    },
+
+    initExamSplitResizer() {
+        const resizer = document.getElementById('exam-split-resizer');
+        const wrapper = document.getElementById('exam-split-wrapper');
+        if (!resizer || !wrapper) return;
+
+        let isDragging = false;
+        const onMove = (clientX) => {
+            if (!isDragging || window.innerWidth <= 900) return;
+            const rect = wrapper.getBoundingClientRect();
+            if (!rect.width) return;
+            const pct = Math.max(26, Math.min(68, ((clientX - rect.left) / rect.width) * 100));
+            this.state.examSplitLeftPct = Number(pct.toFixed(1));
+            wrapper.style.gridTemplateColumns = `${this.state.examSplitLeftPct}% 10px 1fr`;
+        };
+
+        resizer.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            isDragging = true;
+            document.body.classList.add('exam-resizing');
+        });
+        window.addEventListener('mousemove', (e) => onMove(e.clientX));
+        window.addEventListener('mouseup', () => {
+            if (!isDragging) return;
+            isDragging = false;
+            document.body.classList.remove('exam-resizing');
+        });
     },
 
     toggleFlagCurrentQuestion() {
@@ -2344,7 +2577,9 @@ const app = {
             };
         });
 
-        const totalTimeSpent = session.time_limit_seconds - this.state.timeRemainingSeconds;
+        const totalTimeSpent = session.is_free_roam
+            ? this.state.examElapsedSeconds
+            : (session.time_limit_seconds - this.state.timeRemainingSeconds);
 
         try {
             const res = await fetch(`/api/sessions/${session.session_id}/submit`, {
@@ -2392,10 +2627,16 @@ const app = {
         }
         if (subBadgeEl) {
             const st = result.session_type || (session && session.session_type);
-            if (st === 'full_mock') subBadgeEl.textContent = '🎯 จำลองสอบจริง (Full Mock)';
-            else if (st === 'mistakes_review' || st === 'mistake_drill') subBadgeEl.textContent = '⚠️ ฝึกซ้ำสมุดจุดอ่อน (Mistakes Drill)';
-            else if (st === 'mastered_review') subBadgeEl.textContent = '🏆 ทบทวนข้อสอบที่พิชิตแล้ว (Mastered Review)';
-            else subBadgeEl.textContent = '⚡ แบบฝึกหัดเจาะลึก Blueprint';
+            const isFreeRoamRes = Boolean(result.is_free_roam || (session && session.is_free_roam));
+            let baseBadge = '';
+            if (st === 'full_mock') baseBadge = `${this.svg('target', {size: 14})} จำลองสอบจริง (Full Mock)`;
+            else if (st === 'mistakes_review' || st === 'mistake_drill') baseBadge = `${this.svg('alert-triangle', {size: 14})} ฝึกซ้ำสมุดจุดอ่อน (Mistakes Drill)`;
+            else if (st === 'mastered_review') baseBadge = `${this.svg('award', {size: 14})} ทบทวนข้อสอบที่พิชิตแล้ว (Mastered Review)`;
+            else baseBadge = `${this.svg('zap', {size: 14})} แบบฝึกหัดเจาะลึก Blueprint`;
+
+            subBadgeEl.innerHTML = isFreeRoamRes
+                ? `${baseBadge} <span class="badge-freeroam-pill">${this.svg('infinity', {size: 12})} Free Roam</span>`
+                : baseBadge;
         }
 
         // Hero Score & Badge
@@ -2811,368 +3052,7 @@ const app = {
         }
     },
 
-    // ==========================================
-    // 5. MISTAKE NOTEBOOK
-    // ==========================================
-
-    async loadMistakes() {
-        try {
-            const res = await fetch('/api/mistakes');
-            const data = await res.json();
-            if (data.success) {
-                this.state.allMistakes = data.data;
-                document.getElementById('sidebar-mistakes-count').textContent = data.data.filter(m => m.mastery_status !== 'mastered').length;
-                this.renderMistakesList();
-            }
-        } catch (err) {
-            console.error('Failed to load mistakes', err);
-        }
-    },
-
-    filterMistakes(status) {
-        this.state.currentMistakeFilter = status;
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            if (btn.dataset.status === status) btn.classList.add('active');
-            else btn.classList.remove('active');
-        });
-        this.renderMistakesList();
-    },
-
-    renderMistakesList() {
-        const container = document.getElementById('mistakes-list');
-        const filter = this.state.currentMistakeFilter;
-        const list = filter === 'all'
-            ? this.state.allMistakes
-            : this.state.allMistakes.filter(m => m.mastery_status === filter);
-
-        if (list.length === 0) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    🎉 เยี่ยมมาก! ไม่มีข้อสอบที่ต้องทบทวนในหมวดนี้
-                </div>
-            `;
-            return;
-        }
-
-        container.innerHTML = list.map(m => `
-            <div class="mistake-card glass-panel" id="mistake-card-${m.question_id}">
-                <div class="mistake-top">
-                    <div class="mistake-tags">
-                        <span class="subject-cat-badge cat-tgat">${m.subject_name}</span>
-                        <span class="q-domain-pill">${m.subtopic_name || m.domain_name}</span>
-                        <span class="meta-chip" style="color: var(--accent-rose);">ผิดไปแล้ว ${m.times_wrong} ครั้ง</span>
-                    </div>
-
-                    <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
-                        <button class="btn btn-outline btn-sm" onclick="app.toggleSaveQuestionById('${m.question_id}', '')" title="บันทึกข้อนี้ไว้ในคลังถาม AI">
-                            🔖 เก็บไว้ถาม AI
-                        </button>
-                        <button class="btn-ai-tutor" onclick="app.openAiTutor('${m.question_id}', '')" title="ปรึกษา TCAS Master AI เกี่ยวกับข้อที่เคยทำผิด">
-                            <span>🤖</span> คุยกับ AI ข้อนี้
-                        </button>
-                        <select class="mistake-status-select" onchange="app.updateMistakeStatus('${m.question_id}', this.value)">
-                            <option value="need_review" ${m.mastery_status === 'need_review' ? 'selected' : ''}>⚠️ ต้องทบทวนด่วน</option>
-                            <option value="reviewing" ${m.mastery_status === 'reviewing' ? 'selected' : ''}>🔄 กำลังฝึกฝน</option>
-                            <option value="mastered" ${m.mastery_status === 'mastered' ? 'selected' : ''}>✅ แม่นยำแล้ว</option>
-                        </select>
-                        <button class="btn btn-outline btn-sm" onclick="app.removeMistake('${m.question_id}')" title="ลบออกจากสมุดจุดอ่อน">🗑️</button>
-                    </div>
-                </div>
-
-                ${m.stimulus ? `<div class="stimulus-pane" style="max-height: 180px;"><div class="stimulus-body">${m.stimulus}</div></div>` : ''}
-
-                <div class="sol-q-text">${m.question_text}</div>
-
-                <div class="sol-answer-compare">
-                    <div class="compare-line">
-                        <span class="compare-label" style="color: var(--accent-emerald);">คำตอบที่ถูกต้อง:</span>
-                        <span>${m.correct_label ? `${m.correct_label}. ${m.correct_content}` : ''}</span>
-                    </div>
-                </div>
-
-                <div class="explanation-box">
-                    <div class="explanation-title">💡 เฉลยละเอียด:</div>
-                    <div class="explanation-body">${m.explanation}</div>
-                </div>
-
-                ${m.trap_analysis ? `
-                    <div class="trap-box">
-                        <span>⚠️</span>
-                        <div><strong>ข้อนี้ชอบหลอกตรงไหน:</strong> ${m.trap_analysis}</div>
-                    </div>
-                ` : ''}
-
-                <div>
-                    <label class="form-label" style="font-size: 0.8rem; color: var(--text-muted);">📝 โน้ตเตือนใจส่วนตัว (พิมพ์สูตรลัดหรือจุดที่เคยลืม):</label>
-                    <textarea class="mistake-note-input" rows="2" placeholder="เช่น จำสับสนระหว่างคำว่า reluctant กับ eager, ข้อนี้อย่าลืมกลับเครื่องหมายอสมการ..."
-                        onblur="app.saveMistakeNote('${m.question_id}', this.value)">${m.user_note || ''}</textarea>
-                </div>
-            </div>
-        `).join('');
-
-        this.renderMath();
-    },
-
-    async updateMistakeStatus(questionId, status) {
-        try {
-            await fetch(`/api/mistakes/${questionId}`, {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mastery_status: status })
-            });
-            this.showToast('อัปเดตสถานะสำเร็จ', 'success');
-            await this.loadMistakes();
-        } catch (err) {
-            console.error('Failed to update status', err);
-        }
-    },
-
-    async saveMistakeNote(questionId, note) {
-        try {
-            await fetch(`/api/mistakes/${questionId}`, {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user_note: note })
-            });
-            this.showToast('บันทึกโน้ตสำเร็จ', 'success');
-        } catch (err) {
-            console.error('Failed to save note', err);
-        }
-    },
-
-    async removeMistake(questionId) {
-        if (!confirm('ต้องการลบข้อสอบนี้ออกจากสมุดจุดอ่อนหรือไม่?')) return;
-        try {
-            await fetch(`/api/mistakes/${questionId}`, { method: 'DELETE' });
-            this.showToast('ลบออกจากสมุดจุดอ่อนแล้ว', 'info');
-            await this.loadMistakes();
-        } catch (err) {
-            console.error('Failed to delete mistake', err);
-        }
-    },
-
-    async confirmClearAllMistakes() {
-        if (!this.state.allMistakes || this.state.allMistakes.length === 0) {
-            this.showToast('ไม่มีข้อสอบในสมุดจุดอ่อนให้ลบ', 'info');
-            return;
-        }
-        if (!confirm('คุณแน่ใจหรือไม่ว่าต้องการลบข้อสอบในสมุดจุดอ่อน "ทั้งหมด"? ข้อมูลข้อสอบที่เคยบันทึกไว้จะถูกรีเซ็ตและไม่สามารถย้อนกลับได้')) {
-            return;
-        }
-        try {
-            const res = await fetch('/api/mistakes', { method: 'DELETE' });
-            const data = await res.json();
-            if (data.success) {
-                this.state.allMistakes = [];
-                const badge = document.getElementById('sidebar-mistakes-count');
-                if (badge) badge.textContent = '0';
-                this.renderMistakesList();
-                this.showToast('ลบข้อสอบในสมุดจุดอ่อนทั้งหมดเรียบร้อยแล้ว', 'success');
-            } else {
-                throw new Error(data.error);
-            }
-        } catch (err) {
-            console.error('Failed to clear all mistakes', err);
-            this.showToast('เกิดข้อผิดพลาดในการลบ: ' + err.message, 'error');
-        }
-    },
-
-    practiceMistakes() {
-        if (this.state.allMistakes.length === 0) {
-            this.showToast('ไม่มีข้อสอบในสมุดจุดอ่อนให้ฝึกทำ', 'info');
-            return;
-        }
-        this.startExam('all', 'mistakes_review');
-    },
-
-    // ==========================================
-    // 5.1 MASTERED / COMPLETED QUESTIONS CONTROLLER
-    // ==========================================
-
-    async loadMastered(subjectId = 'all') {
-        try {
-            this.state.currentMasteredSubject = subjectId;
-            let url = '/api/questions/mastered';
-            if (subjectId && subjectId !== 'all') {
-                url += `?subject_id=${subjectId}`;
-            }
-
-            const res = await fetch(url);
-            const data = await res.json();
-            if (!data.success) throw new Error(data.error);
-
-            this.state.allMastered = data.data.questions || [];
-            const stats = data.data.subject_stats || [];
-
-            // Update sidebar badge
-            const sideMasteredBadge = document.getElementById('sidebar-mastered-count');
-            if (sideMasteredBadge) sideMasteredBadge.textContent = data.data.total_mastered || 0;
-
-            this.renderMasteredFilters(stats, subjectId);
-            this.renderMasteredQuestions();
-        } catch (err) {
-            console.error('Failed to load mastered questions:', err);
-        }
-    },
-
-    renderMasteredFilters(stats, activeSubId) {
-        const container = document.getElementById('mastered-subject-pills');
-        if (!container) return;
-
-        const totalAll = stats.reduce((acc, s) => acc + (s.mastered_count || 0), 0);
-        let html = `
-            <button class="filter-pill ${activeSubId === 'all' ? 'active' : ''}" onclick="app.loadMastered('all')">
-                ทั้งหมด (${totalAll})
-            </button>
-        `;
-
-        stats.forEach(s => {
-            const count = s.mastered_count || 0;
-            html += `
-                <button class="filter-pill ${activeSubId === s.subject_id ? 'active' : ''}" onclick="app.loadMastered('${s.subject_id}')">
-                    ${s.code} ${this.escapeHtml(s.name_th)} (${count}/${s.catalog_total})
-                </button>
-            `;
-        });
-
-        container.innerHTML = html;
-    },
-
-    renderMasteredQuestions() {
-        const container = document.getElementById('mastered-list');
-        if (!container) return;
-
-        const list = this.state.allMastered;
-        if (!list || list.length === 0) {
-            container.innerHTML = `
-                <div class="empty-state glass-panel" style="text-align: center; padding: 3.5rem 2rem;">
-                    <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">🏆</span>
-                    <h3 style="color: #fff; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">ยังไม่มีข้อสอบในคลังที่พิชิตแล้ว</h3>
-                    <p style="color: var(--text-muted); max-width: 480px; margin: 0 auto 1.5rem;">
-                        เมื่อคุณทำข้อสอบในโหมดจำลองสอบจริงและตอบถูก ข้อสอบจะถูกคัดออกจากคลังหลักและบันทึกมาไว้ที่นี่อัตโนมัติ!
-                    </p>
-                    <button class="btn btn-primary" onclick="app.navigate('dashboard')">
-                        ⚡ เริ่มทำข้อสอบเพื่อเก็บแต้ม
-                    </button>
-                </div>
-            `;
-            return;
-        }
-
-        container.innerHTML = list.map((q, idx) => {
-            const passedDate = q.last_passed_at ? new Date(q.last_passed_at).toLocaleDateString('th-TH') : '';
-            return `
-                <div class="mastered-card glass-panel" id="mastered-card-${q.id}">
-                    <div class="mastered-card-header">
-                        <div class="mastered-meta-tags">
-                            <span class="subject-pill">${q.subject_code || q.subject_id}</span>
-                            <span class="domain-pill">${this.escapeHtml(q.subtopic_name || q.domain_name || 'ทั่วไป')}</span>
-                            <span class="passed-badge">✓ ตอบถูกแล้ว ${q.times_correct} ครั้ง</span>
-                            ${passedDate ? `<span class="date-pill">ล่าสุด: ${passedDate}</span>` : ''}
-                        </div>
-                        <div class="mastered-card-actions">
-                            <button class="btn btn-outline-danger btn-sm" onclick="app.removeMasteredQuestion('${q.id}')" title="ย้ายข้อนี้กลับเข้าสู่คลังข้อสอบหลักเพื่อฝึกซ้ำ">
-                                🔄 ย้ายกลับเข้าคลังหลัก
-                            </button>
-                        </div>
-                    </div>
-
-                    ${q.stimulus ? `<div class="question-stimulus">${this.escapeHtml(q.stimulus)}</div>` : ''}
-                    <div class="question-text" style="font-size: 1.05rem; font-weight: 600; color: #fff; margin: 0.75rem 0;">
-                        ${this.escapeHtml(q.question_text)}
-                    </div>
-
-                    <div class="mastered-options-preview">
-                        ${q.options.map(opt => `
-                            <div class="mastered-opt-row ${opt.is_correct ? 'is-correct' : ''}">
-                                <span class="opt-label">${opt.label}</span>
-                                <span class="opt-content">${this.escapeHtml(opt.content)}</span>
-                                ${opt.is_correct ? '<span class="correct-tag">✓ คำตอบที่ถูกต้อง</span>' : ''}
-                            </div>
-                        `).join('')}
-                    </div>
-
-                    ${q.explanation ? `
-                        <div class="explanation-box" style="margin-top: 1rem;">
-                            <span class="exp-title">💡 เฉลยละเอียด & คำอธิบาย:</span>
-                            <p style="margin: 0.25rem 0 0; color: #e2e8f0; font-size: 0.9rem;">${this.escapeHtml(q.explanation)}</p>
-                        </div>
-                    ` : ''}
-                </div>
-            `;
-        }).join('');
-    },
-
-    async removeMasteredQuestion(questionId) {
-        try {
-            const res = await fetch(`/api/questions/mastered/${questionId}`, { method: 'DELETE' });
-            const data = await res.json();
-            if (data.success) {
-                this.showToast('ย้ายข้อสอบกลับเข้าสู่คลังหลักเรียบร้อย', 'success');
-                await this.loadMastered(this.state.currentMasteredSubject);
-                await this.loadSubjects();
-            } else {
-                this.showToast(data.error || 'เกิดข้อผิดพลาด', 'error');
-            }
-        } catch (err) {
-            this.showToast('เกิดข้อผิดพลาด: ' + err.message, 'error');
-        }
-    },
-
-    async confirmResetMastered() {
-        const sub = this.state.currentMasteredSubject;
-        const msg = sub === 'all'
-            ? 'คุณแน่ใจหรือไม่ว่าต้องการรีเซ็ตข้อสอบที่ผ่านแล้วทั้งหมดกลับเข้าสู่คลังข้อสอบหลัก?'
-            : `คุณแน่ใจหรือไม่ว่าต้องการรีเซ็ตข้อสอบวิชานี้กลับเข้าสู่คลังข้อสอบหลัก?`;
-
-        if (!confirm(msg)) return;
-
-        try {
-            const res = await fetch('/api/questions/mastered/reset', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ subject_id: sub })
-            });
-            const data = await res.json();
-            if (data.success) {
-                this.showToast(data.message || 'รีเซ็ตข้อสอบกลับสู่คลังหลักเรียบร้อย', 'success');
-                await this.loadMastered(sub);
-                await this.loadSubjects();
-                await this.loadDashboard();
-            }
-        } catch (err) {
-            this.showToast('เกิดข้อผิดพลาด: ' + err.message, 'error');
-        }
-    },
-
-    async startMasteredReview() {
-        try {
-            const sub = this.state.currentMasteredSubject || 'all';
-            const res = await fetch('/api/sessions/start', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    session_type: 'mastered_review',
-                    subject_id: sub === 'all' ? 'tgat1' : sub,
-                    question_limit: 20
-                })
-            });
-            const data = await res.json();
-            if (data.success) {
-                this.state.activeSession = data.data;
-                this.state.currentQuestionIndex = 0;
-                this.state.userAnswers = {};
-                this.state.timeRemainingSeconds = data.data.time_limit_seconds;
-                this.navigate('exam');
-                this.renderExamInterface();
-                this.startExamTimer();
-            } else {
-                this.showToast(data.error || 'ไม่สามารถเริ่มการทบทวนได้', 'warning');
-            }
-        } catch (err) {
-            this.showToast('ไม่สามารถเริ่มการทบทวนได้: ' + err.message, 'error');
-        }
-    },
+    // [Mistakes & Mastered moved to public/js/modules/vocab-mistakes.js]
 
     // ==========================================
     // 6. QUICK START MODAL & CUSTOM QUESTIONS
@@ -3337,538 +3217,7 @@ const app = {
         });
     },
 
-    // ==========================================
-    // 8. TEXT SELECTION, HIGHLIGHTER & TRANSLATE
-    // ==========================================
-
-    setupTextSelectionListener() {
-        const handleSelection = () => {
-            const bubble = document.getElementById('selection-action-bubble');
-            if (!bubble) return;
-
-            // 1. Only allow highlighter / vocab lookup in exam-related and study views
-            const allowedViews = ['exam', 'results', 'mistakes', 'vocab'];
-            if (!allowedViews.includes(this.state.currentView)) {
-                bubble.style.display = 'none';
-                return;
-            }
-
-            const selection = window.getSelection();
-            const text = selection ? selection.toString().trim() : '';
-
-            if (!text || text.length === 0 || text.length > 300) {
-                bubble.style.display = 'none';
-                return;
-            }
-
-            const anchorNode = selection.anchorNode;
-            if (!anchorNode) {
-                bubble.style.display = 'none';
-                return;
-            }
-            const parentElem = anchorNode.nodeType === 3 ? anchorNode.parentElement : anchorNode;
-
-            // 2. Avoid triggering anywhere inside non-content UI, form controls, scratchpad, modals, headers, or SVG
-            if (parentElem.closest('input, textarea, button, select, svg, .radar-svg, .rpg-panel, .rpg-hero-card, .rpg-power-card, .scratchpad-overlay, #selection-action-bubble, .modal-overlay, .topbar, .sidebar, .badge, .meta-chip, .user-chip')) {
-                bubble.style.display = 'none';
-                return;
-            }
-
-            // 3. Strict container check - text must be within an exam passage, question, solution explanation, mistake, or vocab card
-            const allowedContainer = parentElem.closest(
-                '.exam-passage-pane, .exam-question-pane, #exam-passage-container, #exam-question-container, ' +
-                '.solution-card, .mistake-card, .vocab-card, .flashcard-box, .sol-q-text, .sol-explanation, .sol-trap, .stimulus-pane'
-            );
-            if (!allowedContainer) {
-                bubble.style.display = 'none';
-                return;
-            }
-
-            this.state.selectedText = text;
-            try {
-                this.state.selectedRange = selection.getRangeAt(0).cloneRange();
-                const rect = selection.getRangeAt(0).getBoundingClientRect();
-                if (rect.width === 0 && rect.height === 0) {
-                    bubble.style.display = 'none';
-                    return;
-                }
-
-                // If Highlight Mode is explicitly turned on, immediately apply highlight to selection!
-                if (this.state.highlightMode) {
-                    this.highlightSelection('yellow');
-                    return;
-                }
-
-                // Extract sentence context for vocab lookup
-                const fullText = parentElem.innerText || parentElem.textContent || '';
-                this.state.selectedContext = this.extractContextSentence(fullText, text);
-
-                // Smart vertical positioning:
-                const bubbleHeight = 46;
-                const bubbleWidth = bubble.offsetWidth || 300;
-                let topPos;
-                if (rect.top - bubbleHeight - 14 < 80) {
-                    topPos = rect.bottom + 10;
-                } else {
-                    topPos = rect.top - bubbleHeight - 10;
-                }
-
-                const centerX = rect.left + rect.width / 2;
-                const minLeft = bubbleWidth / 2 + 16;
-                const maxLeft = window.innerWidth - bubbleWidth / 2 - 16;
-                const leftPos = Math.max(minLeft, Math.min(maxLeft, centerX));
-
-                bubble.style.position = 'fixed';
-                bubble.style.left = `${leftPos}px`;
-                bubble.style.top = `${topPos}px`;
-                bubble.style.transform = 'translateX(-50%)';
-                bubble.style.display = 'flex';
-            } catch (err) {
-                console.error('Selection rect error:', err);
-                bubble.style.display = 'none';
-            }
-        };
-
-        document.addEventListener('mouseup', (e) => {
-            if (e.target.closest('#selection-action-bubble') || e.target.closest('#vocab-lookup-modal')) return;
-            setTimeout(handleSelection, 20);
-        });
-
-        document.addEventListener('keyup', (e) => {
-            if (['Shift', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
-                handleSelection();
-            } else if (e.key === 'Escape') {
-                const bubble = document.getElementById('selection-action-bubble');
-                if (bubble) bubble.style.display = 'none';
-            }
-        });
-
-        // Auto-dismiss bubble whenever selection is cleared or collapsed
-        document.addEventListener('selectionchange', () => {
-            const sel = window.getSelection();
-            if (!sel || sel.isCollapsed || sel.rangeCount === 0 || !sel.toString().trim()) {
-                const bubble = document.getElementById('selection-action-bubble');
-                if (bubble && bubble.style.display !== 'none') {
-                    bubble.style.display = 'none';
-                }
-            }
-        });
-
-        // Hide bubble when clicking outside
-        document.addEventListener('mousedown', (e) => {
-            const bubble = document.getElementById('selection-action-bubble');
-            if (bubble && !e.target.closest('#selection-action-bubble') && !e.target.closest('#vocab-lookup-modal')) {
-                bubble.style.display = 'none';
-            }
-        });
-
-        window.addEventListener('scroll', () => {
-            const bubble = document.getElementById('selection-action-bubble');
-            if (bubble && bubble.style.display !== 'none') {
-                bubble.style.display = 'none';
-            }
-        }, { passive: true, capture: true });
-    },
-
-    extractContextSentence(fullText, phrase) {
-        if (!fullText || !phrase) return '';
-        const idx = fullText.toLowerCase().indexOf(phrase.toLowerCase());
-        if (idx === -1) return phrase;
-
-        let start = idx;
-        while (start > 0 && !['.', '!', '?', '\n'].includes(fullText[start - 1])) {
-            start--;
-        }
-
-        let end = idx + phrase.length;
-        while (end < fullText.length && !['.', '!', '?', '\n'].includes(fullText[end])) {
-            end++;
-        }
-        if (end < fullText.length && ['.', '!', '?'].includes(fullText[end])) end++;
-
-        return fullText.substring(start, end).trim();
-    },
-
-    toggleHighlightMode() {
-        this.state.highlightMode = !this.state.highlightMode;
-        const btn = document.getElementById('btn-toggle-highlighter');
-        const label = document.getElementById('hl-mode-label');
-        if (this.state.highlightMode) {
-            if (btn) btn.classList.add('btn-hl-active');
-            if (label) label.textContent = '🖍️ โหมดไฮไลต์ (เปิด)';
-            this.showToast('โหมดไฮไลต์เปิด: ลากคลุมข้อความที่ต้องการเน้น', 'info');
-        } else {
-            if (btn) btn.classList.remove('btn-hl-active');
-            if (label) label.textContent = '🖍️ โหมดไฮไลต์';
-            this.showToast('ปิดโหมดไฮไลต์แล้ว', 'info');
-        }
-    },
-
-    highlightSelection(color = 'yellow') {
-        const selection = window.getSelection();
-        const range = this.state.selectedRange || (selection && selection.rangeCount > 0 ? selection.getRangeAt(0) : null);
-        if (!range || range.collapsed) return;
-
-        const mark = document.createElement('mark');
-        mark.className = `exam-hl-${color}`;
-        mark.title = 'แตะเพื่อลบไฮไลต์';
-        mark.onclick = (e) => {
-            e.stopPropagation();
-            const parent = mark.parentNode;
-            while (mark.firstChild) parent.insertBefore(mark.firstChild, mark);
-            parent.removeChild(mark);
-            app.showToast('ลบไฮไลต์แล้ว', 'info');
-        };
-
-        try {
-            range.surroundContents(mark);
-        } catch (err) {
-            try {
-                const fragment = range.extractContents();
-                mark.appendChild(fragment);
-                range.insertNode(mark);
-            } catch (err2) {
-                console.error('Highlight failed:', err2);
-                document.execCommand('hiliteColor', false, color === 'yellow' ? '#facc15' : color === 'emerald' ? '#10b981' : '#f43f5e');
-            }
-        }
-
-        if (window.getSelection()) {
-            window.getSelection().removeAllRanges();
-        }
-
-        const bubble = document.getElementById('selection-action-bubble');
-        if (bubble) bubble.style.display = 'none';
-        this.showToast('ไฮไลต์ข้อความเรียบร้อย! (แตะที่สีเพื่อลบ)', 'success');
-    },
-
-    removeSelectionHighlight() {
-        const selection = window.getSelection();
-        if (selection && selection.anchorNode) {
-            const elem = selection.anchorNode.nodeType === 3 ? selection.anchorNode.parentElement : selection.anchorNode;
-            const mark = elem.closest('mark');
-            if (mark) {
-                const parent = mark.parentNode;
-                while (mark.firstChild) parent.insertBefore(mark.firstChild, mark);
-                parent.removeChild(mark);
-                this.showToast('ลบไฮไลต์แล้ว', 'info');
-            }
-        }
-        const bubble = document.getElementById('selection-action-bubble');
-        if (bubble) bubble.style.display = 'none';
-    },
-
-    async translateSelectedText() {
-        const rawWord = this.state.selectedText;
-        if (!rawWord) return;
-
-        // Clean punctuation from word
-        const cleanWord = rawWord.trim().replace(/^['"“‘(\[]+|[.,!?;:)'"”’\]]+$/g, '');
-        if (!cleanWord) return;
-
-        const bubble = document.getElementById('selection-action-bubble');
-        if (bubble) bubble.style.display = 'none';
-
-        try {
-            this.showToast(`กำลังแปลคำว่า "${cleanWord}"...`, 'info');
-            const res = await fetch(`/api/vocab/translate?word=${encodeURIComponent(cleanWord)}`);
-            const result = await res.json();
-            if (result.success) {
-                const data = result.data;
-                document.getElementById('vocab-modal-word').textContent = data.word;
-                document.getElementById('vocab-modal-phonetic').textContent = data.phonetic || '';
-                document.getElementById('vocab-modal-pos').textContent = data.pos || '';
-                document.getElementById('vocab-modal-def').value = data.definition_th || '';
-                document.getElementById('vocab-modal-context').value = this.state.selectedContext || '';
-
-                document.getElementById('vocab-lookup-modal').classList.add('open');
-            }
-        } catch (err) {
-            console.error('Translation failed', err);
-            this.showToast('ไม่สามารถแปลคำศัพท์ได้', 'error');
-        }
-    },
-
-    speakWord(customWord) {
-        const word = customWord || document.getElementById('vocab-modal-word').textContent.trim();
-        if (!word) return;
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            const utter = new SpeechSynthesisUtterance(word);
-            utter.lang = 'en-US';
-            utter.rate = 0.9;
-            window.speechSynthesis.speak(utter);
-        } else {
-            this.showToast('เบราว์เซอร์ไม่รองรับระบบออกเสียง', 'info');
-        }
-    },
-
-    closeVocabModal() {
-        document.getElementById('vocab-lookup-modal').classList.remove('open');
-    },
-
-    async saveCurrentVocab() {
-        const word = document.getElementById('vocab-modal-word').textContent.trim();
-        const phonetic = document.getElementById('vocab-modal-phonetic').textContent.trim();
-        const pos = document.getElementById('vocab-modal-pos').textContent.trim();
-        const def = document.getElementById('vocab-modal-def').value.trim();
-        const context = document.getElementById('vocab-modal-context').value.trim();
-
-        const currentQ = this.state.activeSession?.questions[this.state.currentQuestionIndex];
-
-        try {
-            const res = await fetch('/api/vocab', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    word,
-                    phonetic,
-                    part_of_speech: pos,
-                    definition_th: def,
-                    context_sentence: context,
-                    source_question_id: currentQ ? currentQ.id : null
-                })
-            });
-
-            const data = await res.json();
-            if (data.success) {
-                this.showToast(`บันทึกคำว่า "${word}" เข้าคลังคำศัพท์แล้ว!`, 'success');
-                this.closeVocabModal();
-                await this.loadVocab();
-            } else {
-                this.showToast(data.error || 'ไม่สามารถบันทึกได้', 'error');
-            }
-        } catch (err) {
-            console.error('Failed to save vocab', err);
-            this.showToast('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์', 'error');
-        }
-    },
-
-    // ==========================================
-    // 9. VOCABULARY BANK VIEW & FLASHCARDS
-    // ==========================================
-
-    async loadVocab() {
-        try {
-            const res = await fetch('/api/vocab');
-            const data = await res.json();
-            if (data.success) {
-                this.state.allVocab = data.data;
-                const activeCount = data.data.filter(v => v.mastery_status !== 'mastered').length;
-                const badge = document.getElementById('sidebar-vocab-count');
-                if (badge) badge.textContent = activeCount;
-                this.renderVocabList();
-            }
-        } catch (err) {
-            console.error('Failed to load vocab', err);
-        }
-    },
-
-    filterVocab(status) {
-        this.state.currentVocabFilter = status;
-        document.querySelectorAll('[data-vstatus]').forEach(btn => {
-            if (btn.dataset.vstatus === status) btn.classList.add('active');
-            else btn.classList.remove('active');
-        });
-        this.renderVocabList();
-    },
-
-    searchVocab(query) {
-        const q = (query || '').toLowerCase().trim();
-        const container = document.getElementById('vocab-list-container');
-        if (!container) return;
-
-        let list = this.state.currentVocabFilter === 'all'
-            ? this.state.allVocab
-            : this.state.allVocab.filter(v => v.mastery_status === this.state.currentVocabFilter);
-
-        if (q) {
-            list = list.filter(v =>
-                v.word.toLowerCase().includes(q) ||
-                v.definition_th.toLowerCase().includes(q) ||
-                (v.context_sentence && v.context_sentence.toLowerCase().includes(q))
-            );
-        }
-
-        this.renderVocabItems(list);
-    },
-
-    renderVocabList() {
-        const filter = this.state.currentVocabFilter;
-        const list = filter === 'all'
-            ? this.state.allVocab
-            : this.state.allVocab.filter(v => v.mastery_status === filter);
-        this.renderVocabItems(list);
-    },
-
-    renderVocabItems(list) {
-        const container = document.getElementById('vocab-list-container');
-        if (!container) return;
-
-        if (list.length === 0) {
-            container.innerHTML = `
-                <div class="empty-state" style="grid-column: 1 / -1; padding: 3rem 1.5rem; text-align: center;">
-                    <div style="display:flex;justify-content:center;margin-bottom: 0.75rem;">${this.svg('book', {size: 36, color: 'var(--accent-indigo)'})}</div>
-                    <div style="font-weight: 700; font-size: 1.1rem; color: #f1f5f9; margin-bottom: 0.5rem;">ยังไม่มีคำศัพท์ในหมวดนี้</div>
-                    <p style="color: var(--text-secondary); max-width: 460px; margin: 0 auto; font-size: 0.9rem;">
-                        ขณะฝึกทำข้อสอบภาษาอังกฤษ สามารถลากคลุมเฉพาะคำศัพท์ที่ไม่คุ้นเคยเพื่อแปลและบันทึกเข้าคลังคำศัพท์นี้ได้ทันที
-                    </p>
-                </div>
-            `;
-            return;
-        }
-
-        container.innerHTML = list.map(v => {
-            const escapedWord = v.word.replace(/'/g, "\\'");
-            // Highlight target word in context sentence
-            let formattedContext = v.context_sentence || '';
-            if (formattedContext && v.word) {
-                const regex = new RegExp(`\\b(${v.word})\\b`, 'gi');
-                formattedContext = formattedContext.replace(regex, '<mark>$1</mark>');
-            }
-
-            return `
-                <div class="vocab-card" id="vocab-card-${v.id}">
-                    <div class="vocab-card-top">
-                        <div class="vocab-card-word-group">
-                            <div class="vocab-card-word">
-                                <span>${v.word}</span>
-                                <button class="vocab-speak-btn" onclick="app.speakWord('${escapedWord}')" title="ฟังการออกเสียง (Pronounce)">
-                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
-                                </button>
-                            </div>
-                            <div class="vocab-card-meta">
-                                ${v.phonetic ? `<span class="vocab-card-phonetic">${v.phonetic}</span>` : ''}
-                                ${v.part_of_speech ? `<span class="vocab-card-pos">${v.part_of_speech}</span>` : ''}
-                            </div>
-                        </div>
-
-                        <select class="vocab-status-select" onchange="app.updateVocabStatus('${v.id}', this.value)">
-                            <option value="learning" ${v.mastery_status === 'learning' ? 'selected' : ''}>📖 กำลังจำ</option>
-                            <option value="reviewing" ${v.mastery_status === 'reviewing' ? 'selected' : ''}>🔄 ทบทวน</option>
-                            <option value="mastered" ${v.mastery_status === 'mastered' ? 'selected' : ''}>✅ จำแม่นแล้ว</option>
-                        </select>
-                    </div>
-
-                    <div class="vocab-card-def">
-                        <span style="color: #10b981; font-weight: 700; margin-right: 0.35rem;">แปล:</span>${v.definition_th}
-                    </div>
-
-                    ${formattedContext ? `<div class="vocab-card-context">“${formattedContext}”</div>` : ''}
-
-                    <div class="vocab-card-footer">
-                        <span class="vocab-date-badge">
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                            ${new Date(v.created_at).toLocaleDateString('th-TH')}
-                        </span>
-                        <button class="vocab-delete-btn" onclick="app.deleteVocab('${v.id}')" title="ลบคำศัพท์นี้ออกจากคลัง">
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                            ลบ
-                        </button>
-                    </div>
-                </div>
-            `;
-        }).join('');
-    },
-
-    async updateVocabStatus(id, status) {
-        try {
-            await fetch(`/api/vocab/${id}`, {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mastery_status: status })
-            });
-            this.showToast('อัปเดตสถานะคำศัพท์สำเร็จ', 'success');
-            await this.loadVocab();
-        } catch (err) {
-            console.error('Failed to update vocab', err);
-        }
-    },
-
-    async deleteVocab(id) {
-        if (!confirm('ต้องการลบคำศัพท์นี้ออกจากคลังหรือไม่?')) return;
-        try {
-            await fetch(`/api/vocab/${id}`, { method: 'DELETE' });
-            this.showToast('ลบคำศัพท์แล้ว', 'info');
-            await this.loadVocab();
-        } catch (err) {
-            console.error('Failed to delete vocab', err);
-        }
-    },
-
-    // Flashcards Runner
-    startVocabFlashcards() {
-        if (this.state.allVocab.length === 0) {
-            this.showToast('ไม่มีคำศัพท์ในคลังให้เริ่มโหมดการ์ด', 'info');
-            return;
-        }
-
-        this.state.activeFlashcards = [...this.state.allVocab].sort(() => Math.random() - 0.5);
-        this.state.flashcardIndex = 0;
-
-        document.getElementById('flashcard-runner').style.display = 'flex';
-        document.getElementById('vocab-list-container').style.display = 'none';
-
-        this.renderCurrentFlashcard();
-    },
-
-    stopVocabFlashcards() {
-        document.getElementById('flashcard-runner').style.display = 'none';
-        document.getElementById('vocab-list-container').style.display = 'grid';
-    },
-
-    renderCurrentFlashcard() {
-        const list = this.state.activeFlashcards;
-        const idx = this.state.flashcardIndex;
-        if (!list || list.length === 0 || !list[idx]) return;
-
-        const v = list[idx];
-        const cardBox = document.getElementById('flashcard-box');
-        cardBox.classList.remove('flipped');
-
-        document.getElementById('fc-index').textContent = idx + 1;
-        document.getElementById('fc-total').textContent = list.length;
-
-        document.getElementById('fc-word-front').textContent = v.word;
-        document.getElementById('fc-phonetic-front').textContent = v.phonetic || '';
-        document.getElementById('fc-pos-front').textContent = v.part_of_speech || '';
-
-        document.getElementById('fc-def-back').textContent = v.definition_th;
-        document.getElementById('fc-context-back').textContent = v.context_sentence ? `"${v.context_sentence}"` : '';
-
-        // Auto pronounce when front shows
-        this.speakWord(v.word);
-    },
-
-    flipFlashcard() {
-        document.getElementById('flashcard-box').classList.toggle('flipped');
-    },
-
-    nextFlashcard() {
-        if (this.state.flashcardIndex < this.state.activeFlashcards.length - 1) {
-            this.state.flashcardIndex++;
-            this.renderCurrentFlashcard();
-        } else {
-            this.showToast('🎉 จบชุดการ์ดคำศัพท์แล้ว!', 'success');
-            this.stopVocabFlashcards();
-        }
-    },
-
-    prevFlashcard() {
-        if (this.state.flashcardIndex > 0) {
-            this.state.flashcardIndex--;
-            this.renderCurrentFlashcard();
-        }
-    },
-
-    async markFlashcardMastered() {
-        const v = this.state.activeFlashcards[this.state.flashcardIndex];
-        if (v) {
-            await this.updateVocabStatus(v.id, 'mastered');
-            this.showToast(`บันทึกคำว่า "${v.word}" ว่าจำได้แล้ว!`, 'success');
-            this.nextFlashcard();
-        }
-    },
+    // [Highlighter & Vocab Bank moved to public/js/modules/vocab-mistakes.js]
 
     // ==========================================
     // 10. SCRATCHPAD MATH CANVAS ENGINE
@@ -4248,1683 +3597,7 @@ const app = {
         }
     },
 
-    // ==========================================
-    // 11. AI TUTOR ASSISTANT CONTROLLER
-    // ==========================================
-
-    initAiKeyStatus() {
-        const key = localStorage.getItem('tcas_gemini_key') || '';
-        const savedModel = localStorage.getItem('tcas_gemini_model') || 'Gemini 3.8 Flash';
-        this.state.geminiApiKey = key;
-        const modelBadge = document.getElementById('ai-tutor-model-badge');
-        if (modelBadge) {
-            modelBadge.textContent = key ? (savedModel.toLowerCase().includes('gemini') ? savedModel : `Gemini ${savedModel}`) : 'TCAS Master AI (Offline)';
-        }
-    },
-
-    openAiKeyModal() {
-        const modal = document.getElementById('ai-key-modal');
-        const input = document.getElementById('input-gemini-key');
-        const resDiv = document.getElementById('ai-key-test-result');
-        if (!modal) return;
-        if (input) input.value = this.state.geminiApiKey || '';
-        if (resDiv) resDiv.style.display = 'none';
-        modal.classList.add('open');
-    },
-
-    closeAiKeyModal() {
-        const modal = document.getElementById('ai-key-modal');
-        if (modal) modal.classList.remove('open');
-    },
-
-    openAiKeyRecommendModal(onProceed = null) {
-        this._pendingAiCallback = onProceed;
-        const modal = document.getElementById('ai-key-recommend-modal');
-        if (modal) modal.classList.add('open');
-    },
-
-    closeAiKeyRecommendModal() {
-        const modal = document.getElementById('ai-key-recommend-modal');
-        if (modal) modal.classList.remove('open');
-    },
-
-    proceedAiWithoutKey() {
-        this.closeAiKeyRecommendModal();
-        sessionStorage.setItem('tcas_dismiss_key_hint', 'true');
-        if (typeof this._pendingAiCallback === 'function') {
-            const cb = this._pendingAiCallback;
-            this._pendingAiCallback = null;
-            cb();
-        }
-    },
-
-    openAiKeyModalFromRecommend() {
-        this.closeAiKeyRecommendModal();
-        this.openAiKeyModal();
-    },
-
-    async testGeminiKey() {
-        const input = document.getElementById('input-gemini-key');
-        const resDiv = document.getElementById('ai-key-test-result');
-        if (!input || !resDiv) return;
-        const val = input.value.trim();
-        if (!val) {
-            resDiv.style.display = 'block';
-            resDiv.style.color = 'var(--accent-amber)';
-            resDiv.textContent = 'กรุณากรอก API Key ก่อนทดสอบ';
-            return;
-        }
-
-        resDiv.style.display = 'block';
-        resDiv.style.color = 'var(--accent-cyan)';
-        resDiv.textContent = '⏳ กำลังตรวจสอบกับ Google AI Studio...';
-
-        const testBtn = document.querySelector('#ai-key-modal button[onclick*="testGeminiKey"]');
-        if (testBtn) {
-            testBtn.disabled = true;
-            testBtn.textContent = '⏳ กำลังตรวจ...';
-        }
-
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000);
-
-        try {
-            const res = await fetch('/api/ai/verify-key', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': this.state.authToken ? `Bearer ${this.state.authToken}` : ''
-                },
-                body: JSON.stringify({ apiKey: val }),
-                signal: controller.signal
-            });
-            clearTimeout(timeoutId);
-            const data = await res.json();
-            if (data.success) {
-                resDiv.style.color = 'var(--accent-emerald)';
-                resDiv.textContent = `✅ ${data.message || 'ยอดเยี่ยม! API Key ใช้งานได้สมบูรณ์'}`;
-                if (data.model) {
-                    localStorage.setItem('tcas_gemini_model', data.model);
-                    this.initAiKeyStatus();
-                }
-            } else {
-                resDiv.style.color = 'var(--accent-rose)';
-                resDiv.textContent = `❌ เกิดข้อผิดพลาด: ${data.error}`;
-            }
-        } catch (err) {
-            clearTimeout(timeoutId);
-            resDiv.style.color = 'var(--accent-rose)';
-            if (err.name === 'AbortError') {
-                resDiv.textContent = '❌ การเชื่อมต่อไปยังเซิร์ฟเวอร์หมดเวลา (Timeout) กรุณาลองใหม่อีกครั้ง';
-            } else {
-                resDiv.textContent = `❌ เชื่อมต่อล้มเหลว: ${err.message}`;
-            }
-        } finally {
-            if (testBtn) {
-                testBtn.disabled = false;
-                testBtn.textContent = '🧪 ทดสอบ Key';
-            }
-        }
-    },
-
-    saveGeminiKey() {
-        const input = document.getElementById('input-gemini-key');
-        if (!input) return;
-        const val = input.value.trim();
-        this.state.geminiApiKey = val;
-        if (val) {
-            localStorage.setItem('tcas_gemini_key', val);
-            this.showToast('บันทึก Gemini API Key เรียบร้อยแล้ว!', 'success');
-        } else {
-            localStorage.removeItem('tcas_gemini_key');
-            localStorage.removeItem('tcas_gemini_model');
-            this.showToast('ลบ API Key แล้ว (ระบบจะสลับไปใช้ TCAS Master AI Offline Mode)', 'info');
-        }
-        this.initAiKeyStatus();
-        this.closeAiKeyModal();
-    },
-
-    removeGeminiKey() {
-        const input = document.getElementById('input-gemini-key');
-        if (input) input.value = '';
-        this.saveGeminiKey();
-    },
-
-    // ------------------------------------------
-    // SAVED QUESTIONS FOR AI MANAGEMENT
-    // ------------------------------------------
-
-    async fetchSavedAiQuestions() {
-        try {
-            const res = await fetch('/api/ai/saved-questions', {
-                headers: {
-                    'Authorization': this.state.authToken ? `Bearer ${this.state.authToken}` : ''
-                }
-            });
-            const data = await res.json();
-            if (data.success) {
-                this.state.aiSavedQuestions = data.data || [];
-                this.updateAiSavedBadges();
-                this.renderAiSavedList();
-            }
-        } catch (err) {
-            console.error('Error fetching saved AI questions:', err);
-        }
-    },
-
-    updateAiSavedBadges() {
-        const count = (this.state.aiSavedQuestions || []).length;
-        const topbarBadge = document.getElementById('topbar-ai-count');
-        const sidebarBadge = document.getElementById('sidebar-ai-count');
-        const modalBadge = document.getElementById('ai-hub-saved-badge');
-
-        if (topbarBadge) topbarBadge.textContent = count;
-        if (sidebarBadge) sidebarBadge.textContent = count;
-        if (modalBadge) modalBadge.textContent = count;
-    },
-
-    renderAiSavedList() {
-        const listEl = document.getElementById('ai-saved-list');
-        if (!listEl) return;
-
-        const filter = this.state.aiSavedFilter || 'all';
-        let items = this.state.aiSavedQuestions || [];
-        if (filter !== 'all') {
-            items = items.filter(q => {
-                if (filter === 'alevel') return q.subject_id.startsWith('alevel_') || q.subject_id.startsWith('tpat');
-                return q.subject_id === filter;
-            });
-        }
-
-        if (items.length === 0) {
-            listEl.innerHTML = `
-                <div style="text-align: center; padding: 2rem 1rem; color: var(--text-muted); font-size: 0.8rem;">
-                    <div style="display:flex;justify-content:center;margin-bottom: 0.4rem; opacity: 0.7;">${this.svg('bookmark', {size: 28, color: 'var(--accent-indigo)'})}</div>
-                    <p style="margin: 0;">ยังไม่มีข้อสอบที่บันทึกไว้</p>
-                    <p style="margin-top: 0.25rem; font-size: 0.72rem; color: var(--text-secondary);">
-                        กดปุ่ม <strong>"เก็บไว้ถาม AI"</strong> เหนือข้อสอบขณะทำ หรือกดคุยได้ทันที
-                    </p>
-                </div>
-            `;
-            return;
-        }
-
-        listEl.innerHTML = items.map(item => {
-            const isActive = item.question_id === this.state.aiCurrentQuestionId;
-            const snippet = (item.question_text || '').replace(/<[^>]*>/g, '').substring(0, 65) + '...';
-            const subjectCode = item.subject_code ? `[${item.subject_code}] ` : '';
-            return `
-                <div class="ai-saved-item ${isActive ? 'active' : ''}" onclick="app.selectAiSavedQuestion('${item.question_id}')">
-                    <div class="ai-saved-item-top">
-                        <span class="ai-saved-badge-tag">${subjectCode}${this.escapeHtml(item.subject_name_th || 'ข้อสอบ')}</span>
-                        <button class="btn-delete-saved-q" onclick="event.stopPropagation(); app.deleteSavedQuestion('${item.question_id}')" title="ลบออกจากคลัง">✕</button>
-                    </div>
-                    <div class="ai-saved-item-title">${this.escapeHtml(snippet)}</div>
-                    <div class="ai-saved-item-footer">
-                        <span>💬 ${item.chat_count || 0} ข้อความ</span>
-                        <span>${this.escapeHtml(item.subtopic_name || item.domain_name || '')}</span>
-                    </div>
-                </div>
-            `;
-        }).join('');
-    },
-
-    filterSavedQuestions(filterCategory, btnEl) {
-        this.state.aiSavedFilter = filterCategory;
-        const chips = document.querySelectorAll('.ai-saved-filter-bar .ai-filter-chip');
-        chips.forEach(c => c.classList.remove('active'));
-        if (btnEl) btnEl.classList.add('active');
-        this.renderAiSavedList();
-    },
-
-    async toggleSaveCurrentQuestionForAi() {
-        const session = this.state.activeSession;
-        if (!session || !session.questions) return;
-        const q = session.questions[this.state.currentQuestionIndex];
-        if (!q) return;
-
-        const isAlreadySaved = (this.state.aiSavedQuestions || []).some(sq => sq.question_id === q.id);
-        const qNum = this.state.currentQuestionIndex + 1;
-
-        if (isAlreadySaved) {
-            // Un-save
-            try {
-                const res = await fetch(`/api/ai/saved-questions/${q.id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': this.state.authToken ? `Bearer ${this.state.authToken}` : ''
-                    }
-                });
-                const data = await res.json();
-                if (data.success) {
-                    this.state.aiSavedQuestions = this.state.aiSavedQuestions.filter(sq => sq.question_id !== q.id);
-                    this.updateAiSavedBadges();
-                    this.renderCurrentQuestion();
-                    this.showToast(`นำข้อที่ ${qNum} ออกจากคลังถาม AI แล้ว`, 'info');
-                }
-            } catch (err) {
-                this.showToast('เกิดข้อผิดพลาดในการยกเลิกบันทึก: ' + err.message, 'error');
-            }
-        } else {
-            // Save
-            const selectedOpt = this.state.userAnswers[q.id]?.selected_option_id;
-            try {
-                const res = await fetch('/api/ai/saved-questions', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': this.state.authToken ? `Bearer ${this.state.authToken}` : ''
-                    },
-                    body: JSON.stringify({
-                        question_id: q.id,
-                        session_id: session.id,
-                        user_selected_option: selectedOpt || null
-                    })
-                });
-                const data = await res.json();
-                if (data.success) {
-                    await this.fetchSavedAiQuestions();
-                    this.renderCurrentQuestion();
-                    this.showToast(`📌 บันทึกข้อที่ ${qNum} เข้าคลัง TCAS Master AI แล้ว`, 'success');
-                }
-            } catch (err) {
-                this.showToast('เกิดข้อผิดพลาดในการบันทึก: ' + err.message, 'error');
-            }
-        }
-    },
-
-    async toggleSaveQuestionById(questionId, selectedOptionId) {
-        if (!questionId) return;
-        const isAlreadySaved = (this.state.aiSavedQuestions || []).some(sq => sq.question_id === questionId);
-        if (isAlreadySaved) {
-            await this.deleteSavedQuestion(questionId);
-        } else {
-            try {
-                const res = await fetch('/api/ai/saved-questions', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': this.state.authToken ? `Bearer ${this.state.authToken}` : ''
-                    },
-                    body: JSON.stringify({
-                        question_id: questionId,
-                        session_id: this.state.activeSession?.id || null,
-                        user_selected_option: selectedOptionId || null
-                    })
-                });
-                const data = await res.json();
-                if (data.success) {
-                    await this.fetchSavedAiQuestions();
-                    this.showToast('📌 บันทึกข้อสอบเข้าคลัง TCAS Master AI แล้ว', 'success');
-                }
-            } catch (err) {
-                this.showToast('เกิดข้อผิดพลาดในการบันทึก: ' + err.message, 'error');
-            }
-        }
-    },
-
-    async deleteSavedQuestion(questionId) {
-        try {
-            const res = await fetch(`/api/ai/saved-questions/${questionId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': this.state.authToken ? `Bearer ${this.state.authToken}` : ''
-                }
-            });
-            const data = await res.json();
-            if (data.success) {
-                this.state.aiSavedQuestions = this.state.aiSavedQuestions.filter(sq => sq.question_id !== questionId);
-                this.updateAiSavedBadges();
-                this.renderAiSavedList();
-                this.showToast('ลบข้อสอบออกจากรายการเรียบร้อย', 'info');
-                if (this.state.currentView === 'exam') {
-                    this.renderCurrentQuestion();
-                }
-            }
-        } catch (err) {
-            this.showToast('เกิดข้อผิดพลาดในการลบ: ' + err.message, 'error');
-        }
-    },
-
-    // ------------------------------------------
-    // OPENING & CONTROLLING AI CHAT HUB
-    // ------------------------------------------
-
-    async openAiChatHub() {
-        if (!this.state.geminiApiKey && !sessionStorage.getItem('tcas_dismiss_key_hint')) {
-            this.openAiKeyRecommendModal(() => this.openAiChatHub());
-            return;
-        }
-
-        const modal = document.getElementById('ai-tutor-modal');
-        if (!modal) return;
-
-        await this.fetchSavedAiQuestions();
-
-        // If user is currently in exam, select active question
-        if (this.state.currentView === 'exam' && this.state.activeSession?.questions) {
-            const q = this.state.activeSession.questions[this.state.currentQuestionIndex];
-            if (q) {
-                this.openAiTutor(q.id, this.state.userAnswers[q.id]?.selected_option_id, true);
-                return;
-            }
-        }
-
-        // If there are saved questions, load the first one
-        if (this.state.aiSavedQuestions.length > 0) {
-            this.selectAiSavedQuestion(this.state.aiSavedQuestions[0].question_id, true);
-            return;
-        }
-
-        // Otherwise open with general question prompt
-        this.openAiTutor(null, null, true);
-    },
-
-    openAiChatForCurrentQuestion() {
-        const session = this.state.activeSession;
-        if (!session || !session.questions) return;
-        const q = session.questions[this.state.currentQuestionIndex];
-        if (!q) return;
-
-        // Auto bookmark if not yet saved
-        const isAlreadySaved = (this.state.aiSavedQuestions || []).some(sq => sq.question_id === q.id);
-        if (!isAlreadySaved) {
-            this.toggleSaveCurrentQuestionForAi();
-        }
-
-        const selectedOpt = this.state.userAnswers[q.id]?.selected_option_id;
-        this.openAiTutor(q.id, selectedOpt);
-    },
-
-    selectAiSavedQuestion(questionId, bypassHint = false) {
-        const saved = (this.state.aiSavedQuestions || []).find(q => q.question_id === questionId);
-        const selectedOpt = saved ? saved.user_selected_option : null;
-        this.openAiTutor(questionId, selectedOpt, bypassHint);
-    },
-
-    toggleAiSavedPanel() {
-        const sidebar = document.getElementById('ai-hub-sidebar');
-        if (sidebar) sidebar.classList.toggle('collapsed');
-    },
-
-    toggleAiContextCollapse() {
-        const details = document.getElementById('ai-context-details');
-        const chevron = document.getElementById('ai-context-chevron');
-        if (!details) return;
-        const isOpen = details.style.display !== 'none';
-        details.style.display = isOpen ? 'none' : 'block';
-        if (chevron) chevron.classList.toggle('open', !isOpen);
-    },
-
-    async openAiTutor(questionId, selectedOptionId, bypassHint = false) {
-        if (!bypassHint && !this.state.geminiApiKey && !sessionStorage.getItem('tcas_dismiss_key_hint')) {
-            this.openAiKeyRecommendModal(() => this.openAiTutor(questionId, selectedOptionId, true));
-            return;
-        }
-        this.state.aiCurrentQuestionId = questionId;
-        this.state.aiCurrentSelectedOptionId = selectedOptionId || null;
-        this.state.aiChatHistory = [];
-
-        const modal = document.getElementById('ai-tutor-modal');
-        const thread = document.getElementById('ai-chat-thread');
-        const contextEl = document.getElementById('ai-tutor-q-context');
-        const input = document.getElementById('ai-tutor-input');
-
-        if (!modal || !thread) return;
-
-        this.initAiKeyStatus();
-        this.renderAiSavedList();
-
-        if (input) input.value = '';
-
-        if (!questionId) {
-            // General Hub without selected question
-            if (contextEl) contextEl.textContent = 'เลือกข้อสอบจากแถบด้านซ้าย หรือพิมพ์คำถามทางวิชาการได้เลย';
-            const contextBox = document.getElementById('ai-question-context-box');
-            if (contextBox) contextBox.style.display = 'none';
-
-            thread.innerHTML = `
-                <div class="ai-msg tutor">
-                    <div class="ai-msg-bubble">
-                        <p style="margin: 0; font-weight: 500;">
-                            👋 สวัสดีครับ! ผม <strong>TCAS Master AI</strong> พร้อมเป็นคู่คิดวิเคราะห์ข้อสอบและติวเข้มเนื้อหาตาม Test Blueprint ของ ทปอ. ร่วมกับคุณครับ
-                        </p>
-                        <p style="margin-top: 0.5rem; margin-bottom: 0; font-size: 0.85rem; color: var(--text-secondary);">
-                            คุณสามารถเลือกข้อสอบที่บันทึกไว้จากแถบด้านซ้าย หรือพิมพ์หัวข้อที่ต้องการปรึกษาได้ทันทีครับ!
-                        </p>
-                    </div>
-                </div>
-            `;
-            modal.classList.add('open');
-            return;
-        }
-
-        // Fetch question context and existing chat history from server
-        try {
-            const contextBox = document.getElementById('ai-question-context-box');
-            if (contextBox) contextBox.style.display = 'block';
-
-            const res = await fetch(`/api/ai/chat/${questionId}`, {
-                headers: {
-                    'Authorization': this.state.authToken ? `Bearer ${this.state.authToken}` : ''
-                }
-            });
-            const data = await res.json();
-
-            if (data.success && data.question) {
-                const q = data.question;
-                this.state.aiCurrentQuestionData = q;
-
-                // Update context header
-                if (contextEl) {
-                    contextEl.textContent = `${q.subject_name_th} • ${q.subtopic_name || q.domain_name} (Set ${q.set_number || 1})`;
-                }
-                const badge = document.getElementById('ai-context-subject-badge');
-                if (badge) badge.textContent = q.subject_code ? `[${q.subject_code}] ${q.subject_name_th}` : q.subject_name_th;
-
-                const snippetEl = document.getElementById('ai-context-snippet');
-                if (snippetEl) {
-                    snippetEl.textContent = (q.question_text || '').replace(/<[^>]*>/g, '').substring(0, 90) + '...';
-                }
-
-                const fullTextEl = document.getElementById('ai-context-full-text');
-                if (fullTextEl) {
-                    fullTextEl.innerHTML = `
-                        ${q.stimulus ? `<div style="background: rgba(0,0,0,0.25); padding: 0.6rem; border-radius: 6px; margin-bottom: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5;">${this.escapeHtml(q.stimulus)}</div>` : ''}
-                        <strong>คำถาม:</strong> ${this.escapeHtml(q.question_text)}
-                    `;
-                }
-
-                const optsEl = document.getElementById('ai-context-options');
-                if (optsEl && q.options) {
-                    optsEl.innerHTML = q.options.map(o => {
-                        const isPicked = (this.state.aiCurrentSelectedOptionId && o.id === this.state.aiCurrentSelectedOptionId) || (q.user_selected_option && o.label === q.user_selected_option);
-                        return `
-                            <div class="ai-context-opt-item ${o.is_correct ? 'correct' : ''} ${isPicked ? 'user-picked' : ''}">
-                                <strong>[${o.label}]</strong> ${this.escapeHtml(o.content)}
-                                ${o.is_correct ? ' <span style="color: #34d399; font-size: 0.72rem;">(คำตอบที่ถูกต้อง)</span>' : ''}
-                                ${isPicked ? ' <span style="color: var(--accent-amber); font-size: 0.72rem;">(ตัวเลือกที่คุณตอบ)</span>' : ''}
-                            </div>
-                        `;
-                    }).join('');
-                }
-
-                // Render chat history
-                thread.innerHTML = '';
-
-                // If messages exist, render them
-                if (data.messages && data.messages.length > 0) {
-                    for (const m of data.messages) {
-                        this.state.aiChatHistory.push({ role: m.role === 'user' ? 'user' : 'model', content: m.content });
-                        const bubble = document.createElement('div');
-                        bubble.className = `ai-msg ${m.role === 'user' ? 'user' : 'tutor'}`;
-                        const formatted = m.role === 'user' ? `<p style="margin:0;">${this.escapeHtml(m.content)}</p>` : this.formatMarkdown(m.content);
-                        bubble.innerHTML = `<div class="ai-msg-bubble">${formatted}</div>`;
-                        thread.appendChild(bubble);
-                    }
-                } else {
-                    // Initial welcome greeting
-                    thread.innerHTML = `
-                        <div class="ai-msg tutor">
-                            <div class="ai-msg-bubble">
-                                <p style="margin: 0; font-weight: 500;">
-                                    👋 สวัสดีครับ! สำหรับข้อนี้ในวิชา <strong>${this.escapeHtml(q.subject_name_th)}</strong> (${this.escapeHtml(q.subtopic_name || q.domain_name)}) ผมได้อ่านโจทย์ ตัวเลือก และเฉลยเรียบร้อยแล้วครับ
-                                </p>
-                                <p style="margin-top: 0.5rem; margin-bottom: 0; font-size: 0.85rem; color: var(--text-secondary);">
-                                    คุณสงสัยจุดไหนเป็นพิเศษ หรือต้องการให้อธิบายวิธีคิดข้อนี้ทีละขั้นตอน กดเลือกคำถามด่วนด้านบนหรือพิมพ์ถามผมได้ทันทีเลยครับ!
-                                </p>
-                            </div>
-                        </div>
-                    `;
-                }
-            }
-        } catch (err) {
-            console.error('Error loading question context:', err);
-        }
-
-        modal.classList.add('open');
-        this.renderMath();
-    },
-
-    closeAiTutorModal() {
-        const modal = document.getElementById('ai-tutor-modal');
-        if (modal) modal.classList.remove('open');
-    },
-
-    async clearCurrentAiChatHistory() {
-        const qId = this.state.aiCurrentQuestionId;
-        if (!qId) return;
-
-        if (!confirm('คุณต้องการล้างประวัติการสนทนาของข้อนี้ใช่หรือไม่?')) return;
-
-        try {
-            const res = await fetch(`/api/ai/chat/${qId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': this.state.authToken ? `Bearer ${this.state.authToken}` : ''
-                }
-            });
-            const data = await res.json();
-            if (data.success) {
-                this.state.aiChatHistory = [];
-                const thread = document.getElementById('ai-chat-thread');
-                if (thread) {
-                    thread.innerHTML = `
-                        <div class="ai-msg tutor">
-                            <div class="ai-msg-bubble">
-                                <p style="margin: 0;">🧹 ล้างประวัติการสนทนาเรียบร้อยแล้วครับ เรามาเริ่มวิเคราะห์ข้อนี้กันใหม่ได้เลยครับ!</p>
-                            </div>
-                        </div>
-                    `;
-                }
-                this.fetchSavedAiQuestions();
-                this.showToast('ล้างประวัติแชทเรียบร้อยแล้ว', 'info');
-            }
-        } catch (err) {
-            this.showToast('ไม่สามารถล้างประวัติได้: ' + err.message, 'error');
-        }
-    },
-
-    sendAiQuickPrompt(promptType) {
-        let query = '';
-        if (promptType === 'why_wrong') query = 'ช่วยวิเคราะห์จุดหลอกหน่อยครับ ว่าทำไมตัวเลือกที่ผิดถึงผิด และผู้ออกข้อสอบมีเจตนาลวงตรงไหน';
-        else if (promptType === 'speed_hack') query = 'ขอคำอธิบายวิธีคิดข้อนี้ทีละขั้นตอนแบบชัดเจน เข้าใจง่ายครับ';
-        else if (promptType === 'key_formula') query = 'ข้อนี้มีสูตร กฎเกณฑ์ หรือคีย์เวิร์ดสำคัญอะไรที่ต้องจำตาม Blueprint บ้างครับ';
-        else if (promptType === 'drill_more') query = 'ช่วยสร้างโจทย์แนวคิดเดียวกันมาให้ผมลองฝึกทำอีก 1 ข้อ พร้อมเฉลยและวิธีคิดด้วยครับ';
-
-        if (query) {
-            this.sendAiTutorQuery(query);
-        }
-    },
-
-    handleAiInputSubmit() {
-        const input = document.getElementById('ai-tutor-input');
-        if (!input) return;
-        const text = input.value.trim();
-        if (!text) return;
-        input.value = '';
-        this.sendAiTutorQuery(text);
-    },
-
-    async sendAiTutorQuery(query) {
-        const thread = document.getElementById('ai-chat-thread');
-        const questionId = this.state.aiCurrentQuestionId;
-        if (!thread) return;
-
-        // 1. Append User Message
-        const userBubble = document.createElement('div');
-        userBubble.className = 'ai-msg user';
-        userBubble.innerHTML = `<div class="ai-msg-bubble"><p style="margin:0;">${this.escapeHtml(query)}</p></div>`;
-        thread.appendChild(userBubble);
-
-        // 2. Append Typing Indicator
-        const typingEl = document.createElement('div');
-        typingEl.className = 'ai-msg tutor';
-        typingEl.id = 'ai-typing-loader';
-        typingEl.innerHTML = `
-            <div class="ai-msg-bubble">
-                <div class="ai-typing-indicator">
-                    <span></span><span></span><span></span>
-                </div>
-                <span style="font-size: 0.8rem; color: var(--text-muted); margin-left: 0.5rem;">TCAS Master AI กำลังวิเคราะห์และเรียบเรียงคำตอบ...</span>
-            </div>
-        `;
-        thread.appendChild(typingEl);
-        thread.scrollTop = thread.scrollHeight;
-
-        // Track in history
-        this.state.aiChatHistory.push({ role: 'user', content: query });
-
-        try {
-            const res = await fetch('/api/ai/tutor', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': this.state.authToken ? `Bearer ${this.state.authToken}` : '',
-                    'x-gemini-key': this.state.geminiApiKey || ''
-                },
-                body: JSON.stringify({
-                    question_id: questionId,
-                    user_query: query,
-                    selected_option_id: this.state.aiCurrentSelectedOptionId,
-                    chat_history: this.state.aiChatHistory,
-                    custom_key: this.state.geminiApiKey || '',
-                    preferred_model: localStorage.getItem('tcas_gemini_model') || ''
-                })
-            });
-
-            const data = await res.json();
-            const loader = document.getElementById('ai-typing-loader');
-            if (loader) loader.remove();
-
-            if (data.success && data.ai_response) {
-                this.state.aiChatHistory.push({ role: 'model', content: data.ai_response });
-
-                const replyBubble = document.createElement('div');
-                replyBubble.className = 'ai-msg tutor';
-
-                const formattedHtml = this.formatMarkdown(data.ai_response);
-                replyBubble.innerHTML = `
-                    <div class="ai-msg-bubble">
-                        ${formattedHtml}
-                        ${data.hint ? `<div style="margin-top: 0.75rem; font-size: 0.78rem; color: var(--accent-cyan); opacity: 0.85;">💡 ${data.hint}</div>` : ''}
-                    </div>
-                `;
-                thread.appendChild(replyBubble);
-
-                // Update chat count badge in sidebar list
-                this.fetchSavedAiQuestions();
-            } else {
-                const errBubble = document.createElement('div');
-                errBubble.className = 'ai-msg tutor';
-                errBubble.innerHTML = `
-                    <div class="ai-msg-bubble" style="border-color: rgba(244, 63, 94, 0.4);">
-                        <p style="color: var(--accent-rose); margin: 0;">⚠️ ขออภัยครับ: ${data.error || 'ไม่สามารถติดต่อ TCAS Master AI ได้ในขณะนี้'}</p>
-                    </div>
-                `;
-                thread.appendChild(errBubble);
-            }
-        } catch (err) {
-            const loader = document.getElementById('ai-typing-loader');
-            if (loader) loader.remove();
-
-            const errBubble = document.createElement('div');
-            errBubble.className = 'ai-msg tutor';
-            errBubble.innerHTML = `
-                <div class="ai-msg-bubble" style="border-color: rgba(244, 63, 94, 0.4);">
-                    <p style="color: var(--accent-rose); margin: 0;">❌ ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้: ${err.message}</p>
-                </div>
-            `;
-            thread.appendChild(errBubble);
-        }
-
-        thread.scrollTop = thread.scrollHeight;
-        this.renderMath();
-    },
-
-    // ==========================================
-    // CEFR VOCABULARY QUIZ CONTROLLER (A1 - C2)
-    // ==========================================
-
-    async loadCefrOverview() {
-        try {
-            const res = await fetch('/api/cefr/levels');
-            const data = await res.json();
-            if (!data.success) throw new Error(data.error);
-
-            this.state.cefrLevels = data.data;
-
-            // Compute summary numbers
-            let totalWords = 0;
-            let totalMastered = 0;
-            let totalQuizzes = 0;
-
-            this.state.cefrLevels.forEach(lvl => {
-                totalWords += lvl.total_words || 0;
-                totalMastered += lvl.mastered_words || 0;
-                totalQuizzes += lvl.quizzes_taken || 0;
-            });
-
-            const totalWordsEl = document.getElementById('cefr-total-words-val');
-            const masteredWordsEl = document.getElementById('cefr-mastered-words-val');
-            const quizzesTakenEl = document.getElementById('cefr-quizzes-taken-val');
-
-            if (totalWordsEl) totalWordsEl.textContent = totalWords;
-            if (masteredWordsEl) masteredWordsEl.textContent = totalMastered;
-            if (quizzesTakenEl) quizzesTakenEl.textContent = totalQuizzes;
-
-            this.renderCefrLevelCards();
-        } catch (err) {
-            console.error('Error loading CEFR overview:', err);
-            this.showToast('ไม่สามารถโหลดข้อมูล CEFR ได้: ' + err.message, 'error');
-        }
-    },
-
-    renderCefrLevelCards() {
-        const container = document.getElementById('cefr-levels-container');
-        if (!container) return;
-
-        const levelMetadata = {
-            A1: {
-                title: 'Beginner',
-                examTarget: 'ปูพื้นฐานการสื่อสาร',
-                desc: 'คำศัพท์พื้นฐานสำหรับเริ่มต้น เหมาะสำหรับปูพื้นฐานภาษาอังกฤษให้แน่นตั้งแต่ก้าวแรก',
-                accentClass: 'lvl-a1'
-            },
-            A2: {
-                title: 'Elementary',
-                examTarget: 'ศัพท์ชีวิตประจำวัน',
-                desc: 'คำศัพท์ทั่วไปในชีวิตประจำวัน สิ่งแวดล้อม และบริบทการสนทนาเบื้องต้น',
-                accentClass: 'lvl-a2'
-            },
-            B1: {
-                title: 'Intermediate',
-                examTarget: '⭐ พื้นฐาน TGAT1',
-                desc: 'คำศัพท์ระดับกลางที่พบบ่อยในข้อสอบ TGAT1 พาร์ท Speaking & Reading สื่อสารคล่องแคล่ว',
-                accentClass: 'lvl-b1'
-            },
-            B2: {
-                title: 'Upper Intermediate',
-                examTarget: '🏆 แกนหลัก TGAT1 / TCAS',
-                desc: 'คำศัพท์ที่ชี้ขาดผลคะแนน TGAT1 และข้อสอบมหาวิทยาลัย เช่น การทำงาน, ประกาศ, บทความวิเคราะห์',
-                accentClass: 'lvl-b2'
-            },
-            C1: {
-                title: 'Advanced',
-                examTarget: '🥇 แกนหลัก A-Level อังกฤษ',
-                desc: 'คำศัพท์วิชาการขั้นสูง (Academic Vocabulary) สำหรับบทความวิทยาศาสตร์ ปรัชญา และงานวิจัย',
-                accentClass: 'lvl-c1'
-            },
-            C2: {
-                title: 'Proficiency',
-                examTarget: '👑 ระดับสูง / สายแพทย์ / อินเตอร์',
-                desc: 'คำศัพท์ชั้นครูระดับเชี่ยวชาญ วรรณกรรม คลังศัพท์ชั้นเลิศสำหรับผู้ต้องการพิชิต 90+ คะแนน',
-                accentClass: 'lvl-c2'
-            }
-        };
-
-        let html = '';
-        this.state.cefrLevels.forEach(lvl => {
-            const meta = levelMetadata[lvl.level] || {
-                title: lvl.title,
-                examTarget: 'ทั่วไป',
-                desc: 'ทดสอบคำศัพท์ในระดับ ' + lvl.level,
-                accentClass: 'lvl-b1'
-            };
-
-            const progress = lvl.progress_percentage || 0;
-
-            html += `
-                <div class="cefr-level-card ${meta.accentClass}">
-                    <div>
-                        <div class="cefr-card-top">
-                            <span class="cefr-level-badge-large">${lvl.level}</span>
-                            <span class="cefr-exam-badge">${meta.examTarget}</span>
-                        </div>
-                        <h4 class="cefr-card-title">${lvl.level} - ${meta.title}</h4>
-                        <p class="cefr-card-desc">${meta.desc}</p>
-
-                        <div class="cefr-progress-row">
-                            <div class="cefr-progress-labels">
-                                <span>จดจำแม่นยำ (${lvl.mastered_words}/${lvl.total_words} คำ)</span>
-                                <span>${progress}%</span>
-                            </div>
-                            <div class="cefr-level-progress-track">
-                                <div class="cefr-level-progress-bar" style="width: ${progress}%;"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="cefr-card-actions">
-                        <button class="btn btn-primary" onclick="app.openCefrQuizConfig('${lvl.level}')">
-                            ⚡ ทำควิซ (${lvl.level})
-                        </button>
-                        <button class="btn btn-outline" onclick="app.openCefrWordList('${lvl.level}')">
-                            📖 ดูคำศัพท์
-                        </button>
-                    </div>
-                </div>
-            `;
-        });
-
-        container.innerHTML = html;
-    },
-
-    openCefrQuizConfig(level) {
-        this.state.cefrConfigLevel = level;
-        const modal = document.getElementById('modal-cefr-config');
-        const titleEl = document.getElementById('cefr-cfg-title');
-        const countBadge = document.getElementById('cefr-count-badge');
-        const btnCount = document.getElementById('cefr-btn-word-count');
-        const slider = document.getElementById('cefr-word-slider');
-
-        if (titleEl) {
-            titleEl.textContent = `ตั้งค่าควิซคำศัพท์ ${level === 'MIXED' ? 'Mixed Challenge' : 'Level ' + level}`;
-        }
-        const count = this.state.cefrWordCount || 10;
-        if (countBadge) countBadge.textContent = `${count} คำ`;
-        if (btnCount) btnCount.textContent = count;
-        if (slider) slider.value = count;
-
-        if (modal) modal.classList.add('open');
-    },
-
-    closeCefrConfigModal() {
-        const modal = document.getElementById('modal-cefr-config');
-        if (modal) modal.classList.remove('open');
-    },
-
-    setCefrWordCount(count, btn) {
-        this.state.cefrWordCount = parseInt(count, 10);
-        const countBadge = document.getElementById('cefr-count-badge');
-        const btnCount = document.getElementById('cefr-btn-word-count');
-        const slider = document.getElementById('cefr-word-slider');
-        if (countBadge) countBadge.textContent = `${this.state.cefrWordCount} คำ`;
-        if (btnCount) btnCount.textContent = this.state.cefrWordCount;
-        if (slider) slider.value = this.state.cefrWordCount;
-
-        document.querySelectorAll('.preset-chip').forEach(b => b.classList.remove('active'));
-        if (btn) btn.classList.add('active');
-
-        this.updateCefrRoundEstimate();
-    },
-
-    onCefrSliderChange(val) {
-        this.state.cefrWordCount = parseInt(val, 10);
-        const countBadge = document.getElementById('cefr-count-badge');
-        const btnCount = document.getElementById('cefr-btn-word-count');
-        if (countBadge) countBadge.textContent = `${this.state.cefrWordCount} คำ`;
-        if (btnCount) btnCount.textContent = this.state.cefrWordCount;
-
-        document.querySelectorAll('.preset-chip').forEach(b => {
-            const num = parseInt(b.textContent, 10);
-            if (num === this.state.cefrWordCount) b.classList.add('active');
-            else b.classList.remove('active');
-        });
-
-        this.updateCefrRoundEstimate();
-    },
-
-    setCefrTimerMode(mode) {
-        this.state.cefrTimerMode = mode;
-        document.querySelectorAll('.timer-radio-card').forEach(c => c.classList.remove('active'));
-        const target = document.getElementById(`timer-card-${mode}`);
-        if (target) target.classList.add('active');
-        this.updateCefrRoundEstimate();
-    },
-
-    updateCefrRoundEstimate() {
-        const count = this.state.cefrWordCount || 10;
-        const totalMinutes = Math.max(1, Math.round((count * 15) / 60));
-        const descEl = document.getElementById('cefr-round-time-desc');
-        if (descEl) descEl.textContent = `${totalMinutes} นาที`;
-        this.state.cefrRoundTimeLimitSeconds = totalMinutes * 60;
-    },
-
-    async launchConfiguredCefrQuiz() {
-        this.closeCefrConfigModal();
-        const level = this.state.cefrConfigLevel || 'B2';
-        const count = this.state.cefrWordCount || 10;
-        const timerMode = this.state.cefrTimerMode || 'per_15';
-        await this.startCefrQuiz(level, 'meaning', count, timerMode);
-    },
-
-    async startCefrQuiz(level, mode = 'meaning', count = 10, timerMode = 'per_15') {
-        try {
-            this.state.currentCefrLevel = level;
-            this.state.cefrWordCount = count;
-            this.state.cefrTimerMode = timerMode;
-            this.showToast(`กำลังเตรียมควิซระดับ ${level} (${count} คำ)...`, 'info');
-
-            const res = await fetch('/api/cefr/quiz/generate', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ level, count, mode, timer_type: timerMode })
-            });
-
-            const data = await res.json();
-            if (!data.success) throw new Error(data.error);
-
-            this.state.activeCefrQuiz = data.data;
-            this.state.cefrCurrentQuestionIndex = 0;
-            this.state.cefrQuizAnswers = [];
-            this.state.cefrQuizAnswered = false;
-            this.state.cefrTotalTimeElapsed = 0;
-
-            // Initialize total round time if in round_total mode
-            if (timerMode === 'round_total') {
-                this.state.cefrTimeLeftSeconds = this.state.cefrRoundTimeLimitSeconds || Math.max(60, count * 15);
-            }
-
-            // Switch screen
-            document.getElementById('cefr-screen-overview').style.display = 'none';
-            document.getElementById('cefr-screen-results').style.display = 'none';
-            document.getElementById('cefr-screen-quiz').style.display = 'block';
-
-            // Level indicator
-            const pillEl = document.getElementById('cefr-quiz-level-pill');
-            if (pillEl) {
-                pillEl.textContent = level === 'MIXED' ? `Mixed (${count} คำ)` : `Level ${level} (${count} คำ)`;
-            }
-
-            this.renderCefrQuestion();
-        } catch (err) {
-            console.error('Error starting CEFR quiz:', err);
-            this.showToast('ไม่สามารถเริ่มควิซได้: ' + err.message, 'error');
-        }
-    },
-
-    renderCefrQuestion() {
-        if (!this.state.activeCefrQuiz) return;
-        const qList = this.state.activeCefrQuiz.questions;
-        const currIndex = this.state.cefrCurrentQuestionIndex;
-        if (currIndex >= qList.length) {
-            this.finishCefrQuiz();
-            return;
-        }
-
-        const q = qList[currIndex];
-        this.state.cefrQuizAnswered = false;
-        this.state.cefrQuizStartTime = Date.now();
-
-        // Counter & Progress
-        const counterEl = document.getElementById('cefr-quiz-counter');
-        const progressBar = document.getElementById('cefr-progress-bar');
-        if (counterEl) counterEl.textContent = `คำที่ ${currIndex + 1} / ${qList.length}`;
-        if (progressBar) progressBar.style.width = `${((currIndex + 1) / qList.length) * 100}%`;
-
-        // Word card
-        const wordEl = document.getElementById('cefr-active-word');
-        const phoneticEl = document.getElementById('cefr-active-phonetic');
-        const posEl = document.getElementById('cefr-active-pos');
-        const exampleEl = document.getElementById('cefr-active-example');
-        const starBtn = document.getElementById('cefr-star-btn');
-
-        if (wordEl) wordEl.textContent = q.word;
-        if (phoneticEl) phoneticEl.textContent = q.phonetic || '';
-        if (posEl) posEl.textContent = q.part_of_speech || '';
-        if (exampleEl) exampleEl.textContent = q.example_sentence ? `"${q.example_sentence}"` : 'ตัวอย่างประโยคบริบทการใช้งาน';
-
-        if (starBtn) {
-            starBtn.classList.remove('starred');
-            starBtn.setAttribute('data-word-id', q.word_id);
-        }
-
-        // Options
-        const container = document.getElementById('cefr-options-container');
-        if (container) {
-            container.innerHTML = q.options.map((opt, idx) => `
-                <button class="cefr-option-btn" id="cefr-opt-${idx}" onclick="app.selectCefrOption(${idx})">
-                    <span class="cefr-opt-key">${idx + 1}</span>
-                    <span class="cefr-opt-text">${this.escapeHtml(opt.content)}</span>
-                </button>
-            `).join('');
-        }
-
-        // Hide feedback banner
-        const fbBanner = document.getElementById('cefr-feedback-banner');
-        if (fbBanner) fbBanner.style.display = 'none';
-
-        // Start 15s Timer
-        this.startCefrTimer();
-    },
-
-    startCefrTimer() {
-        if (this.state.cefrTimerInterval) clearInterval(this.state.cefrTimerInterval);
-        const timerBox = document.getElementById('cefr-timer-box');
-        const timerText = document.getElementById('cefr-timer-text');
-        if (timerBox) timerBox.classList.remove('timer-urgent');
-
-        const mode = this.state.cefrTimerMode || 'per_15';
-
-        if (mode === 'zen') {
-            if (timerText) timerText.textContent = 'Zen';
-            this.state.cefrTimerInterval = setInterval(() => {
-                this.state.cefrTotalTimeElapsed++;
-                const m = Math.floor(this.state.cefrTotalTimeElapsed / 60);
-                const s = this.state.cefrTotalTimeElapsed % 60;
-                if (timerText) timerText.textContent = `${m}:${String(s).padStart(2, '0')}`;
-            }, 1000);
-            return;
-        }
-
-        if (mode === 'round_total') {
-            const updateDisplay = () => {
-                const m = Math.floor(this.state.cefrTimeLeftSeconds / 60);
-                const s = this.state.cefrTimeLeftSeconds % 60;
-                if (timerText) timerText.textContent = `${m}:${String(s).padStart(2, '0')}`;
-            };
-            updateDisplay();
-
-            this.state.cefrTimerInterval = setInterval(() => {
-                this.state.cefrTimeLeftSeconds--;
-                this.state.cefrTotalTimeElapsed++;
-                updateDisplay();
-
-                if (this.state.cefrTimeLeftSeconds <= 30 && timerBox) {
-                    timerBox.classList.add('timer-urgent');
-                }
-
-                if (this.state.cefrTimeLeftSeconds <= 0) {
-                    clearInterval(this.state.cefrTimerInterval);
-                    this.showToast('หมดเวลารวมของควิซแล้ว! สรุปคะแนนทันที', 'warning');
-                    this.finishCefrQuiz();
-                }
-            }, 1000);
-            return;
-        }
-
-        // Per question modes (per_15 or per_30)
-        const secondsPerQ = mode === 'per_30' ? 30 : 15;
-        this.state.cefrTimeLeftSeconds = secondsPerQ;
-        if (timerText) timerText.textContent = `${secondsPerQ}s`;
-
-        this.state.cefrTimerInterval = setInterval(() => {
-            this.state.cefrTimeLeftSeconds--;
-            this.state.cefrTotalTimeElapsed++;
-            if (timerText) timerText.textContent = `${this.state.cefrTimeLeftSeconds}s`;
-
-            if (this.state.cefrTimeLeftSeconds <= 5 && timerBox) {
-                timerBox.classList.add('timer-urgent');
-            }
-
-            if (this.state.cefrTimeLeftSeconds <= 0) {
-                clearInterval(this.state.cefrTimerInterval);
-                this.handleCefrTimeout();
-            }
-        }, 1000);
-    },
-
-    selectCefrOption(optIndex) {
-        if (this.state.cefrQuizAnswered) return;
-        this.state.cefrQuizAnswered = true;
-        clearInterval(this.state.cefrTimerInterval);
-
-        const q = this.state.activeCefrQuiz.questions[this.state.cefrCurrentQuestionIndex];
-        const selectedOpt = q.options[optIndex];
-        const isCorrect = selectedOpt && selectedOpt.is_correct === 1;
-        const timeSpent = Math.max(1, Math.round((Date.now() - this.state.cefrQuizStartTime) / 1000));
-
-        // Record Answer
-        this.state.cefrQuizAnswers.push({
-            word_id: q.word_id,
-            word: q.word,
-            part_of_speech: q.part_of_speech,
-            selected_meaning: selectedOpt ? selectedOpt.content : 'ไม่ได้ตอบ',
-            correct_meaning: q.correct_meaning_th,
-            is_correct: isCorrect ? 1 : 0,
-            time_spent_seconds: timeSpent
-        });
-
-        // Highlight Buttons
-        q.options.forEach((opt, idx) => {
-            const btn = document.getElementById(`cefr-opt-${idx}`);
-            if (!btn) return;
-            btn.disabled = true;
-            if (opt.is_correct === 1) {
-                btn.classList.add('opt-correct');
-            } else if (idx === optIndex && !isCorrect) {
-                btn.classList.add('opt-wrong');
-            }
-        });
-
-        // Show Feedback
-        const fbBanner = document.getElementById('cefr-feedback-banner');
-        const fbIcon = document.getElementById('cefr-feedback-icon');
-        const fbTitle = document.getElementById('cefr-feedback-title');
-        const fbDesc = document.getElementById('cefr-feedback-desc');
-
-        if (fbBanner) {
-            fbBanner.style.display = 'flex';
-            if (isCorrect) {
-                this.playSfx('correct');
-                this.showFloatingExp('+20 EXP', window.innerWidth / 2, window.innerHeight * 0.45);
-                fbIcon.innerHTML = this.svg('check-circle', { size: 40, color: '#34d399' });
-                fbTitle.textContent = 'ถูกต้อง แม่นยำมาก!';
-                fbTitle.style.color = '#34d399';
-                fbDesc.textContent = `ความหมาย: ${q.correct_meaning_th}`;
-            } else {
-                this.playSfx('wrong');
-                fbIcon.innerHTML = this.svg('lightbulb', { size: 40, color: '#fb7185' });
-                fbTitle.textContent = 'ยังไม่ถูกต้อง!';
-                fbTitle.style.color = '#fb7185';
-                fbDesc.textContent = `คำตอบที่ถูกต้องคือ: ${q.correct_meaning_th}`;
-            }
-        }
-    },
-
-    handleCefrTimeout() {
-        if (this.state.cefrQuizAnswered) return;
-        this.state.cefrQuizAnswered = true;
-
-        const q = this.state.activeCefrQuiz.questions[this.state.cefrCurrentQuestionIndex];
-        this.state.cefrQuizAnswers.push({
-            word_id: q.word_id,
-            word: q.word,
-            part_of_speech: q.part_of_speech,
-            selected_meaning: 'หมดเวลา (ไม่ได้ตอบ)',
-            correct_meaning: q.correct_meaning_th,
-            is_correct: 0,
-            time_spent_seconds: 15
-        });
-
-        // Reveal correct answer
-        q.options.forEach((opt, idx) => {
-            const btn = document.getElementById(`cefr-opt-${idx}`);
-            if (btn) {
-                btn.disabled = true;
-                if (opt.is_correct === 1) btn.classList.add('opt-correct');
-            }
-        });
-
-        const fbBanner = document.getElementById('cefr-feedback-banner');
-        const fbIcon = document.getElementById('cefr-feedback-icon');
-        const fbTitle = document.getElementById('cefr-feedback-title');
-        const fbDesc = document.getElementById('cefr-feedback-desc');
-
-        if (fbBanner) {
-            fbBanner.style.display = 'flex';
-            fbIcon.textContent = '⏱️';
-            fbTitle.textContent = 'หมดเวลา!';
-            fbTitle.style.color = '#f59e0b';
-            fbDesc.textContent = `คำแปลที่ถูกต้องคือ: ${q.correct_meaning_th}`;
-        }
-    },
-
-    nextCefrQuestion() {
-        clearInterval(this.state.cefrTimerInterval);
-        this.state.cefrCurrentQuestionIndex++;
-        this.renderCefrQuestion();
-    },
-
-    exitCefrQuiz() {
-        clearInterval(this.state.cefrTimerInterval);
-        this.showCefrOverview();
-    },
-
-    async finishCefrQuiz() {
-        clearInterval(this.state.cefrTimerInterval);
-        this.showToast('กำลังประมวลผลคะแนนและ EXP...', 'info');
-
-        try {
-            const res = await fetch('/api/cefr/quiz/submit', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    quiz_id: this.state.activeCefrQuiz.quiz_id,
-                    level: this.state.currentCefrLevel,
-                    mode: this.state.activeCefrQuiz.mode,
-                    answers: this.state.cefrQuizAnswers,
-                    time_spent_seconds: this.state.cefrQuizAnswers.reduce((sum, a) => sum + a.time_spent_seconds, 0)
-                })
-            });
-
-            const data = await res.json();
-            if (!data.success) throw new Error(data.error);
-
-            // Update user status and EXP
-            await this.loadUserStatus(true);
-
-            // Display Results
-            document.getElementById('cefr-screen-quiz').style.display = 'none';
-            document.getElementById('cefr-screen-results').style.display = 'block';
-
-            const r = data.data;
-            const trophyEl = document.getElementById('cefr-result-trophy');
-            const headingEl = document.getElementById('cefr-result-heading');
-            const subtitleEl = document.getElementById('cefr-result-subtitle');
-            const scoreEl = document.getElementById('cefr-result-score');
-            const pctEl = document.getElementById('cefr-result-pct');
-            const expEl = document.getElementById('cefr-result-exp');
-
-            if (scoreEl) scoreEl.textContent = `${r.correct_count} / ${r.total_questions}`;
-            if (pctEl) pctEl.textContent = `${r.score_percentage}%`;
-            if (expEl) expEl.textContent = `+${r.exp_earned} EXP`;
-
-            if (r.score_percentage >= 80) {
-                this.playSfx('level_up');
-                this.launchConfetti();
-                if (trophyEl) trophyEl.innerHTML = this.svg('award', { size: 48, color: '#fbbf24' });
-                if (headingEl) headingEl.textContent = 'ยอดเยี่ยม ไร้ที่ติ!';
-                if (subtitleEl) subtitleEl.textContent = `คุณเชี่ยวชาญคำศัพท์ระดับ ${r.level} พร้อมพิชิตข้อสอบจริงแล้ว`;
-            } else if (r.score_percentage >= 50) {
-                this.playSfx('correct');
-                this.launchConfetti();
-                if (trophyEl) trophyEl.innerHTML = this.svg('star', { size: 48, color: '#fbbf24' });
-                if (headingEl) headingEl.textContent = 'ทำได้ดี มีพัฒนาการ!';
-                if (subtitleEl) subtitleEl.textContent = `คะแนนผ่านเกณฑ์ ทบทวนคำที่ตอบผิดอีกนิดจะจำได้แม่นยำขึ้นครับ`;
-            } else {
-                this.playSfx('wrong');
-                if (trophyEl) trophyEl.innerHTML = this.svg('book', { size: 48, color: '#94a3b8' });
-                if (headingEl) headingEl.textContent = 'พยายามต่อไป!';
-                if (subtitleEl) subtitleEl.textContent = `แนะนำให้กด ⭐ ปักหมุดคำที่ตอบผิดเพื่อกลับมาทบทวนซ้ำครับ`;
-            }
-
-            // Render breakdown
-            const listContainer = document.getElementById('cefr-breakdown-list');
-            if (listContainer) {
-                listContainer.innerHTML = this.state.cefrQuizAnswers.map(a => `
-                    <div class="cefr-breakdown-item">
-                        <div class="cefr-breakdown-left">
-                            <span class="cefr-item-status">${a.is_correct ? this.svg('check-circle', { size: 16, color: '#34d399' }) : this.svg('x', { size: 16, color: '#f43f5e' })}</span>
-                            <div>
-                                <span class="cefr-item-word">${this.escapeHtml(a.word)}</span>
-                                <span class="cefr-item-pos">(${a.part_of_speech})</span>
-                            </div>
-                        </div>
-                        <div class="cefr-item-def">
-                            ${this.escapeHtml(a.correct_meaning)}
-                        </div>
-                    </div>
-                `).join('');
-            }
-
-        } catch (err) {
-            console.error('Error submitting CEFR quiz:', err);
-            this.showToast('ไม่สามารถบันทึกผลได้: ' + err.message, 'error');
-        }
-    },
-
-    showCefrOverview() {
-        document.getElementById('cefr-screen-quiz').style.display = 'none';
-        document.getElementById('cefr-screen-results').style.display = 'none';
-        document.getElementById('cefr-screen-overview').style.display = 'block';
-        this.loadCefrOverview();
-    },
-
-    retryCefrQuiz() {
-        this.startCefrQuiz(this.state.currentCefrLevel, 'meaning');
-    },
-
-    async toggleCurrentWordStar() {
-        const starBtn = document.getElementById('cefr-star-btn');
-        if (!starBtn) return;
-        const wordId = starBtn.getAttribute('data-word-id');
-        if (!wordId) return;
-
-        try {
-            const res = await fetch(`/api/cefr/words/${wordId}/toggle-star`, { method: 'POST' });
-            const data = await res.json();
-            if (data.success) {
-                if (data.is_starred) {
-                    starBtn.classList.add('starred');
-                    this.showToast('⭐ ปักหมุดคำศัพท์นี้เรียบร้อยแล้ว', 'success');
-                } else {
-                    starBtn.classList.remove('starred');
-                    this.showToast('ยกเลิกปักหมุดคำศัพท์แล้ว', 'info');
-                }
-            }
-        } catch (err) {
-            console.error('Error starring word:', err);
-        }
-    },
-
-    async openCefrWordList(level) {
-        try {
-            const res = await fetch(`/api/cefr/words?level=${level}`);
-            const data = await res.json();
-            if (!data.success) throw new Error(data.error);
-
-            const titleEl = document.getElementById('modal-cefr-title');
-            const subtitleEl = document.getElementById('modal-cefr-subtitle');
-            const countEl = document.getElementById('modal-cefr-count');
-            const listEl = document.getElementById('modal-cefr-word-list');
-            const startBtn = document.getElementById('modal-cefr-start-btn');
-
-            if (titleEl) titleEl.textContent = `สมุดคำศัพท์ระดับ ${level}`;
-            if (subtitleEl) subtitleEl.textContent = `รายการคำศัพท์ภาษาอังกฤษระดับ ${level} ในคลังระบบ`;
-            if (countEl) countEl.textContent = `ทั้งหมด ${data.data.length} คำ`;
-
-            if (startBtn) {
-                startBtn.onclick = () => {
-                    this.closeCefrWordList();
-                    this.startCefrQuiz(level, 'meaning');
-                };
-            }
-
-            if (listEl) {
-                listEl.innerHTML = data.data.map(w => `
-                    <div class="cefr-explorer-item">
-                        <div class="cefr-explorer-main">
-                            <div>
-                                <h4>${this.escapeHtml(w.word)}</h4>
-                                <span class="phonetic">${this.escapeHtml(w.phonetic || '')}</span>
-                                <span class="cefr-pos-badge">${this.escapeHtml(w.part_of_speech || '')}</span>
-                            </div>
-                            <div class="cefr-explorer-def">
-                                <strong>${this.escapeHtml(w.meaning_th)}</strong>
-                                ${w.meaning_en ? ` - <span style="color: #94a3b8;">${this.escapeHtml(w.meaning_en)}</span>` : ''}
-                            </div>
-                            ${w.example_sentence ? `<div class="cefr-explorer-example">"${this.escapeHtml(w.example_sentence)}"</div>` : ''}
-                        </div>
-                    </div>
-                `).join('');
-            }
-
-            const modal = document.getElementById('modal-cefr-words');
-            if (modal) modal.classList.add('open');
-        } catch (err) {
-            console.error('Error opening word list:', err);
-            this.showToast('ไม่สามารถเปิดรายการคำศัพท์ได้: ' + err.message, 'error');
-        }
-    },
-
-    closeCefrWordList() {
-        const modal = document.getElementById('modal-cefr-words');
-        if (modal) modal.classList.remove('open');
-    },
-
-    // ==========================================
-    // 9. USER ACCOUNT & AUTHENTICATION CONTROLLER
-    // ==========================================
-
-    async initAuth() {
-        try {
-            const res = await fetch('/api/auth/me');
-            const data = await res.json();
-            if (data.success && data.user) {
-                this.state.currentUser = data.user;
-            } else {
-                this.state.currentUser = null;
-            }
-        } catch (err) {
-            console.error('Failed to initialize user session:', err);
-            this.state.currentUser = null;
-        }
-        this.updateUserUI();
-    },
-
-    updateUserUI() {
-        const u = this.state.currentUser;
-        const topbarSection = document.getElementById('topbar-user-section');
-        const sidebarAvatar = document.getElementById('sidebar-user-avatar');
-        const sidebarName = document.getElementById('sidebar-user-name');
-        const sidebarSub = document.getElementById('sidebar-user-sub');
-        const sidebarBadge = document.getElementById('sidebar-level-badge');
-        const sidebarAuthBtn = document.getElementById('btn-sidebar-auth');
-
-        if (u && u.role !== 'guest') {
-            const lvl = u.stats ? u.stats.level : 1;
-            const avatar = u.avatar_url || '👨‍🎓';
-
-            if (sidebarAvatar) sidebarAvatar.textContent = avatar;
-            if (sidebarName) sidebarName.textContent = u.display_name || u.username;
-            if (sidebarSub) sidebarSub.textContent = `@${u.username} • Lv.${lvl}`;
-            if (sidebarBadge) sidebarBadge.textContent = `Lv.${lvl}`;
-            const heroLvl = document.getElementById('rpg-hero-level');
-            if (heroLvl) heroLvl.textContent = `Lv.${lvl}`;
-
-            if (sidebarAuthBtn) {
-                sidebarAuthBtn.innerHTML = `
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                `;
-                sidebarAuthBtn.title = 'ออกจากระบบ';
-            }
-
-            if (topbarSection) {
-                topbarSection.innerHTML = `
-                    <div class="topbar-user-chip" onclick="app.navigate('status')" title="คลิกดูสเตตัสตัวละคร RPG ของคุณ">
-                        <span class="topbar-avatar">${avatar}</span>
-                        <span class="topbar-user-name btn-text-responsive">${u.display_name || u.username}</span>
-                        <span class="topbar-user-badge">Lv.${lvl}</span>
-                        <button class="btn btn-outline btn-sm btn-logout-chip" onclick="event.stopPropagation(); app.handleLogout()" title="ออกจากระบบ">
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                            <span class="btn-text-responsive">ออก</span>
-                        </button>
-                    </div>
-                `;
-            }
-        } else {
-            // Guest mode
-            if (sidebarAvatar) sidebarAvatar.innerHTML = this.renderAvatar('scholar-m', 38);
-            if (sidebarName) sidebarName.textContent = 'ผู้ใช้งานทั่วไป';
-            if (sidebarSub) sidebarSub.textContent = 'คลิกเพื่อเข้าสู่ระบบ';
-            if (sidebarBadge) sidebarBadge.textContent = 'Guest';
-            const mistBadge = document.getElementById('sidebar-mistakes-count');
-            if (mistBadge) mistBadge.textContent = '0';
-            const mastBadge = document.getElementById('sidebar-mastered-count');
-            if (mastBadge) mastBadge.textContent = '0';
-            if (sidebarAuthBtn) {
-                sidebarAuthBtn.innerHTML = `
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-                `;
-                sidebarAuthBtn.title = 'เข้าสู่ระบบ / สมัครสมาชิก';
-            }
-
-            if (topbarSection) {
-                topbarSection.innerHTML = `
-                    <button class="btn btn-primary btn-sm" onclick="app.openAuthModal('login')">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                        <span class="btn-text-responsive">เข้าสู่ระบบ</span>
-                    </button>
-                `;
-            }
-        }
-    },
-
-    openAuthModal(tab = 'login') {
-        const modal = document.getElementById('auth-modal');
-        if (modal) {
-            modal.classList.add('open');
-            this.switchAuthTab(tab);
-        }
-    },
-
-    closeAuthModal() {
-        const modal = document.getElementById('auth-modal');
-        if (modal) modal.classList.remove('open');
-    },
-
-    switchAuthTab(tab) {
-        const tabLogin = document.getElementById('tab-btn-login');
-        const tabReg = document.getElementById('tab-btn-register');
-        const formLogin = document.getElementById('form-login');
-        const formReg = document.getElementById('form-register');
-
-        if (tab === 'login') {
-            tabLogin.classList.add('active');
-            tabReg.classList.remove('active');
-            formLogin.style.display = 'flex';
-            formReg.style.display = 'none';
-        } else {
-            tabReg.classList.add('active');
-            tabLogin.classList.remove('active');
-            formReg.style.display = 'flex';
-            formLogin.style.display = 'none';
-        }
-    },
-
-    selectAvatar(key, btn) {
-        this.state.selectedAvatar = key;
-        document.querySelectorAll('.avatar-option-btn').forEach(b => b.classList.remove('selected'));
-        if (btn) btn.classList.add('selected');
-    },
-
-    async handleLoginForm(e) {
-        e.preventDefault();
-        const username = document.getElementById('login-username').value.trim();
-        const password = document.getElementById('login-password').value;
-        const btn = document.getElementById('btn-submit-login');
-
-        if (!username || !password) {
-            this.showToast('กรุณากรอกชื่อผู้ใช้และรหัสผ่าน', 'warning');
-            return;
-        }
-
-        try {
-            btn.disabled = true;
-            btn.textContent = 'กำลังตรวจสอบ...';
-
-            const res = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
-            });
-
-            const data = await res.json();
-            if (data.success && data.token) {
-                localStorage.setItem('tcas_auth_token', data.token);
-                this.state.authToken = data.token;
-                this.state.currentUser = data.user;
-                this.showToast(`ยินดีต้อนรับกลับมา, ${data.user.display_name}!`, 'success');
-                this.closeAuthModal();
-                this.updateUserUI();
-
-                // Refresh data to reflect this user's isolated records
-                await this.loadDashboard();
-                await this.loadMistakes();
-                await this.loadVocab();
-                await this.loadUserStatus(true);
-            } else {
-                this.showToast(data.error || 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง', 'error');
-            }
-        } catch (err) {
-            console.error('Login error:', err);
-            this.showToast('เข้าสู่ระบบไม่สำเร็จ: ' + err.message, 'error');
-        } finally {
-            btn.disabled = false;
-            btn.textContent = '🚀 เข้าสู่ระบบ';
-        }
-    },
-
-    async handleRegisterForm(e) {
-        e.preventDefault();
-        const username = document.getElementById('register-username').value.trim();
-        const display_name = document.getElementById('register-displayname').value.trim();
-        const password = document.getElementById('register-password').value;
-        const confirm_password = document.getElementById('register-confirm-password').value;
-        const avatar_url = this.state.selectedAvatar || 'scholar-m';
-        const btn = document.getElementById('btn-submit-register');
-
-        if (!username || !password) {
-            this.showToast('กรุณากรอกข้อมูลให้ครบถ้วน', 'warning');
-            return;
-        }
-        if (password !== confirm_password) {
-            this.showToast('รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน', 'warning');
-            return;
-        }
-
-        try {
-            btn.disabled = true;
-            btn.textContent = 'กำลังสร้างบัญชี...';
-
-            const res = await fetch('/api/auth/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password, display_name, avatar_url })
-            });
-
-            const data = await res.json();
-            if (data.success && data.token) {
-                localStorage.setItem('tcas_auth_token', data.token);
-                this.state.authToken = data.token;
-                this.state.currentUser = data.user;
-                this.showToast('สร้างบัญชีสำเร็จ ยินดีต้อนรับสู่ TCAS Master!', 'success');
-                this.closeAuthModal();
-                this.updateUserUI();
-
-                // Refresh views with blank new student slate
-                await this.loadDashboard();
-                await this.loadMistakes();
-                await this.loadVocab();
-                await this.loadUserStatus(true);
-            } else {
-                this.showToast(data.error || 'สมัครสมาชิกไม่สำเร็จ', 'error');
-            }
-        } catch (err) {
-            console.error('Registration error:', err);
-            this.showToast('เกิดข้อผิดพลาด: ' + err.message, 'error');
-        } finally {
-            btn.disabled = false;
-            btn.textContent = '✨ สร้างบัญชีและเริ่มบันทึกคะแนน';
-        }
-    },
-
-    async handleLogout() {
-        if (!confirm('คุณต้องการออกจากระบบหรือไม่?')) return;
-        try {
-            await fetch('/api/auth/logout', { method: 'POST' });
-        } catch (err) {
-            console.warn('Logout notification error:', err);
-        }
-        localStorage.removeItem('tcas_auth_token');
-        this.state.authToken = null;
-        this.state.currentUser = null;
-        this.showToast('ออกจากระบบเรียบร้อยแล้ว', 'info');
-        await this.initAuth();
-        await this.loadDashboard();
-        await this.loadMistakes();
-        await this.loadVocab();
-        await this.loadUserStatus(true);
-    },
-
-    handleUserChipClick() {
-        if (this.state.currentUser && this.state.currentUser.role !== 'guest') {
-            this.navigate('status');
-        } else {
-            this.openAuthModal('login');
-        }
-    },
-
-    handleAuthButtonAction() {
-        if (this.state.currentUser && this.state.currentUser.role !== 'guest') {
-            this.handleLogout();
-        } else {
-            this.openAuthModal('login');
-        }
-    },
-
-    async openLeaderboardModal() {
-        const modal = document.getElementById('leaderboard-modal');
-        if (modal) modal.classList.add('open');
-
-        const tbody = document.getElementById('leaderboard-rows');
-        const myRankEl = document.getElementById('leaderboard-my-rank');
-        if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-muted);">กำลังโหลดตารางอันดับ...</td></tr>';
-
-        try {
-            const res = await fetch('/api/auth/leaderboard');
-            const data = await res.json();
-            if (data.success && data.data) {
-                const currentUserId = this.state.currentUser ? this.state.currentUser.id : null;
-                let userRank = null;
-
-                tbody.innerHTML = data.data.map((u, idx) => {
-                    const rank = idx + 1;
-                    if (u.id === currentUserId) userRank = rank;
-
-                    let rankBadgeHtml = `<span class="rank-badge rank-badge-other">${rank}</span>`;
-                    if (rank === 1) rankBadgeHtml = `<span class="rank-badge rank-badge-1" style="display:inline-flex;align-items:center;justify-content:center;">${this.svg('medal', { size: 18, color: '#f59e0b' })}</span>`;
-                    else if (rank === 2) rankBadgeHtml = `<span class="rank-badge rank-badge-2" style="display:inline-flex;align-items:center;justify-content:center;">${this.svg('medal', { size: 18, color: '#cbd5e1' })}</span>`;
-                    else if (rank === 3) rankBadgeHtml = `<span class="rank-badge rank-badge-3" style="display:inline-flex;align-items:center;justify-content:center;">${this.svg('medal', { size: 18, color: '#d97706' })}</span>`;
-
-                    const isCurrent = (u.id === currentUserId) ? 'current-user-row' : '';
-
-                    return `
-                        <tr class="${isCurrent}">
-                            <td>${rankBadgeHtml}</td>
-                            <td>
-                                <div class="user-cell">
-                                    <span class="user-cell-avatar">${this.renderAvatar(u.avatar_url, 28)}</span>
-                                    <div class="user-cell-names">
-                                        <span class="user-cell-display">${this.escapeHtml(u.display_name)} ${u.id === currentUserId ? '<span style="color: #38bdf8; font-size: 0.75rem;">(คุณ)</span>' : ''}</span>
-                                        <span class="user-cell-handle">@${this.escapeHtml(u.username)}</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td style="text-align: center;">
-                                <span class="badge-counter" style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; font-weight: 700;">Lv.${u.level}</span>
-                            </td>
-                            <td style="text-align: center; font-weight: 600;">${u.total_exams}</td>
-                            <td style="text-align: right; font-weight: 700; color: #10b981;">${u.total_score}</td>
-                            <td style="text-align: right; font-weight: 700; color: #f59e0b;">${u.total_xp.toLocaleString()} XP</td>
-                        </tr>
-                    `;
-                }).join('');
-
-                if (myRankEl) {
-                    if (userRank) {
-                        myRankEl.innerHTML = `คุณอยู่อันดับที่ <strong style="color: #38bdf8;">#${userRank}</strong> ของระบบ`;
-                    } else {
-                        myRankEl.textContent = 'เข้าสู่ระบบและเริ่มทำข้อสอบเพื่อติดอันดับ!';
-                    }
-                }
-            }
-        } catch (err) {
-            console.error('Failed to load leaderboard', err);
-            if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--accent-danger);">เกิดข้อผิดพลาดในการโหลดตารางอันดับ</td></tr>';
-        }
-    },
-
-    closeLeaderboardModal() {
-        const modal = document.getElementById('leaderboard-modal');
-        if (modal) modal.classList.remove('open');
-    },
-
-    showComingSoonToast(subjectName) {
-        this.showToast(`🚧 ข้อสอบ ${subjectName} อยู่ระหว่างเตรียมข้อสอบตามพิมพ์เขียวปี 68 จะเปิดให้ฝึกทำในเร็วๆ นี้ครับ!`, 'warning');
-    },
+    // [AI Tutor, CEFR Quiz & Auth moved to public/js/modules/{ai-tutor,cefr,auth}.js]
 
     // ==========================================
     // CHEAT SHEET & FORMULA GUIDE MODAL
